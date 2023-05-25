@@ -10,7 +10,8 @@ module.exports = {
     filename: '[name].[contenthash].js',
     publicPath: '/static/dist/',
     path: path.resolve(__dirname, '..','app', 'static', 'dist'),
-    clean: true
+    clean: true,
+    assetModuleFilename: '[name][ext]',
   },
   plugins: [
       new WebpackManifestPlugin()
@@ -23,7 +24,15 @@ module.exports = {
           'style-loader',
           'css-loader'
         ]
-      }
+      },
+      {
+        test: /\.(png|jpg|jpeg|svg|gif)$/i,
+        type: 'asset/resource'
+      },
+      {
+        test: /\.(woff|woff2|ttf)$/i,
+        type: 'asset/resource'
+      },
     ]
   },
 };

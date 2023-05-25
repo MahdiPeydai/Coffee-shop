@@ -19,5 +19,3 @@ db = pymysql.connect(
     cursorclass=pymysql.cursors.DictCursor
 )
 curs = db.cursor()
-
-
