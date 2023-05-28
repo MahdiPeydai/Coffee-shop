@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask
 from app.asset import Asset
 import pymysql.cursors
 
@@ -19,3 +19,6 @@ db = pymysql.connect(
     cursorclass=pymysql.cursors.DictCursor
 )
 curs = db.cursor()
+
+from .routs.home import home
+app.register_blueprint(home)

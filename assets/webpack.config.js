@@ -4,7 +4,8 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 module.exports = {
   entry: {
-    layout: "./src/js/layout.js"
+    layout: "./src/js/layout.js",
+    home: "./src/js/home.js"
   },
   output: {
     filename: '[name].[contenthash].js',
