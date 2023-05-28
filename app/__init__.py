@@ -22,3 +22,6 @@ curs = db.cursor()
 
 from .routs.home import home
 app.register_blueprint(home)
+
+from .routs.shop import shop
+app.register_blueprint(shop)
