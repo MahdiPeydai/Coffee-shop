@@ -1,4 +1,15 @@
 {
   "layout.js": "/static/dist/layout.75cba8cdb46fe52266b6.js",
-  "logo.png": "/static/dist/logo.png"
+  "home.js": "/static/dist/home.c5e09fdb768538508052.js",
+  "1.png": "/static/dist/1.png",
+  "2.png": "/static/dist/2.png",
+  "3.png": "/static/dist/3.png",
+  "banner2.png": "/static/dist/banner2.png",
+  "banner1.png": "/static/dist/banner1.png",
+  "12.png": "/static/dist/12.png",
+  "chocolate_logo.png": "/static/dist/chocolate_logo.png",
+  "coffee_logo.png": "/static/dist/coffee_logo.png",
+  "logo.png": "/static/dist/logo.png",
+  "accessory_logo.png": "/static/dist/accessory_logo.png",
+  "espresso_maker_logo.png": "/static/dist/espresso_maker_logo.png"
 }

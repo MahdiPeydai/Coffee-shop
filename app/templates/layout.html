@@ -60,7 +60,7 @@
     </div>
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvas" data-bs-keyboard="false" data-bs-backdrop="true">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title d-none d-sm-block" id="offcanvas">منو</h5>
+            <h5 class="offcanvas-title d-none d-sm-block">منو</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body px-0">
@@ -94,7 +94,7 @@
     </div>
 </header>
 {% block content %} {% endblock %}
-<footer dir="rtl" class="mt-5">
+<footer dir="rtl" class="my-5">
     <div class="navbar navbar-expand-lg d-flex justify-content-around">
         <div class="navbar-brand d-flex align-items-center">
             <i class="footer_icons fa-solid fa-truck-fast fa-3x"></i>
@@ -123,10 +123,12 @@
                     <p class="mb-4 h6">
                         نشانی: تهران
                     </p>
-                    <div class="mt-5">
-                        <p class="h6 position-absolute">شماره تماس:</p>
-                        <P dir="ltr" class="h5 ">۰۹۱۰۱۱۲۲۳۳۴</P>
-                        <P dir="ltr" class="h5 ">۰۲۱-۱۱۲۲۳۳۴۴</P>
+                    <div class=" navbar navbar-collapse mt-5">
+                        <p class="h6">شماره تماس:</p>
+                        <div dir="rtl">
+                            <P dir="ltr" class="h5 ">۰۹۱۰۱۱۲۲۳۳۴</P>
+                            <P dir="ltr" class="h5 ">۰۲۱-۱۱۲۲۳۳۴۴</P>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
