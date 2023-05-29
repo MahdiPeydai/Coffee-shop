@@ -1,7 +1,8 @@
 {
-  "layout.js": "/static/dist/layout.75cba8cdb46fe52266b6.js",
-  "home.js": "/static/dist/home.c5e09fdb768538508052.js",
-  "product.js": "/static/dist/product.3414ae600e6d5d5893ae.js",
+  "layout.js": "/static/dist/layout.js",
+  "home.js": "/static/dist/home.js",
+  "product.js": "/static/dist/product.js",
+  "card.js": "/static/dist/card.js",
   "1.png": "/static/dist/1.png",
   "2.png": "/static/dist/2.png",
   "3.png": "/static/dist/3.png",

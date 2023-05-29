@@ -1,0 +1,30 @@
+.card_empty_box{
+    border : 5px dashed black;
+}
+
+.topic{
+    color: #BC9020;
+    border-bottom: 5px solid #BC9020;
+}
+
+#carouselExampleIndicators2 .next-btn {
+    color: #BC9020;
+    background: #FFECC9;
+    border: 1px solid #BC9020;
+}
+
+.card_item {
+    background: #FCF4E9;
+}
+
+.address_box {
+    background: #FCF4E9;
+}
+
+.payment-box {
+    background: #FCF4E9;
+}
+
+.select_time_btn {
+    background: #E8C79C;
+}

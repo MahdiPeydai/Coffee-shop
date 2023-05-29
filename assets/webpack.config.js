@@ -7,9 +7,10 @@ module.exports = {
     layout: "./src/js/layout.js",
     home: "./src/js/home.js",
     product: "./src/js/product.js",
+    card: "./src/js/card.js",
   },
   output: {
-    filename: '[name].[contenthash].js',
+    filename: '[name].js',
     publicPath: '/static/dist/',
     path: path.resolve(__dirname, '..','app', 'static', 'dist'),
     clean: true,
