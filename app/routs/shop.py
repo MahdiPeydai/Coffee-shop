@@ -15,3 +15,8 @@ def product():
 @shop.route('/shop/card')
 def card():
     return render_template('card.html')
+
+
+@shop.route('/shop/card/shipment')
+def shipment():
+    return render_template('shipment.html')

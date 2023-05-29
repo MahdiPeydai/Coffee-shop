@@ -8,6 +8,7 @@ module.exports = {
     home: "./src/js/home.js",
     product: "./src/js/product.js",
     card: "./src/js/card.js",
+    shipment: "./src/js/shipment.js",
   },
   output: {
     filename: '[name].js',

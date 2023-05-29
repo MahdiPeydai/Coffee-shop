@@ -3,6 +3,7 @@
   "home.js": "/static/dist/home.js",
   "product.js": "/static/dist/product.js",
   "card.js": "/static/dist/card.js",
+  "shipment.js": "/static/dist/shipment.js",
   "1.png": "/static/dist/1.png",
   "2.png": "/static/dist/2.png",
   "3.png": "/static/dist/3.png",
