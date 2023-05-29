@@ -20,3 +20,8 @@ def card():
 @shop.route('/shop/card/shipment')
 def shipment():
     return render_template('shipment.html')
+
+
+@shop.route('/shop/card/payment/successful')
+def successful_payment():
+    return render_template('successful_payment.html')

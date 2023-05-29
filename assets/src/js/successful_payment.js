@@ -1,0 +1,1 @@
+import '../css/successful_payment.css'

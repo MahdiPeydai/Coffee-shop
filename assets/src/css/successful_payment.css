@@ -1,0 +1,14 @@
+.payment_success_box{
+    border : 5px dashed black;
+}
+
+.topic{
+    color: #BC9020;
+    border-bottom: 5px solid #BC9020;
+}
+
+#carouselExampleIndicators2 .next-btn {
+    color: #BC9020;
+    background: #FFECC9;
+    border: 1px solid #BC9020;
+}
