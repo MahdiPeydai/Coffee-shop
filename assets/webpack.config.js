@@ -9,7 +9,8 @@ module.exports = {
     product: "./src/js/product.js",
     card: "./src/js/card.js",
     shipment: "./src/js/shipment.js",
-    successful_payment: "./src/js/successful_payment.js"
+    successful_payment: "./src/js/successful_payment.js",
+    profile: "./src/js/profile.js"
   },
   output: {
     filename: '[name].js',

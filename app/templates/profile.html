@@ -1,0 +1,409 @@
+{% extends "layout.html" %}
+{% block title %}
+    Coffee Shop
+{% endblock %}
+{% block script %}
+    <script src="{{ asset.url_for('profile.js') }}"></script>
+{% endblock %}
+{% block content %}
+    <div class="m-5 px-3">
+        <div class="row flex-nowrap">
+            <div class="side_bar col-auto col-sm-2 px-sm-1 px-0">
+                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100 shadow rounded-5 p-4">
+                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start px-1" id="menu">
+                        <li class="nav-item">
+                            <a class="nav-link px-0 my-4 py-5 text-decoration-none">
+                                <i class="align-middle fa-solid fa-table-cells-large fa-2x"></i>
+                                <h4 class="align-middle ms-1 my-0 d-none d-md-inline">پیشخوان</h4>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-0 my-4 py-5 text-decoration-none">
+                                <i class="align-middle fa-solid fa-user fa-2x"></i>
+                                <h4 class="align-middle ms-1 my-0 d-none d-md-inline">اطلاعات حساب</h4>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-0 my-4 py-5 text-decoration-none">
+                                <i class="align-middle fa-solid fa-cart-shopping fa-2x"></i>
+                                <h4 class="ms-1 my-0 d-none d-md-inline">سفارش‌های من</h4>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-0 my-4 py-5 text-decoration-none">
+                                <i class="align-middle fa-solid fa-bookmark fa-2x"></i>
+                                <h4 class="align-middle ms-1 my-0 d-none d-md-inline">محصولات ذخیره ‌شده</h4>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-0 my-4 py-5 text-decoration-none">
+                                <i class="align-middle fa-solid fa-lock fa-2x"></i>
+                                <h4 class="align-middle ms-1 my-0 d-none d-md-inline">تغییر رمزعبور</h4>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-0 my-4 py-5 text-decoration-none">
+                                <i class="align-middle fa-solid fa-door-open fa-2x"></i>
+                                <h4 class="align-middle ms-1 my-0 d-none d-md-inline">خروج</h4>
+                            </a>
+                        </li>
+                    </ul>
+                    <hr>
+                </div>
+            </div>
+            <div class="col col-10 py-3 ms-5">
+                <!--پیشخوان-->
+                <div class="p-4 rounded-4 shadow">
+                    <div class="navbar navbar-expand-lg d-flex justify-content-between">
+                        <p class="h4">
+                            اطلاعات حساب کاربری
+                        </p>
+                        <a href="#" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
+                            <i class="fa-solid fa-user-pen fa-xl"></i><p class="h4">ویرایش اطلاعات حساب کاربری</p>
+                        </a>
+                    </div>
+                    <hr>
+                    <table class="table table-borderless">
+                        <thead>
+                        <tr>
+                            <th class="text-secondary" scope="col">نام و نام‌خانوادگی:</th>
+                            <th class="text-secondary" scope="col">کد ملی:</th>
+                            <th class="text-secondary" scope="col">ایمیل:</th>
+                            <th class="text-secondary" scope="col">شماره همراه:</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th>عدنان باباخانی</th>
+                            <td>۱۶۱۸۲۸۷۴۰۲</td>
+                            <td>-</td>
+                            <td>۰۹۳۳۹۲۳۵۶۴۱</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex rounded-4 shadow my-4 p-3" style="background-color: #F0F4F7">
+                    <a href="#" class="nav-link rounded-4 bg-white p-3 mx-2">
+                        <h5 class="m-0">آخرین سفارش‌ها</h5>
+                    </a>
+                    <a href="#" class="nav-link rounded-4 p-3 mx-2">
+                        <h5 class="m-0">آخرین محصولات ذخیره شده</h5>
+                    </a>
+                </div>
+                <!---->
+                <div class=" p-4">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th class="text-secondary" scope="col">شماره سفارش</th>
+                                <th class="text-secondary" scope="col">محصول</th>
+                                <th class="text-secondary" scope="col">تاریخ</th>
+                                <th class="text-secondary" scope="col">قیمت کل</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th>۲۸۷۱۷۸</th>
+                                <td>
+                                    <div class="d-inline-flex">
+                                        <div class="mx-1">
+                                            <img src="{{ asset.url_for('product.png') }}" width="100">
+                                        </div>
+                                        <div class="mx-1">
+                                            <img src="{{ asset.url_for('product.png') }}" width="100">
+                                        </div>
+                                        <div class="mx-1">
+                                            <img src="{{ asset.url_for('product.png') }}" width="100">
+                                        </div>
+                                        <div class="mx-1">
+                                            <img src="{{ asset.url_for('product.png') }}" width="100">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>۱۴۰۰/۰۶/۰۴ - ۰۱:۱۵:۴۸</td>
+                                <td>۸۴۸٬۹۹۰ تومان</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!---->
+                <div class="my-2 rounded-4 shadow">
+                    <div class="card_item navbar navbar-expand-xl d-flex rounded-5 mb-3 alin-items-stretch">
+                        <div class="col-lg-2 mx-5 my-2 p-2">
+                            <img src="{{ asset.url_for('product.png') }}" alt="" style="width: 100%">
+                        </div>
+                        <div class="align-self-stretch col pt-4 me-2">
+                            <h4>آسیاب قهوه بوش مدل TSM۶A۰۱۳B رنگ مشکی</h4>
+                            <div dir="ltr" class="navbar navbar-expand-xl d-flex mx-4 mt-5 pt-5">
+                                <div class="d-flex my-3">
+                                    <a href="#" class="align-self-center">
+                                        <i class="fa-regular fa-trash-can fa-2x text-black"></i>
+                                    </a>
+                                    <div class="border border-1 rounded-4 p-3 ms-4 d-flex align-items-center px-3">
+                                        <i class="fa-solid fa-eye fa-xl"></i> <p class="h4 mx-3 mb-0">مشاهده محصول</p>
+                                    </div>
+                                </div>
+                                <p class="h4 align-self-center my-3 px-3 border-end">۱۶۵،۰۰۰ تومان</p>
+                                <p class="h4 align-self-center my-3 px-3 text-secondary">سود شما از این خرید : ۶۰،۰۰۰ تومان</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="my-2 rounded-4 shadow">
+                    <div class="card_item navbar navbar-expand-xl d-flex rounded-5 mb-3 alin-items-stretch">
+                        <div class="col-lg-2 mx-5 my-2 p-2">
+                            <img src="{{ asset.url_for('product.png') }}" alt="" style="width: 100%">
+                        </div>
+                        <div class="align-self-stretch col pt-4 me-2">
+                            <h4>آسیاب قهوه بوش مدل TSM۶A۰۱۳B رنگ مشکی</h4>
+                            <div dir="ltr" class="navbar navbar-expand-xl d-flex mx-4 mt-5 pt-5">
+                                <div class="d-flex my-3">
+                                    <a href="#" class="align-self-center">
+                                        <i class="fa-regular fa-trash-can fa-2x text-black"></i>
+                                    </a>
+                                    <div class="border border-1 rounded-4 p-3 ms-4 d-flex align-items-center px-3">
+                                        <i class="fa-solid fa-eye fa-xl"></i> <p class="h4 mx-3 mb-0">مشاهده محصول</p>
+                                    </div>
+                                </div>
+                                <p class="h4 align-self-center my-3 px-3 border-end">۱۶۵،۰۰۰ تومان</p>
+                                <p class="h4 align-self-center my-3 px-3 text-secondary">سود شما از این خرید : ۶۰،۰۰۰ تومان</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!--اطلاعات حساب-->
+                <div class="p-4 rounded-4 shadow">
+                    <div class="navbar navbar-expand-lg d-flex justify-content-between">
+                        <p class="h4">
+                            اطلاعات حساب کاربری
+                        </p>
+                        <a href="#" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
+                            <i class="fa-solid fa-user-pen fa-xl"></i><p class="h4">ویرایش اطلاعات حساب کاربری</p>
+                        </a>
+                    </div>
+                    <hr>
+                    <div class="p-4">
+                        <table class="table table-borderless">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <p class="h5 text-secondary mt-5">نام:</p>
+                                    <p class="h5">عدنان</p>
+                                </td>
+                                <td>
+                                    <p class="h5 text-secondary mt-5">نام خانوداگی:</p>
+                                    <p class="h5">باباخانی</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p class="h5 text-secondary mt-5">ایمیل:</p>
+                                    <p class="h5">-</p>
+                                </td>
+                                <td>
+                                    <p class="h5 text-secondary mt-5">شماره همراه:</p>
+                                    <p class="h5">۰۹۳۳۹۲۳۵۶۴۱</p>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!------>
+                <!--تغییر اطلاعات حساب-->
+                <form method="post" class="p-4 rounded-4 shadow">
+                    <div class="navbar navbar-expand-lg d-flex justify-content-between">
+                        <p class="h4">
+                            اطلاعات حساب کاربری
+                        </p>
+                    </div>
+                    <hr>
+                    {% from "formhelpers/profile_form.html" import render_field %}
+                    <div class="navbar navbar-expand-lg d-flex justify-content-center px-4">
+                        {{ render_field(profile_form.firstname) }}
+                        {{ render_field(profile_form.lastname) }}
+                    </div>
+                    <div class="navbar navbar-expand-lg d-flex justify-content-center px-4">
+                        {{ render_field(profile_form.email) }}
+                        {{ render_field(profile_form.phone) }}
+                    </div>
+                    <div dir="ltr" class="d-flex mt-5">
+                        <button formaction="#" class="btn text-white p-3 mx-2" style="background-color: #C89000;">ذخیره اطلاعات</button>
+                        <button formaction="#" class="btn text-danger p-3 mx-2 shadow">لغو ویرایش</button>
+                    </div>
+                </form>
+
+
+
+                <!--سفارش های من-->
+                <form method="post" class="p-4">
+                    <div class="navbar navbar-expand-lg d-flex justify-content-between">
+                        <p class="h4">
+                            سفارش های من
+                        </p>
+                    </div>
+                    <hr>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th class="text-secondary" scope="col">شماره سفارش</th>
+                                <th class="text-secondary" scope="col">محصول</th>
+                                <th class="text-secondary" scope="col">تاریخ</th>
+                                <th class="text-secondary" scope="col">قیمت کل</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th>۲۸۷۱۷۸</th>
+                                <td>
+                                    <div class="d-inline-flex">
+                                        <div class="mx-1">
+                                            <img src="{{ asset.url_for('product.png') }}" width="100">
+                                        </div>
+                                        <div class="mx-1">
+                                            <img src="{{ asset.url_for('product.png') }}" width="100">
+                                        </div>
+                                        <div class="mx-1">
+                                            <img src="{{ asset.url_for('product.png') }}" width="100">
+                                        </div>
+                                        <div class="mx-1">
+                                            <img src="{{ asset.url_for('product.png') }}" width="100">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>۱۴۰۰/۰۶/۰۴ - ۰۱:۱۵:۴۸</td>
+                                <td>۸۴۸٬۹۹۰ تومان</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+
+
+
+                <!--ادرس های من-->
+                <div class="p-4">
+                    <div class="navbar navbar-expand-lg d-flex justify-content-between">
+                        <p class="h4">
+                            ادرس های من
+                        </p>
+                        <a href="#" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
+                            <i class="fa-solid fa-plus fa-xl"></i><p class="h4 my-0 mx-2">ثبت ادرس جدید</p>
+                        </a>
+                    </div>
+                    <hr>
+                    <div class="p-3">
+                        <div class="navbar navbar-expand-lg d-flex justify-content-start mt-2">
+                            <i class="fa-solid fa-plus fa-xl"></i><span class="align-middle h5 my-0 mx-2">ادرس:</span><p class="align-middle h5 my-0 mx-2">گیلان، رشت، بلوار معلم، جنب استانداری، کوچه گلها، ساختمان اهورا، طبقه سوم، واحد ۸</p><br>
+                        </div>
+                        <div class="navbar navbar-expand-lg d-flex justify-content-start mt-2">
+                            <i class="fa-solid fa-clipboard-user fa-xl"></i><span class="align-middle h5 my-0 mx-2">تحویل گیرنده:</span><p class="align-middle h5 my-0 mx-2">آران دیباه</p><br>
+                        </div>
+                        <div class="navbar navbar-expand-lg d-flex justify-content-start mt-2">
+                            <i class="fa-solid fa-mobile-button fa-xl"></i><span class="align-middle h5 my-0 mx-2">شماره تماس:</span><p class="align-middle h5 my-0 mx-2">۰۹۳۳۹۲۳۵۶۴۱</p><br>
+                        </div>
+                        <div class="navbar navbar-expand-lg d-flex justify-content-start mt-2">
+                            <i class="fa-solid fa-phone-volume fa-xl"></i><span class="align-middle h5 my-0 mx-2">شماره تلفن:</span><p class="align-middle h5 my-0 mx-2">۲۱۷۲۷۸۹۱-۰۱۳</p><br>
+                        </div>
+                        <div class="navbar navbar-expand-lg d-flex justify-content-start mt-2">
+                            <i class="fa-solid fa-inbox fa-xl"></i><span class="align-middle h5 my-0 mx-2">کد پستی:</span><p class="align-middle h5 my-0 mx-2">۷۲۷۹۱-۵۱۵۵۵</p><br>
+                        </div>
+                        <div dir="ltr" class="d-flex mt-3">
+                            <a href="#" class="text-black shadow rounded-3 p-2 mx-2">
+                                <i class="fa-solid fa-trash-can fa-xl"></i>
+                            </a>
+                            <a href="#" class="text-black shadow rounded-3 p-2 mx-2">
+                                <i class="fa-solid fa-pen-to-square fa-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!--محصولات ذخیره‌شده-->
+                <div class="p-4">
+                    <div class="navbar navbar-expand-lg d-flex justify-content-between">
+                        <p class="h4">
+                            محصولات ذخیره ‌شده
+                        </p>
+                    </div>
+                    <hr>
+                    <div class="my-2">
+                        <div class="card_item navbar navbar-expand-xl d-flex rounded-5 mb-3 alin-items-stretch">
+                            <div class="col-lg-2 mx-5 my-2 p-2">
+                                <img src="{{ asset.url_for('product.png') }}" alt="" style="width: 100%">
+                            </div>
+                            <div class="align-self-stretch col pt-4 me-2">
+                                <h4>آسیاب قهوه بوش مدل TSM۶A۰۱۳B رنگ مشکی</h4>
+                                <div dir="ltr" class="navbar navbar-expand-xl d-flex mx-4 mt-5 pt-5">
+                                    <div class="d-flex my-3">
+                                        <a href="#" class="align-self-center">
+                                            <i class="fa-regular fa-trash-can fa-2x text-black"></i>
+                                        </a>
+                                        <div class="border border-1 rounded-4 p-3 ms-4 d-flex align-items-center px-3">
+                                            <i class="fa-solid fa-eye fa-xl"></i> <p class="h4 mx-3 mb-0">مشاهده محصول</p>
+                                        </div>
+                                    </div>
+                                    <p class="h4 align-self-center my-3 px-3 border-end">۱۶۵،۰۰۰ تومان</p>
+                                    <p class="h4 align-self-center my-3 px-3 text-secondary">سود شما از این خرید : ۶۰،۰۰۰ تومان</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="my-2">
+                        <div class="card_item navbar navbar-expand-xl d-flex rounded-5 mb-3 alin-items-stretch">
+                            <div class="col-lg-2 mx-5 my-2 p-2">
+                                <img src="{{ asset.url_for('product.png') }}" alt="" style="width: 100%">
+                            </div>
+                            <div class="align-self-stretch col pt-4 me-2">
+                                <h4>آسیاب قهوه بوش مدل TSM۶A۰۱۳B رنگ مشکی</h4>
+                                <div dir="ltr" class="navbar navbar-expand-xl d-flex mx-4 mt-5 pt-5">
+                                    <div class="d-flex my-3">
+                                        <a href="#" class="align-self-center">
+                                            <i class="fa-regular fa-trash-can fa-2x text-black"></i>
+                                        </a>
+                                        <div class="border border-1 rounded-4 p-3 ms-4 d-flex align-items-center px-3">
+                                            <i class="fa-solid fa-eye fa-xl"></i> <p class="h4 mx-3 mb-0">مشاهده محصول</p>
+                                        </div>
+                                    </div>
+                                    <p class="h4 align-self-center my-3 px-3 border-end">۱۶۵،۰۰۰ تومان</p>
+                                    <p class="h4 align-self-center my-3 px-3 text-secondary">سود شما از این خرید : ۶۰،۰۰۰ تومان</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--تغییر رمزعبور-->
+                <div class="p-4">
+                    <div class="navbar navbar-expand-lg d-flex justify-content-between">
+                        <p class="h4">
+                            تغییر رمزعبور
+                        </p>
+                    </div>
+                    <hr>
+                    {% from "formhelpers/change_password_form.html" import render_field %}
+                    <div class="navbar navbar-expand-lg d-flex justify-content-between">
+                        {{ render_field(change_password_form.old_password) }}
+                        {{ render_field(change_password_form.password) }}
+                        {{ render_field(change_password_form.confirm_password) }}
+                        <a href="#" class="btn text-white p-3 m-3" style="background-color: #BC9020">
+                            <span>تغییر رمز عبور</span><i class="fa-solid fa-chevron-left"></i>
+                        </a>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

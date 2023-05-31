@@ -25,3 +25,6 @@ app.register_blueprint(home)
 
 from .routs.shop import shop
 app.register_blueprint(shop)
+
+from .routs.profile import profile
+app.register_blueprint(profile)
