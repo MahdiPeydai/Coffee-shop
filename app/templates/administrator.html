@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Coffee Shop</title>
+</head>
+<body>
+<div class="m-2 p-3">
+    <div class="row flex-nowrap">
+        <div class="side_bar col-auto col-sm-2 px-sm-1 px-0" style="height: border-box">
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 shadow rounded-5 p-4">
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start px-1" id="menu">
+                    <li class="nav-item">
+                        <a href="{{ url_for('admin.administrator', type='product') }}" class="nav-link px-0 my-2 py-3 text-decoration-none text-black">
+                            <i class="align-middle fa-solid fa-mug-hot fa-2x"></i>
+                            <h4 class="align-middle ms-1 my-0 d-none d-md-inline">محصولات</h4>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('admin.administrator', type='category') }}" class="nav-link px-0 my-2 py-3 text-decoration-none text-black">
+                            <i class="align-middle fa-solid fa-layer-group fa-2x"></i>
+                            <h4 class="align-middle ms-1 my-0 d-none d-md-inline">دسته بندی ها</h4>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 my-2 py-3 text-decoration-none text-black">
+                            <i class="align-middle fa-solid fa-user fa-2x"></i>
+                            <h4 class="align-middle ms-1 my-0 d-none d-md-inline">کاربران</h4>
+                            <i class="align-middle fa-solid fa-caret-down fa-xl"></i>
+                        </a>
+                        <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
+                            <li class="nav-item">
+                                <a href="{{ url_for('admin.administrator', type='information') }}" class="nav-link px-0 my-2 py-3 text-decoration-none text-black">
+                                    <i class="align-middle fa-solid fa-clipboard-user fa-2x"></i>
+                                    <h4 class="align-middle ms-1 my-0 d-none d-md-inline">مشخصات</h4>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url_for('admin.administrator', type='role') }}" class="nav-link px-0 my-2 py-3 text-decoration-none text-black">
+                                    <i class="align-middle fa-solid fa-briefcase fa-2x"></i>
+                                    <h4 class="align-middle ms-1 my-0 d-none d-md-inline">Role</h4>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url_for('admin.administrator', type='permission') }}" class="nav-link px-0 my-2 py-3 text-decoration-none text-black">
+                                    <i class="align-middle fa-solid fa-circle-exclamation fa-2x"></i>
+                                    <h4 class="align-middle ms-1 my-0 d-none d-md-inline">Permission</h4>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <hr>
+            </div>
+        </div>
+        <div class="col col-10 py-3 ms-5">
+            {% if menu_type=='product' %}
+            <div class="p-4 rounded-4 shadow">
+                <div class="navbar navbar-expand-lg d-flex justify-content-between">
+                    <p class="h4 my-0">
+                        محصولات
+                    </p>
+                    <a href="#" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
+                        <i class="fa-solid fa-plus fa-xl"></i><p class="h4 mx-2 my-0">افزودن محصول</p>
+                    </a>
+                </div>
+                <hr>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th class="text-secondary" scope="col">نام محصول:</th>
+                        <th class="text-secondary" scope="col">قیمت:</th>
+                        <th class="text-secondary" scope="col">تعداد:</th>
+                        <th class="text-secondary" scope="col">تخفیف:</th>
+                        <th class="text-secondary" scope="col">زمان تخفیف:</th>
+                        <th class="text-secondary" scope="col">ویرایش:</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="align-middle">عدنان باباخانی</td>
+                        <td class="align-middle">۱۶۱۸۲۸۷۴۰۲</td>
+                        <td class="align-middle"></td>
+                        <td class="align-middle"></td>
+                        <td class="align-middle"></td>
+                        <td class="align-middle">
+                            <a class="btn p-1 shadow">
+                                <i class="fa-regular fa-trash-can fa-lg"></i>
+                            </a>
+                            <a class="btn p-1 shadow">
+                                <i class="fa-regular fa-pen-to-square fa-lg"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            {% elif menu_type=='category' %}
+            <div class="p-4 rounded-4 shadow">
+                <div class="navbar navbar-expand-lg d-flex justify-content-between">
+                    <p class="h4 my-0">
+                        دسته بندی ها
+                    </p>
+                    <a href="#" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
+                        <i class="fa-solid fa-plus fa-xl"></i><p class="h4 mx-2 my-0">افزودن دسته بندی</p>
+                    </a>
+                </div>
+                <hr>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th class="text-secondary" scope="col">نام دسته بندی:</th>
+                        <th class="text-secondary" scope="col">دسته بندی مادر:</th>
+                        <th class="text-secondary" scope="col">تعداد محصول:</th>
+                        <th class="text-secondary" scope="col">وضعیت:</th>
+                        <th class="text-secondary" scope="col">ویرایش:</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="align-middle">عدنان باباخانی</td>
+                        <td class="align-middle">۱۶۱۸۲۸۷۴۰۲</td>
+                        <td class="align-middle"></td>
+                        <td class="align-middle"></td>
+                        <td class="align-middle">
+                            <a class="btn p-1 shadow">
+                                <i class="fa-regular fa-trash-can fa-lg"></i>
+                            </a>
+                            <a class="btn p-1 shadow">
+                                <i class="fa-regular fa-pen-to-square fa-lg"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            {% elif menu_type=='information' %}
+            <div class="p-4 rounded-4 shadow">
+                <div class="navbar navbar-expand-lg d-flex justify-content-between">
+                    <p class="h4 my-0">
+                        کاربران
+                    </p>
+                    <a href="#" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
+                        <i class="fa-solid fa-plus fa-xl"></i><p class="h4 mx-2 my-0">افزودن کاربر</p>
+                    </a>
+                </div>
+                <hr>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th class="text-secondary" scope="col">نام و نام خانوادگی:</th>
+                        <th class="text-secondary" scope="col">ایمیل:</th>
+                        <th class="text-secondary" scope="col">تلفن:</th>
+                        <th class="text-secondary" scope="col">Role:</th>
+                        <th class="text-secondary" scope="col">ویرایش:</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="align-middle">عدنان باباخانی</td>
+                        <td class="align-middle">۱۶۱۸۲۸۷۴۰۲</td>
+                        <td class="align-middle"></td>
+                        <td class="align-middle">
+                        </td>
+                        <td class="align-middle">
+                            <a class="btn p-1 shadow">
+                                <i class="fa-regular fa-trash-can fa-lg"></i>
+                            </a>
+                            <a class="btn p-1 shadow">
+                                <i class="fa-regular fa-pen-to-square fa-lg"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            {% elif menu_type=='role' %}
+            <div class="p-4 rounded-4 shadow">
+                <div class="navbar navbar-expand-lg d-flex justify-content-between">
+                    <p class="h4 my-0">
+                        Role
+                    </p>
+                    <a href="#" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
+                        <i class="fa-solid fa-plus fa-xl"></i><p class="h4 mx-2 my-0">افزودن Role</p>
+                    </a>
+                </div>
+                <hr>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th class="text-secondary" scope="col">نام:</th>
+                        <th class="text-secondary" scope="col">permissions:</th>
+                        <th class="text-secondary" scope="col">ویرایش:</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="align-middle">عدنان باباخانی</td>
+                        <td class="align-middle"></td>
+                        <td class="align-middle">
+                            <a class="btn p-1 shadow">
+                                <i class="fa-regular fa-trash-can fa-lg"></i>
+                            </a>
+                            <a class="btn p-1 shadow">
+                                <i class="fa-regular fa-pen-to-square fa-lg"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            {% elif menu_type=='permission' %}
+            <div class="p-4 rounded-4 shadow">
+                <div class="navbar navbar-expand-lg d-flex justify-content-between">
+                    <p class="h4 my-0">
+                        Permission
+                    </p>
+                    <a href="#" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
+                        <i class="fa-solid fa-plus fa-xl"></i><p class="h4 mx-2 my-0">افزودن Permission</p>
+                    </a>
+                </div>
+                <hr>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th class="text-secondary" scope="col">نام:</th>
+                        <th class="text-secondary" scope="col">توضیحات:</th>
+                        <th class="text-secondary" scope="col">ویرایش:</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="align-middle">عدنان باباخانی</td>
+                        <td class="align-middle">بلذ</td>
+                        <td class="align-middle">
+                            <a class="btn p-1 shadow">
+                                <i class="fa-regular fa-trash-can fa-lg"></i>
+                            </a>
+                            <a class="btn p-1 shadow">
+                                <i class="fa-regular fa-pen-to-square fa-lg"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+<script src="{{ asset.url_for('administrator.js') }}"></script>
+</body>
+</html>

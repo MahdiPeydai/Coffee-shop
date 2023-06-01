@@ -10,7 +10,8 @@ module.exports = {
     card: "./src/js/card.js",
     shipment: "./src/js/shipment.js",
     successful_payment: "./src/js/successful_payment.js",
-    profile: "./src/js/profile.js"
+    profile: "./src/js/profile.js",
+    administrator: "./src/js/administrator.js"
   },
   output: {
     filename: '[name].js',

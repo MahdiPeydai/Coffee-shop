@@ -28,3 +28,6 @@ app.register_blueprint(shop)
 
 from .routs.profile import profile
 app.register_blueprint(profile)
+
+from .routs.admin import admin
+app.register_blueprint(admin)

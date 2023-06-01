@@ -6,6 +6,7 @@
   "shipment.js": "/static/dist/shipment.js",
   "successful_payment.js": "/static/dist/successful_payment.js",
   "profile.js": "/static/dist/profile.js",
+  "administrator.js": "/static/dist/administrator.js",
   "1.png": "/static/dist/1.png",
   "2.png": "/static/dist/2.png",
   "3.png": "/static/dist/3.png",

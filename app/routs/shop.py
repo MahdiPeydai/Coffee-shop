@@ -7,21 +7,21 @@ shop = Blueprint('shop', __name__,
                  )
 
 
-@shop.route('/shop/product')
+@shop.route('/product')
 def product():
     return render_template('product.html')
 
 
-@shop.route('/shop/card')
+@shop.route('/card')
 def card():
     return render_template('card.html')
 
 
-@shop.route('/shop/card/shipment')
+@shop.route('/card/shipment')
 def shipment():
     return render_template('shipment.html')
 
 
-@shop.route('/shop/card/payment/successful')
+@shop.route('/card/payment/successful')
 def successful_payment():
     return render_template('successful_payment.html')
