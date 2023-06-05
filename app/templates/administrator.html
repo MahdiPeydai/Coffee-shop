@@ -28,7 +28,7 @@
                             <h4 class="align-middle ms-1 my-0 d-none d-md-inline">کاربران</h4>
                             <i class="align-middle fa-solid fa-caret-down fa-xl"></i>
                         </a>
-                        <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
+                        <ul class="collapse nav flex-column ms-1" id="submenu1">
                             <li class="nav-item">
                                 <a href="{{ url_for('admin.administrator', type='information') }}" class="nav-link px-0 my-2 py-3 text-decoration-none text-black">
                                     <i class="align-middle fa-solid fa-clipboard-user fa-2x"></i>
@@ -54,6 +54,33 @@
             </div>
         </div>
         <div class="col col-10 py-3 ms-5">
+
+            {% with messages = get_flashed_messages(category_filter=["error"]) %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="p-4 rounded-4 shadow mb-2">
+                        <h6 class="text-danger">
+                            {{message}}
+                        </h6>
+                    </div>
+                    <hr>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            {% with messages = get_flashed_messages(category_filter=["message"]) %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="p-4 rounded-4 shadow mb-2">
+                        <h6 class="text-success">
+                            {{message}}
+                        </h6>
+                    </div>
+                    <hr>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+
             {% if menu_type=='product' %}
             <div class="p-4 rounded-4 shadow">
                 <div class="navbar navbar-expand-lg d-flex justify-content-between">
@@ -69,6 +96,7 @@
                     <thead>
                     <tr>
                         <th class="text-secondary" scope="col">نام محصول:</th>
+                        <th class="text-secondary" scope="col">دسته بندی:</th>
                         <th class="text-secondary" scope="col">قیمت:</th>
                         <th class="text-secondary" scope="col">تعداد:</th>
                         <th class="text-secondary" scope="col">تخفیف:</th>
@@ -80,6 +108,7 @@
                     <tr>
                         <td class="align-middle">عدنان باباخانی</td>
                         <td class="align-middle">۱۶۱۸۲۸۷۴۰۲</td>
+                        <td class="align-middle"></td>
                         <td class="align-middle"></td>
                         <td class="align-middle"></td>
                         <td class="align-middle"></td>
@@ -102,9 +131,21 @@
                     <p class="h4 my-0">
                         دسته بندی ها
                     </p>
-                    <a href="#" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
+                    <a href="#createForm" data-bs-toggle="collapse"  aria-expanded="false" role="button"  aria-controls="createForm" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
                         <i class="fa-solid fa-plus fa-xl"></i><p class="h4 mx-2 my-0">افزودن دسته بندی</p>
                     </a>
+                </div>
+                {% from "formhelpers/create_category_form.html" import render_field %}
+                <div id="createForm" class="collapse m-3 py-4 shadow rounded-5">
+                    <form action="{{ url_for('admin.administrator', type='category', form_type='create') }}" method="post" enctype="multipart/form-data" class="navbar navbar-expand-lg d-flex justify-content-around align-items-start">
+                        {{ render_field(form.category_name) }}
+                        {{ render_field(form.category_parent) }}
+                        {{ render_field(form.category_description) }}
+                        {{ render_field(form.category_image) }}
+                        <button class="btn p-3 mx-3 my-2 align-self-center shadow">
+                            <i class="fa-solid fa-plus fa-2x"></i>
+                        </button>
+                    </form>
                 </div>
                 <hr>
                 <table class="table">
@@ -112,26 +153,40 @@
                     <tr>
                         <th class="text-secondary" scope="col">نام دسته بندی:</th>
                         <th class="text-secondary" scope="col">دسته بندی مادر:</th>
-                        <th class="text-secondary" scope="col">تعداد محصول:</th>
                         <th class="text-secondary" scope="col">وضعیت:</th>
                         <th class="text-secondary" scope="col">ویرایش:</th>
                     </tr>
                     </thead>
                     <tbody>
+                    {% for category in data %}
                     <tr>
-                        <td class="align-middle">عدنان باباخانی</td>
-                        <td class="align-middle">۱۶۱۸۲۸۷۴۰۲</td>
-                        <td class="align-middle"></td>
-                        <td class="align-middle"></td>
+                        <td class="align-middle">{{ category['name'] }}</td>
+                        <td class="align-middle">
+                            {% if category['parent_name'] %}
+                            {{ category['parent_name'] }}
+                            {% endif %}
+                        </td>
+                        <td class="align-middle">
+                            {% if category['active'] == 1 %}
+                                <p class="m-0 bg-success">
+                                    فعال
+                                </p>
+                            {% else %}
+                                <p class="m-0 bg-danger">
+                                    غیر فعال
+                                </p>
+                            {% endif %}
+                        </td>
                         <td class="align-middle">
                             <a class="btn p-1 shadow">
                                 <i class="fa-regular fa-trash-can fa-lg"></i>
                             </a>
                             <a class="btn p-1 shadow">
-                                <i class="fa-regular fa-pen-to-square fa-lg"></i>
+                                <i class="fa-regular fa-pen-to-square fa-xl"></i>
                             </a>
                         </td>
                     </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>

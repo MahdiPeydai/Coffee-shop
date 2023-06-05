@@ -1,16 +1,16 @@
-from wtforms import Form, StringField, PasswordField, DateField, FileField, TimeField, TextAreaField
+from wtforms import Form, StringField, PasswordField, DateField, FileField, TimeField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 from flask_wtf.file import FileSize, FileAllowed, FileRequired
-from app import app
+from app import app, curs
 
 
 class Profile(Form):
     firstname = StringField('نام',
                             validators=[DataRequired(),
-                                        Length(max=16)])
+                                        Length(max=50)])
     lastname = StringField('نام خانوادگی',
                            validators=[DataRequired(),
-                                       Length(max=16)])
+                                       Length(max=50)])
     email = StringField('ایمیل',
                         validators=[DataRequired(),
                                     Email(),
@@ -34,3 +34,17 @@ class ChangePassword(Form):
                                      validators=[DataRequired(),
                                                  EqualTo('password', message='Passwords must match!')],
                                      render_kw={"placeholder": "تکرار رمز عبور جدید"})
+
+
+class CreateCategory(Form):
+    category_name = StringField('نام',
+                                validators=[DataRequired(),
+                                            Length(max=50)])
+    category_description = TextAreaField('توضیحات',
+                                         validators=[Length(max=255)])
+    category_parent = SelectField('دسته بندی مادر',
+                                  choices=[],
+                                  default=None)
+    category_image = FileField('تصویر',
+                               validators=[FileSize(max_size=1),
+                                           FileAllowed(app.config['IMAGE_EXTENSION'])])
