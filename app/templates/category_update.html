@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div class="h-100 d-flex align-items-center justify-content-center">
+    <form action="{{ url_for('admin.category_update', category_id=category_id) }}" enctype="multipart/form-data" method="post" class="shadow p-5 rounded-4">
+    {% from "formhelpers/update_form.html" import render_field %}
+        {{ render_field(form.category_name) }}
+        {{ render_field(form.category_parent) }}
+        {{ render_field(form.category_description) }}
+        {{ render_field(form.category_image) }}
+        {{ render_field(form.category_active) }}
+        <div class="d-flex justify-content-end p-3">
+            <button type="submit" class="btn bg-success p-2 shadow text-white">ذخیره تغییرات</button>
+        </div>
+    </form>
+</div>
+
+<script src="{{ asset.url_for('category_update.js') }}"></script>
+</body>
+</html>

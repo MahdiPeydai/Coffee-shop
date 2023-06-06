@@ -153,6 +153,7 @@
                     <tr>
                         <th class="text-secondary" scope="col">نام دسته بندی:</th>
                         <th class="text-secondary" scope="col">دسته بندی مادر:</th>
+                        <th class="text-secondary" scope="col">توضیحات:</th>
                         <th class="text-secondary" scope="col">وضعیت:</th>
                         <th class="text-secondary" scope="col">ویرایش:</th>
                     </tr>
@@ -166,6 +167,7 @@
                             {{ category['parent_name'] }}
                             {% endif %}
                         </td>
+                        <td class="align-middle">{{ category['description'] }}</td>
                         <td class="align-middle">
                             {% if category['active'] == 1 %}
                                 <p class="m-0 bg-success">
@@ -181,8 +183,8 @@
                             <a class="btn p-1 shadow">
                                 <i class="fa-regular fa-trash-can fa-lg"></i>
                             </a>
-                            <a class="btn p-1 shadow">
-                                <i class="fa-regular fa-pen-to-square fa-xl"></i>
+                            <a href="{{ url_for('admin.category_update', category_id=category['id']) }}" class="btn p-1 shadow">
+                                <i class="fa-regular fa-pen-to-square fa-lg"></i>
                             </a>
                         </td>
                     </tr>

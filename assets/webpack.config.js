@@ -11,7 +11,8 @@ module.exports = {
     shipment: "./src/js/shipment.js",
     successful_payment: "./src/js/successful_payment.js",
     profile: "./src/js/profile.js",
-    administrator: "./src/js/administrator.js"
+    administrator: "./src/js/administrator.js",
+    category_update: "./src/js/category_update.js"
   },
   output: {
     filename: '[name].js',

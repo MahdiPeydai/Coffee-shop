@@ -869,7 +869,7 @@ eval("\n\n/* istanbul ignore next  */\nfunction styleTagTransform(css, styleElem
   \**************************************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("var map = {\n\t\"./221c4601-c148-4dfb-bd59-1296d4533265(1).png\": \"./src/image/category_image/221c4601-c148-4dfb-bd59-1296d4533265(1).png\"\n};\n\n\nfunction webpackContext(req) {\n\tvar id = webpackContextResolve(req);\n\treturn __webpack_require__(id);\n}\nfunction webpackContextResolve(req) {\n\tif(!__webpack_require__.o(map, req)) {\n\t\tvar e = new Error(\"Cannot find module '\" + req + \"'\");\n\t\te.code = 'MODULE_NOT_FOUND';\n\t\tthrow e;\n\t}\n\treturn map[req];\n}\nwebpackContext.keys = function webpackContextKeys() {\n\treturn Object.keys(map);\n};\nwebpackContext.resolve = webpackContextResolve;\nmodule.exports = webpackContext;\nwebpackContext.id = \"./src/image/category_image sync recursive \\\\.(png%7Cjpg%7Cjpeg%7Csvg%7Cgif)$\";\n\n//# sourceURL=webpack://assets/./src/image/category_image/_sync_\\.(png%257Cjpg%257Cjpeg%257Csvg%257Cgif)$?");
+eval("var map = {\n\t\"./0f1ff40f-75bc-4aa2-9f65-2c9497036e5c.jpg\": \"./src/image/category_image/0f1ff40f-75bc-4aa2-9f65-2c9497036e5c.jpg\",\n\t\"./ded855a9-04e4-4efe-a477-5ee057f33352.jpg\": \"./src/image/category_image/ded855a9-04e4-4efe-a477-5ee057f33352.jpg\"\n};\n\n\nfunction webpackContext(req) {\n\tvar id = webpackContextResolve(req);\n\treturn __webpack_require__(id);\n}\nfunction webpackContextResolve(req) {\n\tif(!__webpack_require__.o(map, req)) {\n\t\tvar e = new Error(\"Cannot find module '\" + req + \"'\");\n\t\te.code = 'MODULE_NOT_FOUND';\n\t\tthrow e;\n\t}\n\treturn map[req];\n}\nwebpackContext.keys = function webpackContextKeys() {\n\treturn Object.keys(map);\n};\nwebpackContext.resolve = webpackContextResolve;\nmodule.exports = webpackContext;\nwebpackContext.id = \"./src/image/category_image sync recursive \\\\.(png%7Cjpg%7Cjpeg%7Csvg%7Cgif)$\";\n\n//# sourceURL=webpack://assets/./src/image/category_image/_sync_\\.(png%257Cjpg%257Cjpeg%257Csvg%257Cgif)$?");
 
 /***/ }),
 
@@ -1060,14 +1060,25 @@ eval("module.exports = \"data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/20
 
 /***/ }),
 
-/***/ "./src/image/category_image/221c4601-c148-4dfb-bd59-1296d4533265(1).png":
-/*!******************************************************************************!*\
-  !*** ./src/image/category_image/221c4601-c148-4dfb-bd59-1296d4533265(1).png ***!
-  \******************************************************************************/
+/***/ "./src/image/category_image/0f1ff40f-75bc-4aa2-9f65-2c9497036e5c.jpg":
+/*!***************************************************************************!*\
+  !*** ./src/image/category_image/0f1ff40f-75bc-4aa2-9f65-2c9497036e5c.jpg ***!
+  \***************************************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
-eval("module.exports = __webpack_require__.p + \"221c4601-c148-4dfb-bd59-1296d4533265(1).png\";\n\n//# sourceURL=webpack://assets/./src/image/category_image/221c4601-c148-4dfb-bd59-1296d4533265(1).png?");
+eval("module.exports = __webpack_require__.p + \"0f1ff40f-75bc-4aa2-9f65-2c9497036e5c.jpg\";\n\n//# sourceURL=webpack://assets/./src/image/category_image/0f1ff40f-75bc-4aa2-9f65-2c9497036e5c.jpg?");
+
+/***/ }),
+
+/***/ "./src/image/category_image/ded855a9-04e4-4efe-a477-5ee057f33352.jpg":
+/*!***************************************************************************!*\
+  !*** ./src/image/category_image/ded855a9-04e4-4efe-a477-5ee057f33352.jpg ***!
+  \***************************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+eval("module.exports = __webpack_require__.p + \"ded855a9-04e4-4efe-a477-5ee057f33352.jpg\";\n\n//# sourceURL=webpack://assets/./src/image/category_image/ded855a9-04e4-4efe-a477-5ee057f33352.jpg?");
 
 /***/ })
 

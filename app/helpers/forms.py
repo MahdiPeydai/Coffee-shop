@@ -44,7 +44,22 @@ class CreateCategory(Form):
                                          validators=[Length(max=255)])
     category_parent = SelectField('دسته بندی مادر',
                                   choices=[],
-                                  default=None)
+                                  default='')
+    category_image = FileField('تصویر',
+                               validators=[FileSize(max_size=1),
+                                           FileAllowed(app.config['IMAGE_EXTENSION']),
+                                           DataRequired()])
+
+
+class UpdateCategory(Form):
+    category_name = StringField('نام',
+                                validators=[DataRequired(),
+                                            Length(max=50)])
+    category_description = TextAreaField('توضیحات',
+                                         validators=[Length(max=255)])
+    category_parent = SelectField('دسته بندی مادر')
     category_image = FileField('تصویر',
                                validators=[FileSize(max_size=1),
                                            FileAllowed(app.config['IMAGE_EXTENSION'])])
+    category_active = SelectField('وضعیت',
+                                  choices=['فعال', 'غیرفعال'])
