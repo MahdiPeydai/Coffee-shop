@@ -1,8 +1,9 @@
 from flask import render_template, Blueprint, url_for, flash, redirect, request, make_response
 from app import app, db, curs
-from app.helpers.forms import CreateCategory, UpdateCategory, CreateProduct
+from app.helpers.forms import CreateCategory, UpdateCategory, Product
 import uuid
 import os
+import datetime
 
 admin = Blueprint('admin', __name__,
                   template_folder='templates',
@@ -15,18 +16,22 @@ def administrator():
     menu_type = request.args.get('type')
     form = None
     if menu_type == 'product':
-        form = CreateProduct(request.form)
+        form = Product(request.form)
         if request.method == 'POST' and request.args.get('form_type') == 'create':
             product_category_str = request.form.getlist('product_category')
             product_category = []
             for i in product_category_str:
                 product_category.append(int(i))
-
+            print(request.form)
+            if request.form['product_discount_date'] == '':
+                product_discount_date = None
+            else:
+                product_discount_date = request.form['product_discount_date']
             create_product_sql = 'INSERT INTO product (name, price, quantity, discount, discount_date, short_description) ' \
                                  'VALUES (%s, %s, %s, %s, %s, %s) '
             create_product_val = (request.form['product_name'], request.form['product_price'],
                                   request.form['product_quantity'], request.form['product_discount'],
-                                  request.form['product_discount_date'], request.form['product_short_description'])
+                                  product_discount_date, request.form['product_short_description'])
             curs.execute(create_product_sql, create_product_val)
             db.commit()
             product_id_sql = 'SELECT id ' \
@@ -45,8 +50,8 @@ def administrator():
 
         product_sql = 'SELECT product.id, product.name, product.quantity, product.price, product.discount, product.discount_date, category.name as category_name ' \
                       'FROM product ' \
-                      'INNER JOIN product_category on product.id = product_category.product_id ' \
-                      'INNER JOIN category on product_category.category_id = category.id'
+                      'LEFT JOIN product_category on product.id = product_category.product_id ' \
+                      'LEFT JOIN category on product_category.category_id = category.id'
         curs.execute(product_sql)
         products = curs.fetchall()
         data = {}
@@ -133,46 +138,6 @@ def administrator():
 
 @admin.route('/admin/category/<int:category_id>/update', methods=['GET', 'POST'])
 def category_update(category_id):
-    if request.method == 'POST':
-
-        if request.form['category_active'] == 'فعال':
-            category_active = 1
-        else:
-            category_active = 0
-
-        category_update_sql = 'UPDATE category ' \
-                              'SET name=%s, parent_id=%s, description=%s, active=%s ' \
-                              'WHERE id=%s'
-        category_update_val = (
-            request.form['category_name'], request.form['category_parent'], request.form['category_description'],
-            category_active,
-            category_id)
-        curs.execute(category_update_sql, category_update_val)
-        db.commit()
-        if request.files['category_image']:
-            old_category_image_sql = 'SELECT image ' \
-                                     'FROM category ' \
-                                     'WHERE id = %s'
-            old_category_image_val = (category_id,)
-            curs.execute(old_category_image_sql, old_category_image_val)
-            old_img = curs.fetchone()['image']
-            os.remove(os.path.join(app.config['CATEGORY_IMAGE_FOLDER'], old_img))
-
-            category_image = request.files['category_image']
-            category_image_name = category_image.filename
-            file_format = category_image_name[category_image_name.index('.'):]
-            category_image_name = f'{str(uuid.uuid4())}{file_format}'
-            category_image.save(os.path.join(app.config['CATEGORY_IMAGE_FOLDER'], category_image_name))
-
-            new_category_image_sql = 'UPDATE category ' \
-                                     'SET image = %s ' \
-                                     'WHERE id = %s'
-            new_category_image_val = (category_image_name, category_id)
-            curs.execute(new_category_image_sql, new_category_image_val)
-            db.commit()
-        flash('نغییرات با موفقیت انجام شد', 'message')
-        return redirect(url_for('admin.administrator', type='category', category_id=category_id))
-
     category_name_sql = 'SELECT id, name ' \
                         'FROM category'
     curs.execute(category_name_sql)
@@ -200,4 +165,140 @@ def category_update(category_id):
     form = UpdateCategory(request.form, data=placeholders)
     form.category_parent.choices = categories
 
+    if request.method == 'POST' and form.validate():
+        if request.form['category_active'] == 'فعال':
+            category_active = 1
+        else:
+            category_active = 0
+
+        category_update_sql = 'UPDATE category ' \
+                              'SET name=%s, parent_id=%s, description=%s, active=%s ' \
+                              'WHERE id=%s'
+        category_update_val = (
+            request.form['category_name'], request.form['category_parent'], request.form['category_description'],
+            category_active,
+            category_id)
+        curs.execute(category_update_sql, category_update_val)
+        db.commit()
+
+        if request.files['category_image']:
+            old_category_image_sql = 'SELECT image ' \
+                                     'FROM category ' \
+                                     'WHERE id = %s'
+            old_category_image_val = (category_id,)
+            curs.execute(old_category_image_sql, old_category_image_val)
+            old_img = curs.fetchone()['image']
+            os.remove(os.path.join(app.config['CATEGORY_IMAGE_FOLDER'], old_img))
+
+            category_image = request.files['category_image']
+            category_image_name = category_image.filename
+            file_format = category_image_name[category_image_name.index('.'):]
+            category_image_name = f'{str(uuid.uuid4())}{file_format}'
+            category_image.save(os.path.join(app.config['CATEGORY_IMAGE_FOLDER'], category_image_name))
+
+            new_category_image_sql = 'UPDATE category ' \
+                                     'SET image = %s ' \
+                                     'WHERE id = %s'
+            new_category_image_val = (category_image_name, category_id)
+            curs.execute(new_category_image_sql, new_category_image_val)
+            db.commit()
+        flash('نغییرات با موفقیت انجام شد', 'message')
+        return redirect(url_for('admin.administrator', type='category'))
     return render_template('category_update.html', form=form, category_id=category_id)
+
+
+@admin.route('/admin/product/<int:product_id>/update', methods=['GET', 'POST'])
+def product_update(product_id):
+    if request.method == "POST":
+        if request.form['product_discount_date'] == '':
+            product_discount_date = None
+        else:
+            product_discount_date = request.form['product_discount_date']
+        update_product_sql = 'UPDATE product ' \
+                             'SET name=%s, price=%s, quantity=%s, discount=%s, discount_date=%s, short_description=%s ' \
+                             'WHERE id=%s'
+        update_product_val = (request.form['product_name'], request.form['product_price'],
+                              request.form['product_quantity'], request.form['product_discount'],
+                              product_discount_date, request.form['product_short_description'],
+                              product_id)
+        curs.execute(update_product_sql, update_product_val)
+        db.commit()
+
+        old_category_sql = 'SELECT category.id as category_id ' \
+                           'FROM product ' \
+                           'LEFT JOIN product_category on product.id = product_category.product_id ' \
+                           'LEFT JOIN category on product_category.category_id = category.id ' \
+                           'WHERE product.id=%s'
+        old_category_val = (product_id,)
+        curs.execute(old_category_sql, old_category_val)
+        old_category_dict = curs.fetchall()
+        old_category = []
+        for check in old_category_dict:
+            old_category.append(check['category_id'])
+        new_category_str = request.form.getlist('product_category')
+        new_category = []
+        for check in new_category_str:
+            new_category.append(int(check))
+
+        for overplus in old_category:
+            if overplus not in new_category:
+                delete_category_sql = 'DELETE FROM product_category ' \
+                                      'WHERE category_id=%s AND product_id=%s'
+                delete_category_val = (overplus, product_id)
+                curs.execute(delete_category_sql, delete_category_val)
+                db.commit()
+        for shortage in new_category:
+            if shortage not in old_category:
+                add_category_sql = 'INSERT INTO product_category (product_id, category_id)' \
+                                   'VALUES (%s, %s)'
+                add_category_val = (product_id, int(shortage))
+                curs.execute(add_category_sql, add_category_val)
+                db.commit()
+        flash('تغییرات با موفقیت انجام شد', 'message')
+        return redirect(url_for('admin.administrator', type='product'))
+
+    product_sql = 'SELECT product.id, product.name, product.quantity, product.price, product.discount, product.discount_date, product.short_description, category.id as category_id ' \
+                  'FROM product ' \
+                  'LEFT JOIN product_category on product.id = product_category.product_id ' \
+                  'LEFT JOIN category on product_category.category_id = category.id ' \
+                  'WHERE product.id=%s'
+    product_val = (product_id,)
+    curs.execute(product_sql, product_val)
+    products = curs.fetchall()
+    product = {}
+    for product_check in products:
+        if product_check['id'] not in product.values():
+            product = {
+                'id': product_check['id'],
+                'name': product_check['name'],
+                'quantity': product_check['quantity'],
+                'price': product_check['price'],
+                'discount': product_check['discount'],
+                'discount_date': product_check['discount_date'],
+                'short_description': product_check['short_description'],
+                'category': [product_check['category_id']]
+            }
+        else:
+            product['category'].append(product_check['category_id'])
+    placeholders = {
+        'product_name': product['name'],
+        'product_quantity': product['quantity'],
+        'product_price': product['price'],
+        'product_discount': product['discount'],
+        'product_discount_date': product['discount_date'],
+        'product_short_description': product['short_description']
+    }
+    form = Product(request.form, data=placeholders)
+    category_name_sql = 'SELECT id, name ' \
+                        'FROM category'
+    curs.execute(category_name_sql)
+    categories = []
+    for category in curs.fetchall():
+        categories.append((category['id'], category['name']))
+    form.product_category.choices = categories
+    product_category = []
+    for category_id in product['category']:
+        product_category.append(str(category_id))
+    form.product_category.data = product_category
+
+    return render_template('product_update.html', form=form, product_id=product_id)

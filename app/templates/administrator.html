@@ -125,7 +125,9 @@
                             <td class="align-middle">{{ data[product]['name'] }}</td>
                             <td class="align-middle">
                                 {% for category in data[product]['category'] %}
+                                {% if data[product]['category'][data[product]['category'].index(category)] %}
                                     <p class="d-inline">{{ category }},</p>
+                                {% endif %}
                                 {% endfor %}
                             </td>
                             <td class="align-middle">{{ data[product]['price'] }}</td>
@@ -144,7 +146,7 @@
                                 <a class="btn p-1 shadow">
                                     <i class="fa-regular fa-trash-can fa-lg"></i>
                                 </a>
-                                <a href="#" class="btn p-1 shadow">
+                                <a href="{{ url_for('admin.product_update', product_id=product) }}" class="btn p-1 shadow">
                                     <i class="fa-regular fa-pen-to-square fa-lg"></i>
                                 </a>
                             </td>

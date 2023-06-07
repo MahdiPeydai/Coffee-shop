@@ -71,7 +71,7 @@ class MultiCheckboxField(SelectMultipleField):
     option_widget = widgets.CheckboxInput()
 
 
-class CreateProduct(Form):
+class Product(Form):
     product_name = StringField('نام',
                                validators=[DataRequired(),
                                            Length(max=50)])
@@ -82,9 +82,9 @@ class CreateProduct(Form):
     product_price = StringField('قیمت',
                                 validators=[DataRequired(),
                                             Length(max=50)])
-    product_discount = IntegerField('نخفیف',
-                                    validators=[NumberRange(min=0, max=100)], )
+    product_discount = StringField('تخفیف',
+                                   validators=[NumberRange(min=0, max=100)], )
     product_discount_date = DateTimeLocalField('تاریخ تخفیف',
-                                               format='%m/%d/%y')
+                                               format='%Y-%m-%d %H:%M:%S')
     product_short_description = TextAreaField('توضیحات',
                                               validators=[Length(max=255)])
