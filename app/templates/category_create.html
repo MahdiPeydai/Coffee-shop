@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div class="h-100 d-flex align-items-center justify-content-center">
+    <form action="{{ url_for('admin.category_create') }}" enctype="multipart/form-data" method="post" class="shadow p-5 rounded-4">
+        {% with messages = get_flashed_messages(category_filter=["error"]) %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="p-4 rounded-4 shadow mb-2">
+                        <h6 class="text-danger">
+                            {{message}}
+                        </h6>
+                    </div>
+                    <hr>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% from "formhelpers/update_form.html" import render_field %}
+        {{ render_field(form.category_name) }}
+        {{ render_field(form.category_parent) }}
+        {{ render_field(form.category_description) }}
+        {{ render_field(form.category_image) }}
+        <div class="d-flex justify-content-end p-3">
+            <button type="submit" class="btn bg-success p-2 shadow text-white">ذخیره دسته‌ بندی</button>
+        </div>
+    </form>
+</div>
+
+<script src="{{ asset.url_for('category_create.js') }}"></script>
+</body>
+</html>

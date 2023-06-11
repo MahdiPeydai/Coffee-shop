@@ -1,6 +1,7 @@
 from flask import render_template, Blueprint, url_for, flash, redirect, request, make_response
 from app import app, db, curs
-from app.helpers.forms import CreateCategory, UpdateCategory, Product
+from app.helpers.forms import Category, Product
+from wtforms.validators import DataRequired
 import uuid
 import os
 import datetime
@@ -75,41 +76,6 @@ def administrator():
             categories.append((category['id'], category['name']))
         form.product_category.choices = categories
     elif menu_type == 'category':
-        form = CreateCategory(request.form)
-
-        if request.method == 'POST' and request.args.get('form_type') == 'create':
-            category_check_sql = 'SELECT name ' \
-                                 'FROM category ' \
-                                 'WHERE name= %s'
-            category_check_val = (request.form['category_name'],)
-            curs.execute(category_check_sql, category_check_val)
-            if curs.fetchone():
-                flash('دسته بندی با نام وارد شده قبلا ایجاد شده است ...', 'error')
-                return redirect(url_for('admin.administrator', type='category'))
-
-            category_image = request.files['category_image']
-            category_image_name = category_image.filename
-            file_format = category_image_name[category_image_name.index('.'):]
-            category_image_name = f'{str(uuid.uuid4())}{file_format}'
-            category_image.save(os.path.join(app.config['CATEGORY_IMAGE_FOLDER'], category_image_name))
-
-            create_category_sql = 'INSERT INTO category (name, description, image, active, parent_id) ' \
-                                  'VALUES (%s, %s, %s, 1, %s)'
-            create_category_val = (
-                request.form['category_name'], request.form['category_description'], category_image_name,
-                request.form['category_parent'])
-            curs.execute(create_category_sql, create_category_val)
-            db.commit()
-            flash('دسته بندی با موفقیت ایجاد شد', 'message')
-
-        category_name_sql = 'SELECT id, name ' \
-                            'FROM category'
-        curs.execute(category_name_sql)
-        categories = [(0, '')]
-        for category in curs.fetchall():
-            categories.append((category['id'], category['name']))
-        form.category_parent.choices = categories
-
         category_sql = 'SELECT A.id, A.name, A.description, A.image, B.name AS parent_name, A.active ' \
                        'FROM category A ' \
                        'LEFT JOIN category B ON B.id = A.parent_id ' \
@@ -134,6 +100,45 @@ def administrator():
         data = None
 
     return render_template('administrator.html', menu_type=menu_type, data=data, form=form)
+
+
+@admin.route('/admin/category/create', methods=['GET', 'POST'])
+def category_create():
+    if request.method == 'POST':
+        category_check_sql = 'SELECT name ' \
+                             'FROM category ' \
+                             'WHERE name= %s'
+        category_check_val = (request.form['category_name'],)
+        curs.execute(category_check_sql, category_check_val)
+        if curs.fetchone():
+            flash('دسته بندی با نام وارد شده قبلا ایجاد شده است ...', 'error')
+            return redirect(url_for('admin.category_create'))
+
+        category_image = request.files['category_image']
+        category_image_name = category_image.filename
+        file_format = category_image_name[category_image_name.index('.'):]
+        category_image_name = f'{str(uuid.uuid4())}{file_format}'
+        category_image.save(os.path.join(app.config['CATEGORY_IMAGE_FOLDER'], category_image_name))
+
+        create_category_sql = 'INSERT INTO category (name, description, image, active, parent_id) ' \
+                              'VALUES (%s, %s, %s, 1, %s)'
+        create_category_val = (
+            request.form['category_name'], request.form['category_description'], category_image_name,
+            request.form['category_parent'])
+        curs.execute(create_category_sql, create_category_val)
+        db.commit()
+        flash('دسته بندی با موفقیت ایجاد شد', 'message')
+        return redirect(url_for('admin.administrator', type='category'))
+    form = Category(request.form)
+    form.category_image.validators.append(DataRequired())
+    category_name_sql = 'SELECT id, name ' \
+                        'FROM category'
+    curs.execute(category_name_sql)
+    categories = [(0, '')]
+    for category in curs.fetchall():
+        categories.append((category['id'], category['name']))
+    form.category_parent.choices = categories
+    return render_template('category_create.html', form=form)
 
 
 @admin.route('/admin/category/<int:category_id>/update', methods=['GET', 'POST'])
@@ -162,7 +167,7 @@ def category_update(category_id):
     }
     if category['active'] == 0:
         placeholders['category_active'] = 'غیرفعال'
-    form = UpdateCategory(request.form, data=placeholders)
+    form = Category(request.form, data=placeholders)
     form.category_parent.choices = categories
 
     if request.method == 'POST' and form.validate():
@@ -205,6 +210,81 @@ def category_update(category_id):
         flash('نغییرات با موفقیت انجام شد', 'message')
         return redirect(url_for('admin.administrator', type='category'))
     return render_template('category_update.html', form=form, category_id=category_id)
+
+
+@admin.route('/admin/category/<int:category_id>/delete')
+def category_delete(category_id):
+    category_delete_sql = 'DELETE FROM category ' \
+                          'WHERE id = %s'
+    category_delete_val = (category_id,)
+    curs.execute(category_delete_sql, category_delete_val)
+    db.commit()
+    parent_delete_sql = 'UPDATE category ' \
+                        'SET parent_id = NULL ' \
+                        'WHERE parent_id = %s'
+    parent_delete_val = (category_id,)
+    curs.execute(parent_delete_sql, parent_delete_val)
+    db.commit()
+    product_category_delete_sql = 'DELETE FROM product_category ' \
+                                  'WHERE category_id = %s'
+    product_category_delete_val = (category_id,)
+    curs.execute(product_category_delete_sql, product_category_delete_val)
+    db.commit()
+    flash('دسته بندی با موفقیت حذف شد', 'message')
+    return redirect(url_for('admin.administrator', type='category'))
+
+
+@admin.route('/admin/product/create', methods=['GET', 'POST'])
+def product_create():
+    if request.method == 'POST':
+        product_check_sql = 'SELECT name ' \
+                            'FROM product ' \
+                            'WHERE name = %s'
+        product_check_val = (request.form['product_name'],)
+        curs.execute(product_check_sql, product_check_val)
+        if curs.fetchone():
+            flash('محصول با نام وارد شده قبلا ایجاد شده است ...', 'error')
+            return redirect(url_for('admin.product_create'))
+
+        product_category_str = request.form.getlist('product_category')
+        product_category = []
+        for i in product_category_str:
+            product_category.append(int(i))
+
+        if request.form['product_discount_date'] == '':
+            product_discount_date = None
+        else:
+            product_discount_date = request.form['product_discount_date']
+        create_product_sql = 'INSERT INTO product (name, price, quantity, discount, discount_date, short_description) ' \
+                             'VALUES (%s, %s, %s, %s, %s, %s) '
+        create_product_val = (request.form['product_name'], request.form['product_price'],
+                              request.form['product_quantity'], request.form['product_discount'],
+                              product_discount_date, request.form['product_short_description'])
+        curs.execute(create_product_sql, create_product_val)
+        db.commit()
+        product_id_sql = 'SELECT id ' \
+                         'FROM product ' \
+                         'WHERE name = %s'
+        product_id_val = (request.form['product_name'],)
+        curs.execute(product_id_sql, product_id_val)
+        product_id = curs.fetchone()['id']
+        for category_id in product_category:
+            product_category_sql = 'INSERT INTO product_category(product_id, category_id) ' \
+                                   'VALUES (%s, %s)'
+            product_category_val = (product_id, category_id)
+            curs.execute(product_category_sql, product_category_val)
+            db.commit()
+        flash('محصول با موفقیت اضافه شد', 'message')
+        return redirect(url_for('admin.administrator', type='product'))
+    form = Product(request.form)
+    category_name_sql = 'SELECT id, name ' \
+                        'FROM category'
+    curs.execute(category_name_sql)
+    categories = []
+    for category in curs.fetchall():
+        categories.append((category['id'], category['name']))
+    form.product_category.choices = categories
+    return render_template('product_create.html', form=form)
 
 
 @admin.route('/admin/product/<int:product_id>/update', methods=['GET', 'POST'])
@@ -302,3 +382,18 @@ def product_update(product_id):
     form.product_category.data = product_category
 
     return render_template('product_update.html', form=form, product_id=product_id)
+
+
+@admin.route('/admin/product/<int:product_id>/delete')
+def product_delete(product_id):
+    product_delete_sql = 'DELETE FROM product ' \
+                         'WHERE id = %s'
+    product_delete_val = (product_id,)
+    curs.execute(product_delete_sql, product_delete_val)
+    db.commit()
+    product_category_delete_sql = 'DELETE FROM product_category ' \
+                                  'WHERE product_id = %s'
+    product_category_delete_val = (product_id)
+    curs.execute(product_category_delete_sql, product_category_delete_val)
+    db.commit()
+    return redirect(url_for('admin.administrator', type='product'))

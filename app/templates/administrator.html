@@ -86,24 +86,9 @@
                     <p class="h4 my-0">
                         محصولات
                     </p>
-                    <a href="#createForm2" data-bs-toggle="collapse"  aria-expanded="false" role="button"  aria-controls="createForm" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
+                    <a href="{{ url_for('admin.product_create') }}" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
                         <i class="fa-solid fa-plus fa-xl"></i><p class="h4 mx-2 my-0">افزودن محصول</p>
                     </a>
-                </div>
-                {% from "formhelpers/create_form.html" import render_field %}
-                <div id="createForm2" class="collapse m-3 py-4 shadow rounded-5">
-                    <form action="{{ url_for('admin.administrator', type='product', form_type='create') }}" method="post" enctype="multipart/form-data" class="col-12 col-lg-6 col-xl-4">
-                        {{ render_field(form.product_name) }}
-                        {{ render_field(form.product_category) }}
-                        {{ render_field(form.product_price) }}
-                        {{ render_field(form.product_quantity) }}
-                        {{ render_field(form.product_discount) }}
-                        {{ render_field(form.product_discount_date) }}
-                        {{ render_field(form.product_short_description) }}
-                        <button class="btn p-3 mx-3 my-2 align-self-center shadow">
-                            <i class="fa-solid fa-plus fa-2x"></i>
-                        </button>
-                    </form>
                 </div>
                 <hr>
                 <div class="table-responsive">
@@ -163,21 +148,9 @@
                     <p class="h4 my-0">
                         دسته بندی ها
                     </p>
-                    <a href="#createForm1" data-bs-toggle="collapse"  aria-expanded="false" role="button"  aria-controls="createForm" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
+                    <a href="{{ url_for('admin.category_create') }}" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
                         <i class="fa-solid fa-plus fa-xl"></i><p class="h4 mx-2 my-0">افزودن دسته بندی</p>
                     </a>
-                </div>
-                {% from "formhelpers/create_form.html" import render_field %}
-                <div id="createForm1" class="collapse m-3 py-4 shadow rounded-5">
-                    <form action="{{ url_for('admin.administrator', type='category', form_type='create') }}" method="post" enctype="multipart/form-data" class="navbar navbar-expand-lg d-flex justify-content-around align-items-start">
-                        {{ render_field(form.category_name) }}
-                        {{ render_field(form.category_parent) }}
-                        {{ render_field(form.category_description) }}
-                        {{ render_field(form.category_image) }}
-                        <button class="btn p-3 mx-3 my-2 align-self-center shadow">
-                            <i class="fa-solid fa-plus fa-2x"></i>
-                        </button>
-                    </form>
                 </div>
                 <hr>
                 <table class="table">

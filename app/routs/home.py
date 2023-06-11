@@ -1,5 +1,6 @@
 from flask import render_template, Blueprint, url_for, flash, redirect, request, make_response
 from app import app, db, curs
+from app.helpers.permissions import permission_require
 
 home = Blueprint('home', __name__,
                  template_folder='templates',
@@ -16,6 +17,5 @@ def home_page():
                         'WHERE active = 1'
     curs.execute(slideshow_img_sql)
     slideshow_img = curs.fetchall()
-    print(slideshow_img)
 
     return render_template('home.html', slideshow_img=slideshow_img)

@@ -12,7 +12,10 @@ module.exports = {
     successful_payment: "./src/js/successful_payment.js",
     profile: "./src/js/profile.js",
     administrator: "./src/js/administrator.js",
-    category_update: "./src/js/category_update.js"
+    category_create: "./src/js/category_create.js",
+    category_update: "./src/js/category_update.js",
+    product_create: "./src/js/product_create.js",
+    product_update: "./src/js/product_update.js",
   },
   output: {
     filename: '[name].js',

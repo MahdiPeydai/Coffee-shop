@@ -37,22 +37,7 @@ class ChangePassword(Form):
                                      render_kw={"placeholder": "تکرار رمز عبور جدید"})
 
 
-class CreateCategory(Form):
-    category_name = StringField('نام',
-                                validators=[DataRequired(),
-                                            Length(max=50)])
-    category_description = TextAreaField('توضیحات',
-                                         validators=[Length(max=255)])
-    category_parent = SelectField('دسته بندی مادر',
-                                  choices=[],
-                                  default='')
-    category_image = FileField('تصویر',
-                               validators=[FileSize(max_size=1),
-                                           FileAllowed(app.config['IMAGE_EXTENSION']),
-                                           DataRequired()])
-
-
-class UpdateCategory(Form):
+class Category(Form):
     category_name = StringField('نام',
                                 validators=[DataRequired(),
                                             Length(max=50)])
