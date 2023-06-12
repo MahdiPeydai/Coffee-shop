@@ -7,7 +7,7 @@
 <body>
 <div class="h-100 d-flex align-items-center justify-content-center">
     <form action="{{ url_for('admin.product_update', product_id=product_id) }}" enctype="multipart/form-data" method="post" class="shadow p-5 rounded-4 m-5">
-    {% from "formhelpers/update_form.html" import render_field %}
+    {% from "formhelpers/crud_form.html" import render_field %}
         {{ render_field(form.product_name) }}
         {{ render_field(form.product_category) }}
         {{ render_field(form.product_price) }}

@@ -19,7 +19,7 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
-        {% from "formhelpers/update_form.html" import render_field %}
+        {% from "formhelpers/crud_form.html" import render_field %}
         {{ render_field(form.category_name) }}
         {{ render_field(form.category_parent) }}
         {{ render_field(form.category_description) }}

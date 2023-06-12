@@ -16,6 +16,9 @@ module.exports = {
     category_update: "./src/js/category_update.js",
     product_create: "./src/js/product_create.js",
     product_update: "./src/js/product_update.js",
+    user_create: "./src/js/user_create.js",
+    user_update: "./src/js/user_update.js",
+    user_change_password: "./src/js/user_change_password.js",
   },
   output: {
     filename: '[name].js',

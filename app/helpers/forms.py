@@ -5,6 +5,11 @@ from flask_wtf.file import FileSize, FileAllowed, FileRequired
 from app import app, curs
 
 
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+
+
 class Profile(Form):
     firstname = StringField('نام',
                             validators=[DataRequired(),
@@ -47,13 +52,6 @@ class Category(Form):
     category_image = FileField('تصویر',
                                validators=[FileSize(max_size=1),
                                            FileAllowed(app.config['IMAGE_EXTENSION'])])
-    category_active = SelectField('وضعیت',
-                                  choices=['فعال', 'غیرفعال'])
-
-
-class MultiCheckboxField(SelectMultipleField):
-    widget = widgets.ListWidget(prefix_label=False)
-    option_widget = widgets.CheckboxInput()
 
 
 class Product(Form):
@@ -73,3 +71,30 @@ class Product(Form):
                                                format='%Y-%m-%d %H:%M:%S')
     product_short_description = TextAreaField('توضیحات',
                                               validators=[Length(max=255)])
+
+
+class User(Form):
+    firstname = StringField('نام',
+                            validators=[DataRequired(),
+                                        Length(max=50)],
+                            render_kw={"placeholder": "نام"})
+    lastname = StringField('نام خانوادگی',
+                           validators=[DataRequired(),
+                                       Length(max=50)],
+                           render_kw={"placeholder": "نام خانوادگی"})
+    email = StringField('ایمیل',
+                        validators=[DataRequired(),
+                                    Email(),
+                                    Length(max=120)],
+                        render_kw={"placeholder": "ایمیل"})
+    phone = StringField('تلفن',
+                        validators=[DataRequired(),
+                                    Length(min=11, max=14, message='صحیح : "09** *** ****"')],
+                        render_kw={"placeholder": "09** *** ****"})
+    password = PasswordField('رمز عبور',
+                             validators=[DataRequired(),
+                                         Length(min=8, message='Password should be at least %(min)d characters long')])
+    confirm_password = PasswordField('تکرار رمز عبور',
+                                     validators=[DataRequired(),
+                                                 EqualTo('password', message='Passwords must match!')])
+    role = SelectField('Role')
