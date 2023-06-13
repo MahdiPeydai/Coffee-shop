@@ -98,3 +98,11 @@ class User(Form):
                                      validators=[DataRequired(),
                                                  EqualTo('password', message='Passwords must match!')])
     role = SelectField('Role')
+
+
+class Role(Form):
+    role_name = StringField('نام',
+                            validators=[DataRequired(),
+                                        Length(max=50)])
+    role_permission = MultiCheckboxField('permission',
+                                         choices=[])

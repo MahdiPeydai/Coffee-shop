@@ -19,6 +19,8 @@ module.exports = {
     user_create: "./src/js/user_create.js",
     user_update: "./src/js/user_update.js",
     user_change_password: "./src/js/user_change_password.js",
+    role_create: "./src/js/role_create.js",
+    role_update: "./src/js/role_update.js",
   },
   output: {
     filename: '[name].js',

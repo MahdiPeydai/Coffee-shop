@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint, url_for, flash, redirect, request, make_response
 from app import app, db, curs
-from app.helpers.forms import Category, Product, User, ChangePassword
+from app.helpers.forms import Category, Product, User, ChangePassword, Role
 from wtforms.validators import DataRequired
 import uuid, os, hashlib
 import datetime
@@ -50,7 +50,8 @@ def administrator():
                           'FROM user ' \
                           'INNER JOIN user_role ON user.id = user_role.user_id ' \
                           'INNER JOIN role ON user_role.role_id = role.id ' \
-                          'WHERE user.is_deleted IS NULL'
+                          'WHERE user.is_deleted IS NULL ' \
+                          'ORDER BY user.id'
         curs.execute(information_sql)
         users = curs.fetchall()
         data = {}
@@ -66,9 +67,22 @@ def administrator():
                 data[user['id']]['role'].append(user['role_name'])
         print(data)
     elif menu_type == 'role':
-        role_sql = 'SELECT * ' \
-                   'FROM role'
-        data = curs.execute(role_sql)
+        role_sql = 'SELECT role.name, role.id, permission.name AS permission ' \
+                   'FROM role ' \
+                   'LEFT JOIN role_permission ON role.id=role_permission.role_id ' \
+                   'LEFT JOIN permission ON role_permission.permission_id=permission.id ' \
+                   'ORDER BY role.id'
+        curs.execute(role_sql)
+        roles = curs.fetchall()
+        data = {}
+        for role in roles:
+            if role['id'] not in data.keys():
+                data[role['id']] = {
+                    'name': role['name'],
+                    'permission': [role['permission']]
+                }
+            else:
+                data[role['id']]['permission'].append(role['permission'])
     elif menu_type == 'permission':
         permission_sql = 'SELECT * ' \
                          'FROM permission'
@@ -309,7 +323,7 @@ def product_update(product_id):
                 curs.execute(add_category_sql, add_category_val)
                 db.commit()
         flash('تغییرات با موفقیت انجام شد', 'message')
-        return redirect(url_for('admin.product_update', type='product'))
+        return redirect(url_for('admin.product_update'))
 
     product_sql = 'SELECT product.id, product.name, product.quantity, product.price, product.discount, product.discount_date, product.short_description, category.id as category_id ' \
                   'FROM product ' \
@@ -321,7 +335,7 @@ def product_update(product_id):
     products = curs.fetchall()
     product = {}
     for product_check in products:
-        if product_check['id'] not in product.values():
+        if 'id' not in product.keys():
             product = {
                 'id': product_check['id'],
                 'name': product_check['name'],
@@ -461,8 +475,8 @@ def user_update(user_id):
 @admin.route('/admin/user/<int:user_id>/delete', methods=['POST', 'GET'])
 def user_delete(user_id):
     user_delete_sql = 'UPDATE user ' \
-                         'SET is_deleted = CURRENT_TIMESTAMP ' \
-                         'WHERE id = %s'
+                      'SET is_deleted = CURRENT_TIMESTAMP ' \
+                      'WHERE id = %s'
     user_delete_val = (user_id,)
     curs.execute(user_delete_sql, user_delete_val)
     db.commit()
@@ -492,3 +506,155 @@ def user_password_update(user_id):
             return redirect(url_for('admin.user_update', type='information'))
     form = ChangePassword(request.form)
     return render_template('user_change_password.html', form=form)
+
+
+@admin.route('/admin/role/create', methods=['POST', 'GET'])
+def role_create():
+    if request.method == 'POST':
+        role_check_sql = 'SELECT name ' \
+                         'FROM role ' \
+                         'WHERE name = %s'
+        role_check_val = (request.form['role_name'])
+        curs.execute(role_check_sql, role_check_val)
+        if curs.fetchone():
+            flash('role با این نام قبلا ثبت شده', 'error')
+            return redirect(url_for('admin.role_create'))
+        else:
+            role_create_sql = 'INSERT INTO role(name) ' \
+                              'VALUE (%s)'
+            role_create_val = (request.form['role_name'])
+            curs.execute(role_create_sql, role_create_val)
+            db.commit()
+            role_id_sql = 'SELECT id ' \
+                          'FROM role ' \
+                          'WHERE name = %s'
+            role_id_val = (request.form['role_name'],)
+            curs.execute(role_id_sql, role_id_val)
+            role_id = curs.fetchone()['id']
+
+            role_permission_str = request.form.getlist('role_permission')
+            role_permission = []
+            for i in role_permission_str:
+                role_permission.append(int(i))
+
+            for permission_id in role_permission:
+                role_permission_sql = 'INSERT INTO role_permission(role_id, permission_id) ' \
+                                      'VALUES (%s, %s)'
+                role_permission_val = (role_id, permission_id)
+                curs.execute(role_permission_sql, role_permission_val)
+                db.commit()
+            flash('Role با موفقیت ایجاد شد', 'message')
+            return redirect(url_for('admin.administrator', type='information'))
+
+    form = Role(request.form)
+    permission_name_sql = 'SELECT id, name ' \
+                          'FROM permission'
+    curs.execute(permission_name_sql)
+    permissions = []
+    for permission in curs.fetchall():
+        permissions.append((permission['id'], permission['name']))
+    form.role_permission.choices = permissions
+    return render_template('role_create.html', form=form)
+
+
+@admin.route('/admin/role/<int:role_id>/update', methods=['POST', 'GET'])
+def role_update(role_id):
+    if request.method == 'POST':
+        role_check_sql = 'SELECT name ' \
+                         'FROM role ' \
+                         'WHERE name = %s AND NOT id=%s'
+        role_check_val = (request.form['role_name'], role_id)
+        curs.execute(role_check_sql, role_check_val)
+        if curs.fetchone():
+            flash('role با این نام قبلا ثبت شده', 'error')
+            return redirect(url_for('admin.role_create'))
+        else:
+            role_update_sql = 'UPDATE role ' \
+                              'SET name=%s ' \
+                              'WHERE id=%s'
+            role_update_val = (request.form['role_name'], role_id)
+            curs.execute(role_update_sql, role_update_val)
+            db.commit()
+
+            old_permission_sql = 'SELECT permission.id as permission_id ' \
+                                 'FROM role ' \
+                                 'LEFT JOIN role_permission on role.id = role_permission.role_id ' \
+                                 'LEFT JOIN permission on role_permission.permission_id = permission.id ' \
+                                 'WHERE role.id=%s'
+            old_permission_val = (role_id,)
+            curs.execute(old_permission_sql, old_permission_val)
+            old_permission_dict = curs.fetchall()
+            old_permission = []
+            for check in old_permission_dict:
+                old_permission.append(check['permission_id'])
+            new_permission_str = request.form.getlist('role_permission')
+            new_permission = []
+            for check in new_permission_str:
+                new_permission.append(int(check))
+            for overplus in old_permission:
+                if overplus not in new_permission:
+                    delete_permission_sql = 'DELETE FROM role_permission ' \
+                                            'WHERE permission_id=%s AND role_id=%s'
+                    delete_permission_val = (overplus, role_id)
+                    curs.execute(delete_permission_sql, delete_permission_val)
+                    db.commit()
+            for shortage in new_permission:
+                if shortage not in old_permission:
+                    add_permission_sql = 'INSERT INTO role_permission (role_id, permission_id) ' \
+                                         'VALUES (%s, %s)'
+                    add_permission_val = (role_id, int(shortage))
+                    curs.execute(add_permission_sql, add_permission_val)
+                    db.commit()
+            flash('تغییرات با موفقیت انجام شد', 'message')
+            return redirect(url_for('admin.role_update', role_id=role_id))
+
+    role_sql = 'SELECT role.name, role.id, permission.id AS permission ' \
+               'FROM role ' \
+               'LEFT JOIN role_permission ON role.id=role_permission.role_id ' \
+               'LEFT JOIN permission ON role_permission.permission_id=permission.id ' \
+               'WHERE role.id = %s'
+    role_val = (role_id,)
+    curs.execute(role_sql, role_val)
+    roles = curs.fetchall()
+    role = {}
+    for role_check in roles:
+        if 'role_id' not in role.keys():
+            role = {
+                'role_id': role_check['id'],
+                'role_name': role_check['name'],
+                'role_permission': [role_check['permission']]
+            }
+        else:
+            role['role_permission'].append(role_check['permission'])
+    placeholders = {
+        'role_name': role['role_name']
+    }
+    form = Role(request.form, data=placeholders)
+    permission_name_sql = 'SELECT id, name ' \
+                          'FROM permission'
+    curs.execute(permission_name_sql)
+    permissions = []
+    for permission in curs.fetchall():
+        permissions.append((permission['id'], permission['name']))
+    form.role_permission.choices = permissions
+    role_permission = []
+    for permission_id in role['role_permission']:
+        role_permission.append(str(permission_id))
+    form.role_permission.data = role_permission
+    return render_template('role_update.html', form=form, role_id=role_id)
+
+
+@admin.route('/admin/role/<int:role_id>/delete')
+def role_delete(role_id):
+    role_delete_sql = 'DELETE FROM role ' \
+                      'WHERE id=%s'
+    role_delete_val = (role_id,)
+    curs.execute(role_delete_sql, role_delete_val)
+    db.commit()
+    role_permission_delete_sql = 'DELETE FROM role_permission ' \
+                                 'WHERE role_id=%s'
+    role_permission_delete_val = (role_id,)
+    curs.execute(role_permission_delete_sql, role_permission_delete_val)
+    db.commit()
+    flash('role با موفقیت حذف شد','message')
+    return redirect(url_for('admin.administrator', type='role'))
