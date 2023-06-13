@@ -6,7 +6,7 @@
 </head>
 <body>
 <div class="d-flex align-items-center justify-content-center">
-    <form action="{{ url_for('admin.role_update', role_id=role_id) }}" enctype="multipart/form-data" method="post" class="m-5 shadow p-5 rounded-4">
+    <form action="{{ url_for('admin.permission_update', permission_id=permission_id) }}" enctype="multipart/form-data" method="post" class="m-5 shadow p-5 rounded-4">
     {% with messages = get_flashed_messages(category_filter=["message"]) %}
             {% if messages %}
                 {% for message in messages %}
@@ -32,8 +32,8 @@
             {% endif %}
         {% endwith %}
         {% from "formhelpers/crud_form.html" import render_field %}
-        {{ render_field(form.role_name) }}
-        {{ render_field(form.role_permission) }}
+        {{ render_field(form.permission_name) }}
+        {{ render_field(form.permission_description) }}
         <div class="d-flex justify-content-around p-3">
             <button type="submit" class="btn bg-success p-2 shadow text-white">ذخیره تغییرات</button>
             <a href="{{ url_for('admin.administrator', type='role') }}" class="btn bg-danger p-2 shadow text-white">
@@ -43,6 +43,6 @@
     </form>
 </div>
 
-<script src="{{ asset.url_for('role_update.js') }}"></script>
+<script src="{{ asset.url_for('permission_update.js') }}"></script>
 </body>
 </html>

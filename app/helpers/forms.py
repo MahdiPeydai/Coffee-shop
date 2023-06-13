@@ -106,3 +106,11 @@ class Role(Form):
                                         Length(max=50)])
     role_permission = MultiCheckboxField('permission',
                                          choices=[])
+
+
+class Permission(Form):
+    permission_name = StringField('نام',
+                                  validators=[DataRequired(),
+                                              Length(max=50)])
+    permission_description = TextAreaField('توضیحات',
+                                           validators=[Length(max=255)])

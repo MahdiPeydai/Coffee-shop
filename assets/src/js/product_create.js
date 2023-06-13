@@ -4,4 +4,4 @@ import '@fortawesome/fontawesome-free/js/regular'
 import '@fortawesome/fontawesome-free/js/brands'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import ('../css/product_create.css')
+import '../css/product_create.css'

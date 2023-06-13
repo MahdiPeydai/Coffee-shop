@@ -35,7 +35,7 @@
         {{ render_field(form.role_name) }}
         {{ render_field(form.role_permission) }}
         <div class="d-flex justify-content-around p-3">
-            <button type="submit" class="btn bg-success p-2 shadow text-white">ذخیره Role</button>
+            <button type="submit" class="btn bg-success p-2 shadow text-white">ایجاد Role</button>
             <a href="{{ url_for('admin.administrator', type='role') }}" class="btn bg-danger p-2 shadow text-white">
                 بازگشت
             </a>
@@ -43,6 +43,6 @@
     </form>
 </div>
 
-<script src="{{ asset.url_for('user_create.js') }}"></script>
+<script src="{{ asset.url_for('role_create.js') }}"></script>
 </body>
 </html>

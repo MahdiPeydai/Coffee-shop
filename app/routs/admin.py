@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint, url_for, flash, redirect, request, make_response
 from app import app, db, curs
-from app.helpers.forms import Category, Product, User, ChangePassword, Role
+from app.helpers.forms import Category, Product, User, ChangePassword, Role, Permission
 from wtforms.validators import DataRequired
 import uuid, os, hashlib
 import datetime
@@ -14,7 +14,7 @@ admin = Blueprint('admin', __name__,
 @admin.route('/admin', methods=['GET', 'POST'])
 def administrator():
     menu_type = request.args.get('type')
-    form = None
+    data = None
     if menu_type == 'product':
         form = Product(request.form)
         product_sql = 'SELECT product.id, product.name, product.quantity, product.price, product.discount, product.discount_date, category.name as category_name ' \
@@ -86,11 +86,10 @@ def administrator():
     elif menu_type == 'permission':
         permission_sql = 'SELECT * ' \
                          'FROM permission'
-        data = curs.execute(permission_sql)
-    else:
-        data = None
+        curs.execute(permission_sql)
+        data = curs.fetchall()
 
-    return render_template('administrator.html', menu_type=menu_type, data=data, form=form)
+    return render_template('administrator.html', menu_type=menu_type, data=data)
 
 
 @admin.route('/admin/category/create', methods=['GET', 'POST'])
@@ -102,7 +101,7 @@ def category_create():
         category_check_val = (request.form['category_name'],)
         curs.execute(category_check_sql, category_check_val)
         if curs.fetchone():
-            flash('دسته بندی با نام وارد شده قبلا ایجاد شده است ...', 'error')
+            flash('دسته بندی با نام وارد شده قبلا ایجاد شده است', 'error')
             return redirect(url_for('admin.category_create'))
 
         category_image = request.files['category_image']
@@ -134,42 +133,21 @@ def category_create():
 
 @admin.route('/admin/category/<int:category_id>/update', methods=['GET', 'POST'])
 def category_update(category_id):
-    category_name_sql = 'SELECT id, name ' \
-                        'FROM category'
-    curs.execute(category_name_sql)
-    categories = [(0, '')]
-    for category in curs.fetchall():
-        categories.append((category['id'], category['name']))
-
-    category_sql = 'SELECT A.id, A.name, A.description, A.image, B.id AS parent ' \
-                   'FROM category A ' \
-                   'LEFT JOIN category B ON B.id = A.parent_id ' \
-                   'WHERE A.id = %s ' \
-                   'ORDER BY A.id'
-    category_val = (category_id,)
-    curs.execute(category_sql, category_val)
-    category = curs.fetchone()
-    print(category['name'])
-    placeholders = {
-        'category_name': category['name'],
-        'category_parent': category['parent'],
-        'category_description': category['description']
-    }
-    form = Category(request.form, data=placeholders)
-    form.category_parent.choices = categories
-
     if request.method == 'POST':
-        if request.form['category_active'] == 'فعال':
-            category_active = 1
-        else:
-            category_active = 0
+        category_check_sql = 'SELECT name ' \
+                             'FROM category ' \
+                             'WHERE name= %s AND NOT id=%s'
+        category_check_val = (request.form['category_name'],category_id)
+        curs.execute(category_check_sql, category_check_val)
+        if curs.fetchone():
+            flash('دسته بندی با نام وارد شده قبلا ایجاد شده است ...', 'error')
+            return redirect(url_for('admin.category_create'))
 
         category_update_sql = 'UPDATE category ' \
-                              'SET name=%s, parent_id=%s, description=%s, active=%s ' \
+                              'SET name=%s, parent_id=%s, description=%s ' \
                               'WHERE id=%s'
         category_update_val = (
             request.form['category_name'], request.form['category_parent'], request.form['category_description'],
-            category_active,
             category_id)
         curs.execute(category_update_sql, category_update_val)
         db.commit()
@@ -196,27 +174,41 @@ def category_update(category_id):
             curs.execute(new_category_image_sql, new_category_image_val)
             db.commit()
         flash('نغییرات با موفقیت انجام شد', 'message')
-        return redirect(url_for('admin.administrator', type='category'))
+
+    category_name_sql = 'SELECT id, name ' \
+                        'FROM category'
+    curs.execute(category_name_sql)
+    categories = [(0, '')]
+    for category in curs.fetchall():
+        categories.append((category['id'], category['name']))
+
+    category_sql = 'SELECT A.id, A.name, A.description, A.image, B.id AS parent ' \
+                   'FROM category A ' \
+                   'LEFT JOIN category B ON B.id = A.parent_id ' \
+                   'WHERE A.id = %s ' \
+                   'ORDER BY A.id'
+    category_val = (category_id,)
+    curs.execute(category_sql, category_val)
+    category = curs.fetchone()
+    print(category['name'])
+    placeholders = {
+        'category_name': category['name'],
+        'category_parent': category['parent'],
+        'category_description': category['description']
+    }
+    form = Category(request.form, data=placeholders)
+    form.category_parent.choices = categories
+
     return render_template('category_update.html', form=form, category_id=category_id)
 
 
 @admin.route('/admin/category/<int:category_id>/delete')
 def category_delete(category_id):
-    category_delete_sql = 'DELETE FROM category ' \
+    category_delete_sql = 'UPDATE category ' \
+                          'SET is_deleted =  CURRENT_TIMESTAMP ' \
                           'WHERE id = %s'
     category_delete_val = (category_id,)
     curs.execute(category_delete_sql, category_delete_val)
-    db.commit()
-    parent_delete_sql = 'UPDATE category ' \
-                        'SET parent_id = NULL ' \
-                        'WHERE parent_id = %s'
-    parent_delete_val = (category_id,)
-    curs.execute(parent_delete_sql, parent_delete_val)
-    db.commit()
-    product_category_delete_sql = 'DELETE FROM product_category ' \
-                                  'WHERE category_id = %s'
-    product_category_delete_val = (category_id,)
-    curs.execute(product_category_delete_sql, product_category_delete_val)
     db.commit()
     flash('دسته بندی با موفقیت حذف شد', 'message')
     return redirect(url_for('admin.administrator', type='category'))
@@ -278,6 +270,14 @@ def product_create():
 @admin.route('/admin/product/<int:product_id>/update', methods=['GET', 'POST'])
 def product_update(product_id):
     if request.method == "POST":
+        product_check_sql = 'SELECT name ' \
+                            'FROM product ' \
+                            'WHERE name = %s AND NOT id=%s'
+        product_check_val = (request.form['product_name'],product_id)
+        curs.execute(product_check_sql, product_check_val)
+        if curs.fetchone():
+            flash('محصول با نام وارد شده قبلا ایجاد شده است ...', 'error')
+            return redirect(url_for('admin.product_create'))
         if request.form['product_discount_date'] == '':
             product_discount_date = None
         else:
@@ -323,7 +323,6 @@ def product_update(product_id):
                 curs.execute(add_category_sql, add_category_val)
                 db.commit()
         flash('تغییرات با موفقیت انجام شد', 'message')
-        return redirect(url_for('admin.product_update'))
 
     product_sql = 'SELECT product.id, product.name, product.quantity, product.price, product.discount, product.discount_date, product.short_description, category.id as category_id ' \
                   'FROM product ' \
@@ -392,14 +391,14 @@ def user_create():
                          'WHERE email = %s'
         check_user_val = (request.form['email'],)
         curs.execute(check_user_sql, check_user_val)
-        if curs.fetchone():
-            flash('کاربر با این ایمیل قبلا ثبت شده', 'error')
-        elif not request.form['role']:
+        if not request.form['role']:
             placeholders['firstname'] = request.form['firstname']
             placeholders['lastname'] = request.form['lastname']
             placeholders['phone'] = request.form['phone']
             placeholders['email'] = request.form['email']
             flash('یک رول برای کاربر تعیین کنید', 'error')
+        elif curs.fetchone():
+            flash('کاربر با این ایمیل قبلا ثبت شده', 'error')
         else:
             user_password = request.form['password']
             user_password = user_password.encode()
@@ -432,6 +431,14 @@ def user_create():
 @admin.route('/admin/user/<int:user_id>/update', methods=['POST', 'GET'])
 def user_update(user_id):
     if request.method == 'POST':
+        user_check_sql = 'SELECT email ' \
+                         'FROM user ' \
+                         'WHERE email=%s AND NOT id=%s'
+        user_check_val = (request.form['email'], user_id)
+        curs.execute(user_check_sql, user_check_val)
+        if curs.fetchone():
+            flash('کاربر با این ایمیل قبلا ثبت شده', 'error')
+            return redirect(url_for('admin.administrator', type='information'))
         user_update_sql = 'UPDATE user ' \
                           'set firstname=%s, lastname=%s, phone=%s, email=%s ' \
                           'WHERE id=%s'
@@ -503,7 +510,7 @@ def user_password_update(user_id):
             password_update_val = (user_hashed_password, user_id)
             curs.execute(password_update_sql, password_update_val)
             db.commit()
-            return redirect(url_for('admin.user_update', type='information'))
+            return redirect(url_for('admin.user_update', user_id=user_id))
     form = ChangePassword(request.form)
     return render_template('user_change_password.html', form=form)
 
@@ -514,7 +521,7 @@ def role_create():
         role_check_sql = 'SELECT name ' \
                          'FROM role ' \
                          'WHERE name = %s'
-        role_check_val = (request.form['role_name'])
+        role_check_val = (request.form['role_name'],)
         curs.execute(role_check_sql, role_check_val)
         if curs.fetchone():
             flash('role با این نام قبلا ثبت شده', 'error')
@@ -567,7 +574,7 @@ def role_update(role_id):
         curs.execute(role_check_sql, role_check_val)
         if curs.fetchone():
             flash('role با این نام قبلا ثبت شده', 'error')
-            return redirect(url_for('admin.role_create'))
+            return redirect(url_for('admin.role_update'))
         else:
             role_update_sql = 'UPDATE role ' \
                               'SET name=%s ' \
@@ -606,7 +613,6 @@ def role_update(role_id):
                     curs.execute(add_permission_sql, add_permission_val)
                     db.commit()
             flash('تغییرات با موفقیت انجام شد', 'message')
-            return redirect(url_for('admin.role_update', role_id=role_id))
 
     role_sql = 'SELECT role.name, role.id, permission.id AS permission ' \
                'FROM role ' \
@@ -651,10 +657,73 @@ def role_delete(role_id):
     role_delete_val = (role_id,)
     curs.execute(role_delete_sql, role_delete_val)
     db.commit()
-    role_permission_delete_sql = 'DELETE FROM role_permission ' \
-                                 'WHERE role_id=%s'
-    role_permission_delete_val = (role_id,)
-    curs.execute(role_permission_delete_sql, role_permission_delete_val)
-    db.commit()
-    flash('role با موفقیت حذف شد','message')
+    flash('role با موفقیت حذف شد', 'message')
     return redirect(url_for('admin.administrator', type='role'))
+
+
+@admin.route('/admin/permission/create', methods=['POST', 'GET'])
+def permission_create():
+    if request.method == 'POST':
+        permission_check_sql = 'SELECT name ' \
+                               'FROM permission ' \
+                               'WHERE name=%s'
+        permission_check_val = (request.form['permission_name'],)
+        curs.execute(permission_check_sql, permission_check_val)
+        if curs.fetchone():
+            flash('Permission با این نام وجود دارد', 'error')
+            return redirect(url_for('admin.permission_create'))
+
+        permission_create_sql = 'INSERT INTO permission(name, description) ' \
+                                'VALUES (%s, %s)'
+        permission_create_val = (request.form['permission_name'], request.form['permission_description'])
+        curs.execute(permission_create_sql, permission_create_val)
+        db.commit()
+        flash('Permission با موفقیت ایجاد شد', 'message')
+        return redirect(url_for('admin.administrator', type='permission'))
+    form = Permission(request.form)
+    return render_template('permission_create.html', form=form)
+
+
+@admin.route('/admin/permission/<int:permission_id>/update', methods=['POST', 'GET'])
+def permission_update(permission_id):
+    if request.method == 'POST':
+        permission_check_sql = 'SELECT name ' \
+                               'FROM permission ' \
+                               'WHERE name=%s AND NOT id=%s'
+        permission_check_val = (request.form['permission_name'], permission_id)
+        curs.execute(permission_check_sql, permission_check_val)
+        if curs.fetchone():
+            flash('Permission با این نام وجود دارد', 'error')
+            return redirect(url_for('admin.permission_create'))
+
+        permission_update_sql = 'UPDATE permission ' \
+                                'SET name=%s, description=%s ' \
+                                'WHERE id=%s'
+        permission_update_val = (request.form['permission_name'], request.form['permission_description'], permission_id)
+        curs.execute(permission_update_sql, permission_update_val)
+        db.commit()
+        flash('تغییرات با موفقیت انجام شد', 'message')
+
+    permission_sql = 'SELECT name, description ' \
+                     'FROM permission ' \
+                     'WHERE id=%s'
+    permission_val = (permission_id,)
+    curs.execute(permission_sql, permission_val)
+    permission = curs.fetchone()
+    placeholders = {
+        'permission_name': permission['name'],
+        'permission_description': permission['description']
+    }
+    form = Permission(request.form, data=placeholders)
+    return render_template('permission_update.html', form=form, permission_id=permission_id)
+
+
+@admin.route('/admin/permission/<int:permission_id>/delete', methods=['POST', 'GET'])
+def permission_delete(permission_id):
+    permission_delete_sql = 'DELETE FROM permission ' \
+                            'WHERE id=%s'
+    permission_delete_val = (permission_id,)
+    curs.execute(permission_delete_sql, permission_delete_val)
+    db.commit()
+    flash('permission با موفقیت حذف شد', 'message')
+    return redirect(url_for('admin.administrator', type='permission'))

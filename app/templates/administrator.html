@@ -280,7 +280,7 @@
                     <p class="h4 my-0">
                         Permission
                     </p>
-                    <a href="#" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
+                    <a href="{{ url_for('admin.permission_create') }}" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
                         <i class="fa-solid fa-plus fa-xl"></i><p class="h4 mx-2 my-0">افزودن Permission</p>
                     </a>
                 </div>
@@ -294,18 +294,24 @@
                     </tr>
                     </thead>
                     <tbody>
+                    {% for permission in data %}
                     <tr>
-                        <td class="align-middle">عدنان باباخانی</td>
-                        <td class="align-middle">بلذ</td>
+                        <td class="align-middle">{{ permission['name'] }}</td>
                         <td class="align-middle">
-                            <a class="btn p-1 shadow">
+                            {% if permission['description'] %}
+                                {{ permission['description'] }}
+                            {% endif %}
+                        </td>
+                        <td class="align-middle">
+                            <a href="{{ url_for('admin.permission_delete', permission_id=permission['id']) }}" class="btn p-1 shadow">
                                 <i class="fa-regular fa-trash-can fa-lg"></i>
                             </a>
-                            <a class="btn p-1 shadow">
+                            <a href="{{ url_for('admin.permission_update', permission_id=permission['id']) }}" class="btn p-1 shadow">
                                 <i class="fa-regular fa-pen-to-square fa-lg"></i>
                             </a>
                         </td>
                     </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>
