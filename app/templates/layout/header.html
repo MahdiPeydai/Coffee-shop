@@ -1,0 +1,33 @@
+<header class="container-fluid mt-3">
+    <div class="d-flex justify-content-center justify-content-md-start align-items-center sticky-top px-5 bg-white">
+        <a href="{{ url_for('home') }}" class="d-flex align-items-center text-decoration-none text-black">
+            <img src="{{ asset.url_for('logo.png') }}">
+            <p class="h5 my-0 mx-2">
+                فروشگاه قهوه بهنام کافه
+            </p>
+        </a>
+        <div id="sidebar-toggle" class="btn mx-3 d-lg-none">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+        <div dir="ltr" class="d-md-flex col-12 col-lg-11 bottom_navbar rounded-3 p-2">
+            <a href="{{ url_for('cart') }}" class="col-md-3 col-xl-2 nav-link d-flex align-items-center justify-content-center card_button px-3 py-2 mx-2">
+                <p class="my-0 mx-1 px-1 text-white card_counter">{{ cart_items_number }}</p>
+                <p class="my-0 mx-1">سبد خرید</p>
+                <i class="fa-solid fa-basket-shopping my-0 mx-1"></i>
+            </a>
+            {% if user_id %}
+            <a href="{{ url_for('user_profile') }}" class="col-md-3 col-xl-2 nav-link d-flex align-items-center justify-content-center px-3 py-2 mx-2 rounded-3 border border-2">
+                <p class="my-0 mx-1">پروفایل</p>
+                <i class="fa-solid fa-id-card mx-1"></i>
+            </a>
+            {% else %}
+            <a href="{{ url_for('user_login') }}" class="col-md-3 col-xl-2 nav-link d-flex align-items-center justify-content-center px-3 py-2 mx-2 rounded-3 border border-1 text-secondary">
+                <p class="my-0 mx-1">ورود یا ثبت نام</p>
+                <i class="fa-solid fa-arrow-right-to-bracket mx-1"></i>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</header>

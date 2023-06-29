@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+</head>
+<body>
+<div class="m-2 p-3">
+    <div class="row flex-nowrap">
+        <div class="side_bar col-auto col-sm-2 px-sm-1 px-0" style="height: border-box">
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 shadow rounded-5 p-4">
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start px-1" id="menu">
+                    <li class="nav-item">
+                        <a href="{{ url_for('admin_product') }}" class="nav-link px-0 my-2 py-3 text-decoration-none text-black">
+                            <i class="align-middle fa-solid fa-mug-hot fa-2x"></i>
+                            <h4 class="align-middle ms-1 my-0 d-none d-md-inline">محصولات</h4>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('admin_category') }}" class="nav-link px-0 my-2 py-3 text-decoration-none text-black">
+                            <i class="align-middle fa-solid fa-layer-group fa-2x"></i>
+                            <h4 class="align-middle ms-1 my-0 d-none d-md-inline">دسته بندی ها</h4>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('admin_user') }}" class="nav-link px-0 my-2 py-3 text-decoration-none text-black">
+                            <i class="align-middle fa-solid fa-clipboard-user fa-2x"></i>
+                            <h4 class="align-middle ms-1 my-0 d-none d-md-inline">کاربران</h4>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('admin_role') }}" class="nav-link px-0 my-2 py-3 text-decoration-none text-black">
+                            <i class="align-middle fa-solid fa-briefcase fa-2x"></i>
+                            <h4 class="align-middle ms-1 my-0 d-none d-md-inline">Role</h4>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('admin_permission') }}" class="nav-link px-0 my-2 py-3 text-decoration-none text-black">
+                            <i class="align-middle fa-solid fa-circle-exclamation fa-2x"></i>
+                            <h4 class="align-middle ms-1 my-0 d-none d-md-inline">Permission</h4>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('admin_logout') }}" class="nav-link px-0 my-2 py-3 text-decoration-none text-black">
+                            <i class="align-middle fa-solid fa-door-open fa-2x"></i>
+                            <h4 class="align-middle ms-1 my-0 d-none d-md-inline">خروج</h4>
+                        </a>
+                    </li>
+                </ul>
+                <hr>
+            </div>
+        </div>
+        <div class="col col-10 py-3 ms-5">
+            {% with messages = get_flashed_messages(category_filter=["error"]) %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="p-4 rounded-4 shadow mb-2">
+                        <h6 class="text-danger">
+                            {{message}}
+                        </h6>
+                    </div>
+                    <hr>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            {% with messages = get_flashed_messages(category_filter=["message"]) %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="p-4 rounded-4 shadow mb-2">
+                        <h6 class="text-success">
+                            {{message}}
+                        </h6>
+                    </div>
+                    <hr>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+
+<script src="{{ asset.url_for('administrator.js') }}"></script>
+</body>
+</html>

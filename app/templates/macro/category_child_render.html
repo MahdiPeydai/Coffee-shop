@@ -1,0 +1,13 @@
+{% macro render_children(children, categories_data) %}
+    <ul class="list-group border-0 px-3">
+        {% for child, subchildren in children.items() %}
+            <li class="list-group-item border-0 p-0">
+                <a href="{{ url_for('category', category_id=child) }}" class="btn px-1 py-0 my-1">{{ categories_data[child]['name'] }}</a>
+                {% if subchildren %}
+                    {% call render_children(subchildren, categories_data) %}
+                    {% endcall %}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endmacro %}

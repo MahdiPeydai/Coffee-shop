@@ -1,0 +1,299 @@
+{% extends "layout/layout.html" %}
+
+{% block header %}
+{% include 'layout/header.html' %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'layout/sidebar.html' %}
+{% endblock %}
+
+{% block footer %}
+{% include 'layout/footer.html' %}
+{% endblock %}
+
+{% block title %}
+Product
+{% endblock %}
+
+{% block script %}
+    <script>
+    let price = {{ product['price'] }};
+    let old_price = 0;
+    {% if product['discount'] %}
+        old_price = price
+        price = price*(100-{{ product['discount'] }})/100;
+    {% endif %}
+    </script>
+    <script src="{{ asset.url_for('product.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-center mx-1 mt-3 px-2">
+        <div class="row align-items-start">
+            <div class="row col-12 col-md-8 col-lg-9 d-flex">
+                <div class="col-12 col-lg-8 col-xl-5 my-2 px-1">
+                    <div class="d-flex">
+                        <div class="align-self-start px-3">
+                            <a href="#">
+                                <i class="fa-solid fa-heart fa-xl mb-3 mt-5 text-black"></i>
+                            </a><br>
+                            <a href="#">
+                                <i class="fa-solid fa-paper-plane fa-xl text-black"></i>
+                            </a>
+                        </div>
+                        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                            <ol class="carousel-indicators">
+                            {#        {% a = 0 %}#}
+                            {#        {% for slid in slideshow_img %}#}
+                            {#            <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="{{ 'active' if a == 0 else '' }}"></li>#}
+                            {#            {% a += 1%}#}
+                            {#        {% endfor %}#}
+                                <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
+                                <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" class=""></li>
+                                <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" class=""></li>
+                            </ol>
+                            <div class="carousel-inner">
+                            {#        {% for slide in slideshow_img %}#}
+                        {#            <a href="#" class="carousel-item active">#}
+                        {#                <img class="d-block w-100" src="{{ asset.url_for(slide) }}" alt="First slide">#}
+                        {#            </a>#}
+                        {#        {% endfor %}#}
+                                <div class="carousel-item active">
+                                    <img class="d-block w-100" src="{{ asset.url_for('product.png') }}" alt="First slide">
+                                </div>
+                                <div class="carousel-item">
+                                    <img class="d-block w-100" src="{{ asset.url_for('product.png') }}" alt="Second slide">
+                                </div>
+                                <div class="carousel-item">
+                                    <img class="d-block w-100" src="{{ asset.url_for('product.png') }}" alt="Third slide">
+                                </div>
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12 col-xl-7 my-2">
+                    <h2 class="">{{ product['name'] }}</h2>
+                    <div dir="ltr" class="mt-5">
+                        {% if product['discount'] %}
+                        <div dir="rtl" class="d-inline-flex align-items-center">
+                            <p id="old_price" class="my-0 text-decoration-line-through">
+                                <span class="price">{{ product['price'] }}</span>
+                            </p>
+                            <p class="bg-danger rounded-5 p-2 me-2 mb-0 text-white">{{ product['discount'] }}%</p>
+                        </div><br>
+                        {% endif %}
+                        <div dir="rtl" class="d-inline-flex">
+                            <h4 class="mx-2">قیمت:</h4>
+                            <h4 class="mx-2">
+                                <span class="price">{{ product['discounted_price'] }}</span> تومان
+                            </h4>
+                        </div>
+                        <div class="mt-3">
+                            {% if limit %}
+                                <div>
+                                    <p class="h6 text-danger px-3">تنها {{ product['quantity'] }} عدد باقی مانده</p>
+                                </div>
+                            {% endif %}
+
+                            {% with messages = get_flashed_messages(category_filter=["error"]) %}
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        <div>
+                                            <p class="h6 text-danger px-3">{{message}}</p>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endwith %}
+                            {% with messages = get_flashed_messages(category_filter=["message"]) %}
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        <div>
+                                            <p class="h6 text-danger px-3">{{message}}</p>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endwith %}
+
+                            {% if product['quantity'] != 0 %}
+                            {% if item_quantity %}
+                                <div class="border border-1 border-danger rounded-4 ms-4 d-inline-flex align-items-center px-3">
+                                    {% if item_quantity == 1 %}
+                                    <a href="{{ url_for('cart_item_delete', product_id=product['id']) }}">
+                                        <i class="fa-regular fa-trash-can fa-lg text-black"></i>
+                                    </a>
+                                    {% else %}
+                                    <a href="{{ url_for('cart_item_delete', product_id=product['id']) }}">
+                                        <i class="fa-solid fa-circle-minus fa-lg text-black"></i>
+                                    </a>
+                                    {% endif %}
+                                    <p class="h4 mx-3 mb-0">{{ item_quantity }}</p>
+                                    <a href="{{ url_for('cart_item_store', product_id=product['id']) }}">
+                                        <i class="fa-solid fa-circle-plus fa-lg text-black"></i>
+                                    </a>
+                                </div>
+                            {% else %}
+                            <a href="{{ url_for('cart_item_store', product_id=product['id']) }}" class="btn h5 bg-danger text-white p-3 rounded-4">
+                                افزودن به سبد خرید
+                            </a>
+                            {% endif %}
+                            {% else %}
+                            <div class="d-inline-flex h5 bg-body-secondary p-3 rounded-4">
+                                موجود نمی باشد
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="info-box col-12 col-md-4 col-lg-3 p-2 rounded-4">
+                <h5 class="my-4">
+                    <i class="fa-solid fa-certificate mx-2"></i>گارانتی اصالت و سلامت فیزیکی کالا
+                </h5>
+                <h5 class="ready-shipment my-4">
+                    <i class="fa-solid fa-motorcycle mx-2"></i>آماده ارسال
+                </h5>
+                <hr>
+                <div class="d-flex justify-content-around my-4">
+                    <p class="h5">
+                        ۳.۵ از ۱۲۳ رای
+                    </p>
+                    <div dir="ltr">
+                        <i class="fa-solid fa-star fa-xl"></i>
+                        <i class="fa-solid fa-star fa-xl"></i>
+                        <i class="fa-solid fa-star fa-xl"></i>
+                        <i class="fa-regular fa-star-half-stroke fa-xl"></i>
+                        <i class="fa-regular fa-star fa-xl"></i>
+                    </div>
+                </div>
+                <h6 class="my-4">
+                    <i class="fa-solid fa-cart-shopping mx-2"></i>خرید به صورت آنلاین و ارسال پستی
+                </h6>
+                <div class="d-flex align-items-start">
+                    <h6>
+                        <i class="fa-solid fa-truck-moving mx-2"></i>
+                    </h6>
+                    <p class="h6">
+                        ارسال مرسوله های بالاتر از ۳۰۰ هزار تومان فقط در شهر رشت رایگان خواهد بود.
+                    </p>
+                </div>
+                <h6 class="my-4">
+                    <i class="fa-solid fa-shield mx-2"></i>خرید آنلاین با استفاده از درگاه های امن
+                </h6>
+            </div>
+        </div>
+    </div>
+    <div class="px-5">
+        <div class="navbar border-bottom pb-0">
+            <p class="topic h3 pb-3 mb-0">محصولات مرتبط</p>
+        </div>
+        <div>
+            <div class="container d-xl-flex">
+                <div class="col-12 col-xl-3 d-flex justify-content-center">
+                    <div class="card m-3 pb-0">
+                        <img src="{{ asset.url_for('12.png') }}" class="m-4" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title">اسپرسوساز نسپرسو مدل لاتیسما تاچ EN۵۶۰</h6>
+                            <br>
+                            <div dir="ltr" class="d-flex align-items-center">
+                                <p class="bg-danger rounded-5 p-2 me-2 mb-0 text-white">10%</p>
+                                <p class="my-0">19,000,000</p>
+                            </div>
+                            <p dir="ltr" class="ms-2 mb-0 text-decoration-line-through">22,000,000</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-3 d-flex justify-content-center">
+                    <div class="card m-3 pb-0">
+                        <img src="{{ asset.url_for('12.png') }}" class="m-4" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title">اسپرسوساز نسپرسو مدل لاتیسما تاچ EN۵۶۰</h6>
+                            <br>
+                            <div dir="ltr" class="d-flex align-items-center">
+                                <p class="bg-danger rounded-5 p-2 me-2 mb-0 text-white">10%</p>
+                                <p class="my-0">19,000,000</p>
+                            </div>
+                            <p dir="ltr" class="ms-2 mb-0 text-decoration-line-through">22,000,000</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-3 d-flex justify-content-center">
+                    <div class="card m-3 pb-0">
+                        <img src="{{ asset.url_for('12.png') }}" class="m-4" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title">اسپرسوساز نسپرسو مدل لاتیسما تاچ EN۵۶۰</h6>
+                            <br>
+                            <div dir="ltr" class="d-flex align-items-center">
+                                <p class="bg-danger rounded-5 p-2 me-2 mb-0 text-white">10%</p>
+                                <p class="my-0">19,000,000</p>
+                            </div>
+                            <p dir="ltr" class="ms-2 mb-0 text-decoration-line-through">22,000,000</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-3 d-flex justify-content-center">
+                    <div class="card m-3 pb-0">
+                        <img src="{{ asset.url_for('12.png') }}" class="m-4" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title">اسپرسوساز نسپرسو مدل لاتیسما تاچ EN۵۶۰</h6>
+                            <br>
+                            <div dir="ltr" class="d-flex align-items-center">
+                                <p class="bg-danger rounded-5 p-2 me-2 mb-0 text-white">10%</p>
+                                <p class="my-0">19,000,000</p>
+                            </div>
+                            <p dir="ltr" class="ms-2 mb-0 text-decoration-line-through">22,000,000</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="px-5">
+        <div class="navbar border-bottom pb-0">
+            <p class="topic h3 pb-3 mb-0">نقد و بررسی محصول</p>
+        </div>
+        <p class="mt-5 px-5">
+            لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
+        </p>
+    </div>
+    <div class="px-5">
+        <div class="navbar border-bottom pb-0">
+        <p class="topic h3 pb-3 mb-0">مشخصات فنی</p>
+    </div>
+    <h4 class="mt-5">مشخصات کلی</h4>
+    <table class="table table-sm table-borderless mt-4 w-50">
+      <tbody>
+      <tr>
+        <th class="w-50"></th>
+        <th></th>
+      </tr>
+      <tr>
+        <td class="text-secondary">ابعاد</td>
+        <td>۴۸×۲۰×۳۵ سانتی‌متر</td>
+      </tr>
+      </tbody>
+    </table>
+    <h4 class="mt-5">مشخصات فنی</h4>
+    <table class="table table-sm table-borderless mt-4 mb-5 w-50">
+      <tbody>
+      <tr>
+        <th class="w-50"></th>
+        <th></th>
+      </tr>
+      <tr>
+        <td class="text-secondary">سیستم کاپوچینو ساز</td>
+        <td>دارد</td>
+      </tr>
+      </tbody>
+    </table>
+    <hr>
+  </div>
+{% endblock %}

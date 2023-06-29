@@ -1,0 +1,21 @@
+{% extends 'layout/panel_crud.html' %}
+
+{% block form_action %}
+    {{ url_for('product_store') }}
+{% endblock %}
+
+{% block form %}
+    {{ render_field(form.product_name) }}
+    {{ render_field(form.product_category) }}
+    {{ render_field(form.product_price) }}
+    {{ render_field(form.product_quantity) }}
+    {{ render_field(form.product_discount) }}
+{% endblock %}
+
+{% block btn %}
+    ایجاد محصول
+{% endblock %}
+
+{% block backward_url %}
+{{ url_for('admin_product') }}
+{% endblock %}

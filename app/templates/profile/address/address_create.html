@@ -1,0 +1,62 @@
+{% extends "layout/profile.html" %}
+
+{% block profile_content %}
+    <div class="p-4 rounded-4 shadow">
+        <div class="d-flex justify-content-between">
+            <p class="h4">
+                ادرس های من
+            </p>
+        </div>
+        <hr>
+        {% with messages = get_flashed_messages(category_filter=["message"]) %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="p-4 rounded-4 shadow mb-2">
+                    <h6 class="text-success">
+                        {{message}}
+                    </h6>
+                </div>
+                <hr>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        {% with messages = get_flashed_messages(category_filter=["error"]) %}
+        {% if messages %}
+        {% for message in messages %}
+            <div class="p-4 rounded-4 shadow mb-2">
+                <h6 class="text-danger">
+                    {{message}}
+                </h6>
+            </div>
+            <hr>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        {% from "macro/profile_form.html" import render_field %}
+        <form action="{{ url_for('user_address_store') }}" method="post">
+            {{ form.csrf_token }}
+            <input type="hidden" name="_method" value="PUT">
+            <div class="row p-4">
+                <div class="col-12 col-lg-6 p-4">
+                    {{ render_field(form.city) }}
+                </div>
+                <div class="col-12 col-lg-6 p-4">
+                    {{ render_field(form.address_line) }}
+                </div>
+                <div class="col-12 col-lg-6 p-4">
+                    {{ render_field(form.transferee) }}
+                </div>
+                <div class="col-12 col-lg-6 p-4">
+                    {{ render_field(form.phone) }}
+                </div>
+                <div class="col-12 col-lg-6 p-4">
+                    {{ render_field(form.postal_code) }}
+                </div>
+            </div>
+            <div dir="ltr" class="d-flex mt-5">
+                <button type="submit" class="btn text-white p-3 mx-2" style="background-color: #C89000;">ثبت ادرس</button>
+                <a href="{{ url_for('user_address') }}" class="btn text-danger p-3 mx-2 shadow">بازگشت</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

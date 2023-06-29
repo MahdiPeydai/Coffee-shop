@@ -1,0 +1,23 @@
+{% extends 'layout/panel_crud.html' %}
+
+{% block form_action %}
+    {{ url_for('admin_user_store') }}
+{% endblock %}
+
+{% block form %}
+    {{ render_field(form.firstname) }}
+    {{ render_field(form.lastname) }}
+    {{ render_field(form.email) }}
+    {{ render_field(form.phone) }}
+    {{ render_field(form.role) }}
+    {{ render_field(form.password) }}
+    {{ render_field(form.confirm_password) }}
+{% endblock %}
+
+{% block btn %}
+    ایجاد کاربر
+{% endblock %}
+
+{% block backward_url %}
+    {{ url_for('admin_user') }}
+{% endblock %}

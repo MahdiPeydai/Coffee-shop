@@ -1,0 +1,20 @@
+.info-box {
+    background: #F0F0F0;
+}
+.ready-shipment {
+    color: #C89000;
+}
+.topic {
+    color: #BC9020;
+    border-bottom: 5px solid #BC9020;
+}
+
+#carouselExampleIndicators .next-btn {
+    color: #BC9020;
+    background: #FFECC9;
+    border: 1px solid #BC9020;
+}
+
+#carouselExampleIndicators li {
+    list-style: none;
+}

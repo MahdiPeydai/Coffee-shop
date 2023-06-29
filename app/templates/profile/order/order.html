@@ -1,0 +1,40 @@
+{% extends "layout/profile.html" %}
+
+{% block profile_content %}
+    <div class="p-4 rounded-4 shadow">
+        <div class="d-flex justify-content-between">
+            <p class="h4">
+                سفارش های من
+            </p>
+        </div>
+        <hr>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="text-secondary" scope="col">شماره سفارش</th>
+                    <th class="text-secondary" scope="col">محصولات</th>
+                    <th class="text-secondary" scope="col">تاریخ</th>
+                    <th class="text-secondary" scope="col">قیمت کل</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in user_orders %}
+                <tr>
+                    <th>{{ order }}</th>
+                    <td>
+                        <div>
+                            {% for product in user_orders[order]['product'] %}
+                            <p class="shadow m-1 p-1 rounded-3">{{ product }}</p>
+                            {% endfor %}
+                        </div>
+                    </td>
+                    <td>{{ user_orders[order]['date'] }}</td>
+                    <td>{{ user_orders[order]['total'] }} تومان</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

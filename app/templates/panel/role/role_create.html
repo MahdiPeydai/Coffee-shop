@@ -1,0 +1,18 @@
+{% extends 'layout/panel_crud.html' %}
+
+{% block form_action %}
+    {{ url_for('role_store') }}
+{% endblock %}
+
+{% block form %}
+    {{ render_field(form.role_name) }}
+    {{ render_field(form.role_permission) }}
+{% endblock %}
+
+{% block btn %}
+    ایجاد Role
+{% endblock %}
+
+{% block backward_url %}
+{{ url_for('admin_role') }}
+{% endblock %}

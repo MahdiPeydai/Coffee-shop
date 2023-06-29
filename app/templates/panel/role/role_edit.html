@@ -1,0 +1,19 @@
+{% extends 'layout/panel_crud.html' %}
+
+{% block form_action %}
+    {{ url_for('role_update', role_id=role_id) }}
+{% endblock %}
+
+{% block form %}
+    <input type="hidden" name="_method" value="PUT">
+    {{ render_field(form.role_name) }}
+    {{ render_field(form.role_permission) }}
+{% endblock %}
+
+{% block btn %}
+    ذخیره تغییرات
+{% endblock %}
+
+{% block backward_url %}
+{{ url_for('admin_role') }}
+{% endblock %}

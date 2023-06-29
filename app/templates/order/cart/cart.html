@@ -1,0 +1,202 @@
+{% extends "layout/layout.html" %}
+
+{% block header %}
+{% include 'layout/header.html' %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'layout/sidebar.html' %}
+{% endblock %}
+
+{% block footer %}
+{% include 'layout/footer.html' %}
+{% endblock %}
+
+{% block title %}
+    Coffee Shop
+{% endblock %}
+
+{% block script %}
+<script src="{{ asset.url_for('cart.js') }}"></script>
+{% endblock %}
+
+
+{% block content %}
+    {% if cart_status == 'empty' %}
+    <div class="d-flex justify-content-center my-5">
+        <div class="card_empty_box col-12 col-md-6 text-center p-5">
+            <i class="fa-solid fa-cart-plus fa-10x" style="color: #e8c79c;"></i>
+            <h5 class="my-4">سبد خریدت خالیه هنوز</h5>
+            <p>
+                از <a href="{{ url_for('home') }}" class="text-decoration-none" style="color: #E8C79C;">اینجا</a> می‌تونی وارد صفحه اصلی فروشگاه بشی و دنبال چیزی که می‌خوای بگردی!
+            </p>
+        </div>
+    </div>
+    <div class="m-5">
+        <div class="navbar border-bottom pb-0">
+            <p class="topic h3 pb-3 mb-0">فروش ویژه</p>
+        </div>
+        <div>
+            <div class="container d-xl-flex">
+                <div class="col-12 col-xl-3 d-flex justify-content-center">
+                    <div class="card m-3 pb-0">
+                        <img src="{{ asset.url_for('12.png') }}" class="m-4" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title">اسپرسوساز نسپرسو مدل لاتیسما تاچ EN۵۶۰</h6>
+                            <br>
+                            <div dir="ltr" class="d-flex align-items-center">
+                                <p class="bg-danger rounded-5 p-2 me-2 mb-0 text-white">10%</p>
+                                <p class="my-0">19,000,000</p>
+                            </div>
+                            <p dir="ltr" class="ms-2 mb-0 text-decoration-line-through">22,000,000</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-3 d-flex justify-content-center">
+                    <div class="card m-3 pb-0">
+                        <img src="{{ asset.url_for('12.png') }}" class="m-4" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title">اسپرسوساز نسپرسو مدل لاتیسما تاچ EN۵۶۰</h6>
+                            <br>
+                            <div dir="ltr" class="d-flex align-items-center">
+                                <p class="bg-danger rounded-5 p-2 me-2 mb-0 text-white">10%</p>
+                                <p class="my-0">19,000,000</p>
+                            </div>
+                            <p dir="ltr" class="ms-2 mb-0 text-decoration-line-through">22,000,000</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-3 d-flex justify-content-center">
+                    <div class="card m-3 pb-0">
+                        <img src="{{ asset.url_for('12.png') }}" class="m-4" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title">اسپرسوساز نسپرسو مدل لاتیسما تاچ EN۵۶۰</h6>
+                            <br>
+                            <div dir="ltr" class="d-flex align-items-center">
+                                <p class="bg-danger rounded-5 p-2 me-2 mb-0 text-white">10%</p>
+                                <p class="my-0">19,000,000</p>
+                            </div>
+                            <p dir="ltr" class="ms-2 mb-0 text-decoration-line-through">22,000,000</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-3 d-flex justify-content-center">
+                    <div class="card m-3 pb-0">
+                        <img src="{{ asset.url_for('12.png') }}" class="m-4" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title">اسپرسوساز نسپرسو مدل لاتیسما تاچ EN۵۶۰</h6>
+                            <br>
+                            <div dir="ltr" class="d-flex align-items-center">
+                                <p class="bg-danger rounded-5 p-2 me-2 mb-0 text-white">10%</p>
+                                <p class="my-0">19,000,000</p>
+                            </div>
+                            <p dir="ltr" class="ms-2 mb-0 text-decoration-line-through">22,000,000</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="d-md-flex align-items-start mt-2">
+        <div class="col-md-7 col-xl-9 d-flex flex-column align-items-center px-3 my-2 my-md-0">
+            {% for item in cart_items %}
+            <div class="card_item col-12 col-sm-8 col-md-12 d-flex flex-column flex-xl-row align-items-xl-center rounded-5 p-3">
+                <div class="col-xl-3 d-flex justify-content-center align-items-start">
+                    <img src="{{ asset.url_for('product.png') }}" alt="" style="width: 100%">
+                </div>
+                <div class="col-xl-9 d-flex flex-column p-3 py-xl-0">
+                    <h5>
+                        {{ item['name'] }}
+                    </h5>
+                    <p class="py-3 m-0">
+                        <i class="fa-solid fa-motorcycle "></i>
+                        <span>اماده ارسال</span>
+                    </p>
+
+                    {% with messages = get_flashed_messages(category_filter=["error"]) %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <p class="h6 text-danger py-3 m-0">{{message}}</p>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    {% with messages = get_flashed_messages(category_filter=["message"]) %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div>
+                                    <p class="h6 text-danger py-3 m-0">{{message}}</p>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <div dir="ltr" class="d-flex align-items-center flex-column flex-xl-row">
+                        <div class="d-flex align-items-center border border-1 border-secondary rounded-4 px-3 my-2 my-xl-0">
+                        {% if item['quantity'] == 1 %}
+                            <a href="{{ url_for('cart_item_delete', product_id=item['id']) }}">
+                                <i class="fa-regular fa-trash-can fa-lg text-black"></i>
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('cart_item_delete', product_id=item['id']) }}">
+                                <i class="fa-solid fa-circle-minus fa-lg text-black"></i>
+                            </a>
+                        {% endif %}
+                            <p class="h4 mx-3 mb-0">{{ item['quantity'] }}</p>
+                            <a href="{{ url_for('cart_item_store', product_id=item['id']) }}">
+                                <i class="fa-solid fa-circle-plus fa-lg text-black"></i>
+                            </a>
+                        </div>
+                        <div class="d-flex">
+                            <p class="h5 px-3 my-2 my-xl-0 border-end">۱۶۵،۰۰۰ تومان</p>
+                        </div>
+                        <div class="d-flex ">
+                            <p class="h5 px-3 my-2 my-xl-0 text-danger">تخفیف : ۶۰،۰۰۰ تومان</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="col-md-5 col-xl-3 align-self-start payment-box rounded-4 p-3">
+            <div class="d-flex justify-content-between align-items-center mt-3 pb-5">
+                <h5>
+                    سبد خرید شما از بهنام کافه
+                </h5>
+                <i class="fa-solid fa-cart-arrow-down fa-5x" style="color: #BC9020;"></i>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <h5>
+                    جمع مبلغ کالاها
+                </h5>
+                <h5>
+                    <span class="price">{{ cart_price['cart_total_price'] }}</span> تومان
+                </h5>
+            </div>
+            <div class="d-flex justify-content-between align-items-center text-danger my-3">
+                <h5>
+                    سود شما از این سبد
+                </h5>
+                <h5>
+                    <span class="price">{{ cart_price['cart_total_discount'] }}</span> تومان
+                </h5>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between align-items-center">
+                <h5>
+                    جمع سبد خرید
+                </h5>
+                <h5>
+                    <span class="price">{{ cart_price['cart_total_discounted_price'] }}</span> تومان
+                </h5>
+            </div>
+            <p class="my-3">هزینه ارسال مرسوله‌ها برعهده مشتری است و هنگام دریافت محصول باید پرداخت شود.</p>
+            <a class="shipment_link d-flex justify-content-center text-decoration-none m-3 rounded-3 py-4">
+                <p class="h5 m-0 text-black">
+                    انتخاب زمان ارسال
+                </p>
+            </a>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}

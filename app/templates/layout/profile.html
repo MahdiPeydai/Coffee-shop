@@ -1,0 +1,81 @@
+{% extends "layout/layout.html" %}
+
+{% block title %}
+    Coffee Shop
+{% endblock %}
+
+{% block script %}
+    <script src="{{ asset.url_for('profile.js') }}"></script>
+{% endblock %}
+
+{% block header %}
+{% include 'layout/header.html' %}
+{% endblock %}
+
+{% block footer %}
+{% include 'layout/footer.html' %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'layout/sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="m-1 d-flex">
+    <div class="col-2 align-self-start side_bar px-sm-1 px-0 shadow rounded-4">
+        <div class="d-flex justify-content-center py-4 px-2">
+            <a href="{{ url_for('user_information') }}" class="nav-link d-xl-flex px-0 text-decoration-none">
+                <div class="d-flex justify-content-center">
+                    <i class="fa-solid fa-user fa-xl mx-2"></i><br>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <h5 class="ms-1 my-0 d-none d-lg-block text-center">اطلاعات حساب</h5>
+                </div>
+            </a>
+        </div>
+        <div class="d-flex justify-content-center py-4 px-2">
+            <a href="{{ url_for('user_address') }}" class="nav-link d-xl-flex px-0 text-decoration-none">
+                <div class="d-flex justify-content-center">
+                    <i class="fa-solid fa-map-location fa-xl mx-2"></i><br>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <h5 class="ms-1 my-0 d-none d-lg-block text-center">ادرس ها</h5>
+                </div>
+            </a>
+        </div>
+        <div class="d-flex justify-content-center py-4 px-2">
+            <a href="{{ url_for('user_order') }}" class="nav-link d-xl-flex px-0 text-decoration-none">
+                <div class="d-flex justify-content-center">
+                    <i class="fa-solid fa-cart-shopping fa-xl mx-2"></i><br>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <h5 class="ms-1 my-0 d-none d-lg-block text-center">سفارش‌های من</h5>
+                </div>
+            </a>
+        </div>
+        <div class="d-flex justify-content-center py-4 px-2">
+            <a href="{{ url_for('user_password_edit') }}" class="nav-link d-xl-flex px-0 text-decoration-none">
+                <div class="d-flex justify-content-center">
+                    <i class="fa-solid fa-lock fa-xl mx-2"></i><br>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <h5 class="ms-1 my-0 d-none d-lg-block text-center">تغییر رمزعبور</h5>
+                </div>
+            </a>
+        </div>
+        <div class="d-flex justify-content-center py-4 px-2">
+            <a href="{{ url_for('user_logout') }}" class="nav-link d-xl-flex px-0 text-decoration-none">
+                <div class="d-flex justify-content-center">
+                    <i class="fa-solid fa-door-open fa-xl mx-2"></i><br>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <h5 class="ms-1 my-0 d-none d-lg-block text-center">خروج</h5>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-10 p-2">
+        {% block profile_content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

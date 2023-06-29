@@ -1,0 +1,27 @@
+{% extends 'layout/panel_crud.html' %}
+
+{% block form_action %}
+    {{ url_for('admin_user_update', user_id=user_id) }}
+{% endblock %}
+
+{% block form %}
+    <input type="hidden" name="_method" value="PUT">
+    {{ render_field(form.firstname) }}
+    {{ render_field(form.lastname) }}
+    {{ render_field(form.email) }}
+    {{ render_field(form.phone) }}
+    {{ render_field(form.role) }}
+    <div class="d-flex p-3 justify-content-center">
+        <a href="{{ url_for('admin_user_password_edit', user_id=user_id) }}" class="btn bg-danger p-2 shadow text-white">
+            تغییر رمز عبور
+        </a>
+    </div>
+{% endblock %}
+
+{% block btn %}
+    ذخیره تغییرات
+{% endblock %}
+
+{% block backward_url %}
+{{ url_for('admin_user') }}
+{% endblock %}

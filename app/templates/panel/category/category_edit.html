@@ -1,0 +1,21 @@
+{% extends 'layout/panel_crud.html' %}
+
+{% block form_action %}
+    {{ url_for('category_update', category_id=category_id) }}
+{% endblock %}
+
+{% block form %}
+    <input type="hidden" name="_method" value="PUT">
+    {{ render_field(form.category_name) }}
+    {{ render_field(form.category_parent) }}
+    {{ render_field(form.category_description) }}
+    {{ render_field(form.category_image) }}
+{% endblock %}
+
+{% block btn %}
+    ذخیره تغییرات
+{% endblock %}
+
+{% block backward_url %}
+    {{ url_for('admin_category') }}
+{% endblock %}

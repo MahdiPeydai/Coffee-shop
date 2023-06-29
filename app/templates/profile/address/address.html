@@ -1,0 +1,69 @@
+{% extends "layout/profile.html" %}
+
+{% block profile_content %}
+    <div class="p-4 rounded-4 shadow">
+        <div class="d-flex justify-content-between">
+            <p class="h4">
+                ادرس های من
+            </p>
+            <a href="{{ url_for('user_address_create') }}" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
+                <i class="fa-solid fa-plus fa-xl"></i>
+                <p class="d-none d-lg-block h4 px-2 m-0">ثبت ادرس جدید</p>
+            </a>
+        </div>
+        <hr>
+        {% with messages = get_flashed_messages(category_filter=["message"]) %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="p-4 rounded-4 shadow mb-2">
+                    <h6 class="text-success">
+                        {{message}}
+                    </h6>
+                </div>
+                <hr>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        {% with messages = get_flashed_messages(category_filter=["error"]) %}
+        {% if messages %}
+        {% for message in messages %}
+            <div class="p-4 rounded-4 shadow mb-2">
+                <h6 class="text-danger">
+                    {{message}}
+                </h6>
+            </div>
+            <hr>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        {% from "macro/profile_form.html" import render_field %}
+        {% for address in user_address %}
+        <div class="m-3 p-3 rounded-3 shadow-sm">
+            <div class="navbar navbar-expand-lg d-flex justify-content-start mt-2">
+                <i class="fa-solid fa-location-crosshairs fa-xl"></i><span class="align-middle h5 my-0 mx-2">ادرس:</span>
+                <p class="align-middle h5 my-0 mx-2">{{ address['address_line'] }}</p>
+            </div>
+            <div class="navbar navbar-expand-lg d-flex justify-content-start mt-2">
+                <i class="fa-solid fa-clipboard-user fa-xl"></i><span class="align-middle h5 my-0 mx-2">تحویل گیرنده:</span>
+                <p class="align-middle h5 my-0 mx-2">{{ address['transferee'] }}</p>
+            </div>
+            <div class="navbar navbar-expand-lg d-flex justify-content-start mt-2">
+                <i class="fa-solid fa-mobile-button fa-xl"></i><span class="align-middle h5 my-0 mx-2">شماره تماس:</span>
+                <p class="align-middle h5 my-0 mx-2">{{ address['phone'] }}</p>
+            </div>
+            <div class="navbar navbar-expand-lg d-flex justify-content-start mt-2">
+                <i class="fa-solid fa-inbox fa-xl"></i><span class="align-middle h5 my-0 mx-2">کد پستی:</span>
+                <p class="align-middle h5 my-0 mx-2">{{ address['postal_code'] }}</p>
+            </div>
+            <div dir="ltr" class="d-flex mt-3">
+                <a href="{{ url_for('user_address_delete', address_id = address['id']) }}" class="text-black shadow rounded-3 p-2 mx-2">
+                    <i class="fa-solid fa-trash-can fa-xl"></i>
+                </a>
+                <a href="{{ url_for('user_address_edit', address_id = address['id']) }}" class="text-black shadow rounded-3 p-2 mx-2">
+                    <i class="fa-solid fa-pen-to-square fa-xl"></i>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

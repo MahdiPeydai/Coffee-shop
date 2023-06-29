@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport">
+  <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+<div class="h-100 d-flex align-items-center justify-content-center">
+    <div class="box col-8 col-sm-6 col-xl-3 px-5 py-3 rounded-3">
+    {% with messages = get_flashed_messages(category_filter=["message"]) %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="p-4 rounded-4 shadow mb-2">
+                    <h6 class="text-success">
+                        {{message}}
+                    </h6>
+                </div>
+                <hr>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {% with messages = get_flashed_messages(category_filter=["error"]) %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="p-4 rounded-4 shadow mb-2">
+                    <h6 class="text-danger">
+                        {{message}}
+                    </h6>
+                </div>
+                <hr>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+        <div class="d-flex align-items-center justify-content-center">
+            <h1 class="title">
+                ورود
+            </h1>
+        </div>
+        {% from "macro/user_auth_form.html" import render_field %}
+        <form action="{{ url_for('user_login') }}" method=post>
+            <dl>
+                {{ render_field(form.email) }}
+                {{ render_field(form.password) }}
+            </dl>
+            <div class="d-flex align-items-center justify-content-center">
+                <button type="submit" class="btn btn-success container-xl m-2">
+                    <p class="h6 m-1">ورود</p>
+                </button>
+                <a href="{{ url_for('user_register') }}" class="btn btn-secondary container-xl mx-2">
+                    <p class="h6 m-1">ثبت نام</p>
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="{{ asset.url_for('user_auth.js') }}"></script>
+<script src="{{ asset.url_for('layout.js') }}"></script>
+</body>
+</html>

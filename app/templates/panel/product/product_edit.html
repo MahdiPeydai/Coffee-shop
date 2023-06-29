@@ -1,0 +1,22 @@
+{% extends 'layout/panel_crud.html' %}
+
+{% block form_action %}
+    {{ url_for('product_update', product_id=product_id) }}
+{% endblock %}
+
+{% block form %}
+    <input type="hidden" name="_method" value="PUT">
+    {{ render_field(form.product_name) }}
+    {{ render_field(form.product_category) }}
+    {{ render_field(form.product_price) }}
+    {{ render_field(form.product_quantity) }}
+    {{ render_field(form.product_discount) }}
+{% endblock %}
+
+{% block btn %}
+    ذخیره تغییرات
+{% endblock %}
+
+{% block backward_url %}
+{{ url_for('admin_product') }}
+{% endblock %}
