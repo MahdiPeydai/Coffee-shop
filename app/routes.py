@@ -57,7 +57,7 @@ app.add_url_rule('/panel/user/store', 'admin_user_store', admin_user_store, meth
 
 # update
 app.add_url_rule('/panel/user/<int:user_id>/edit', 'admin_user_edit', admin_user_edit)
-app.add_url_rule('/panel/user/<int:user_id>/update', 'admin_user_update', admin_user_update, methods=['POST'])
+app.add_url_rule('/panel/user/<int:user_id>/update', 'admin_user_update', admin_user_update, methods=['POST', 'PUT'])
 
 app.add_url_rule('/panel/user/<int:user_id>/password/edit', 'admin_user_password_edit', admin_user_password_edit)
 app.add_url_rule('/panel/user/<int:user_id>/password/update', 'admin_user_password_update', admin_user_password_update,
@@ -65,7 +65,7 @@ app.add_url_rule('/panel/user/<int:user_id>/password/update', 'admin_user_passwo
 #
 
 # delete
-app.add_url_rule('/panel/user/<int:user_id>/delete', 'admin_user_delete', admin_user_delete)
+app.add_url_rule('/panel/user/<int:user_id>/destroy', 'admin_user_delete', admin_user_delete)
 #
 
 #
@@ -84,7 +84,7 @@ app.add_url_rule('/panel/role/<int:role_id>/update', 'role_update', role_update,
 #
 
 # delete
-app.add_url_rule('/panel/role/<int:role_id>/delete', 'role_delete', role_delete)
+app.add_url_rule('/panel/role/<int:role_id>/destroy', 'role_delete', role_delete)
 #
 
 #
@@ -104,7 +104,7 @@ app.add_url_rule('/panel/permission/<int:permission_id>/update', 'permission_upd
 #
 
 # delete
-app.add_url_rule('/panel/permission/<int:permission_id>/delete', 'permission_delete', permission_delete)
+app.add_url_rule('/panel/permission/<int:permission_id>/destroy', 'permission_delete', permission_delete)
 #
 
 #
@@ -126,7 +126,7 @@ app.add_url_rule('/panel/category/<int:category_id>/update', 'category_update', 
 #
 
 # delete
-app.add_url_rule('/panel/category/<int:category_id>/delete', 'category_delete', category_delete)
+app.add_url_rule('/panel/category/<int:category_id>/destroy', 'category_delete', category_delete)
 #
 
 #
@@ -145,7 +145,7 @@ app.add_url_rule('/panel/product/<int:product_id>/update', 'product_update', pro
 #
 
 # delete
-app.add_url_rule('/panel/product/<int:product_id>/delete', 'product_delete', product_delete)
+app.add_url_rule('/panel/product/<int:product_id>/destroy', 'product_delete', product_delete)
 #
 
 #
@@ -189,7 +189,7 @@ app.add_url_rule('/profile/password/update', 'user_password_update', user_passwo
 #
 
 # delete
-app.add_url_rule('/profile/delete', 'user_delete', user_delete)
+app.add_url_rule('/profile/destroy', 'user_delete', user_delete)
 #
 
 #
@@ -208,7 +208,7 @@ app.add_url_rule('/profile/addresses/<int:address_id>/update', 'user_address_upd
 #
 
 # delete
-app.add_url_rule('/profile/addresses/<int:address_id>/delete', 'user_address_delete', user_address_delete)
+app.add_url_rule('/profile/addresses/<int:address_id>/destroy', 'user_address_delete', user_address_delete)
 #
 
 #
@@ -240,5 +240,5 @@ app.add_url_rule('/checkout/cart/product/<int:product_id>/store', 'cart_item_sto
 #
 
 # delete item
-app.add_url_rule('/checkout/cart/product/<int:product_id>/delete', 'cart_item_delete', cart_item_delete)
+app.add_url_rule('/checkout/cart/product/<int:product_id>/destroy', 'cart_item_delete', cart_item_delete)
 #

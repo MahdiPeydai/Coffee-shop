@@ -123,7 +123,8 @@ def admin_user_update(user_id):
         role.append((id, name))
     form.role.choices = role
     if form.validate:
-        if request.form.get('_method') == 'PUT':
+        print(request.method)
+        if request.method == 'PUT':
             user_check = db.session.query(model.User.id) \
                 .join(model.user_role_association, model.User.id == model.user_role_association.c.user_id) \
                 .join(model.Role, model.user_role_association.c.role_id == model.Role.id) \
