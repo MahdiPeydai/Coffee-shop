@@ -1,6 +1,6 @@
-from flask import Flask, request, render_template
+from flask import Flask
 from app.asset import Asset
-from app.model import db, Permission
+from app.model import db
 from flask_migrate import Migrate
 
 app = Flask(__name__)
