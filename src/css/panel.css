@@ -34,3 +34,7 @@
     overflow-x: hidden;
     overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
 }
+
+.tinymce p{
+    margin: 0;
+}

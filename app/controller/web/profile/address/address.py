@@ -1,7 +1,7 @@
 import flask
 from flask import render_template, request, flash, redirect, url_for
 
-from app import db, model
+from app import app, db, model
 from sqlalchemy import and_, func
 
 from app.middlewares.auth.login import user_login_require
@@ -34,7 +34,8 @@ def user_address(user_id):
 def user_address_create(user_id):
     form = Address()
     flask.session["referrer_url"] = request.referrer
-    return render_template('web/profile/address/address_create.html', form=form, user_id=user_id)
+    return render_template('web/profile/address/address_create.html', form=form, user_id=user_id,
+                           tinymce_key=app.config['TINYMCE_API_KEY'])
 
 
 @user_login_require
@@ -56,7 +57,6 @@ def user_address_store(user_id):
         referrer_url = flask.session['referrer_url']
         del flask.session['referrer_url']
         return redirect(referrer_url)
-    print(form.errors)
 
 
 @user_login_require
@@ -71,7 +71,8 @@ def user_address_edit(user_id, address_id):
         'phone': address[4]
     }
     form = Address(data=placeholders)
-    return render_template('web/profile/address/address_edit.html', form=form, address_id=address_id)
+    return render_template('web/profile/address/address_edit.html', form=form, address_id=address_id,
+                           tinymce_key=app.config['TINYMCE_API_KEY'])
 
 
 @user_login_require

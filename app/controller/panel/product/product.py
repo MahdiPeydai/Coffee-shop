@@ -1,4 +1,4 @@
-from app import db, model
+from app import app, db, model
 from sqlalchemy import and_, func
 from flask import request, redirect, render_template, url_for, flash
 from app.forms import Product
@@ -9,20 +9,23 @@ from app.middlewares.auth.permissions import permission_require
 @user_login_require
 @permission_require(['product'])
 def admin_product(user_id):
-    products = db.session.query(model.Product.id, model.Product.name, model.Product.quantity,
-                                model.Product.price, model.Product.discount, model.Category.name.label('category_name'))\
-        .join(model.product_category_association, model.Product.id == model.product_category_association.c.product_id, isouter=True) \
+    products = db.session.query(model.Product.id, model.Product.name, model.Product.quantity, model.Product.price,
+                                model.Product.discount, model.Product.description,
+                                model.Category.name.label('category_name'))\
+        .join(model.product_category_association,
+              model.Product.id == model.product_category_association.c.product_id, isouter=True) \
         .join(model.Category, model.Category.id == model.product_category_association.c.category_id, isouter=True) \
         .filter(model.Product.is_deleted == None)
     db.session.commit()
     data = {}
-    for id, name, quantity, price, discount, category_name in products:
+    for id, name, quantity, price, discount, description, category_name in products:
         if id not in data.keys():
             data[id] = {
                 'name': name,
                 'quantity': quantity,
                 'price': price,
                 'discount': discount,
+                'description': description,
                 'category': [category_name]
             }
         else:
@@ -41,7 +44,7 @@ def product_create(user_id):
     for id, name in category_query:
         categories.append((id, name))
     form.product_category.choices = categories
-    return render_template('panel/product/product_create.html', form=form)
+    return render_template('panel/product/product_create.html', form=form, tinymce_key=app.config['TINYMCE_API_KEY'])
 
 
 @user_login_require
@@ -76,6 +79,7 @@ def product_store(user_id):
             price=int(request.form['product_price']),
             quantity=request.form['product_quantity'],
             discount=product_discount,
+            description=request.form['product_description']
         )
         db.session.add(new_product)
         db.session.commit()
@@ -94,14 +98,14 @@ def product_store(user_id):
 @permission_require(['product', 'product_crud'])
 def product_edit(user_id, product_id):
     products = db.session.query(model.Product.id, model.Product.name, model.Product.quantity, model.Product.price,
-                                model.Product.discount, model.Category.id.label('category')) \
+                                model.Product.discount, model.Product.description, model.Category.id.label('category'))\
         .join(model.product_category_association, model.Product.id == model.product_category_association.c.product_id,
               isouter=True) \
         .join(model.Category, model.Category.id == model.product_category_association.c.category_id, isouter=True) \
         .filter(model.Product.id == product_id)
 
     product = {}
-    for id, name, quantity, price, discount, category in products:
+    for id, name, quantity, price, discount, description, category in products:
         if 'id' not in product.keys():
             product = {
                 'id': id,
@@ -109,6 +113,7 @@ def product_edit(user_id, product_id):
                 'quantity': quantity,
                 'price': price,
                 'discount': discount,
+                'description': description,
                 'category': [str(category)]
             }
         else:
@@ -117,7 +122,8 @@ def product_edit(user_id, product_id):
         'product_name': product['name'],
         'product_quantity': product['quantity'],
         'product_price': product['price'],
-        'product_discount': product['discount']
+        'product_discount': product['discount'],
+        'product_description': product['description']
     }
     form = Product(data=placeholders)
     category_query = db.session.query(model.Category.id, model.Category.name)
@@ -127,7 +133,8 @@ def product_edit(user_id, product_id):
         categories.append((id, name))
     form.product_category.choices = categories
     form.product_category.data = product['category']
-    return render_template('panel/product/product_edit.html', form=form, product_id=product_id)
+    return render_template('panel/product/product_edit.html', form=form, product_id=product_id,
+                           tinymce_key=app.config['TINYMCE_API_KEY'])
 
 
 @user_login_require
@@ -161,6 +168,7 @@ def product_update(user_id, product_id):
             product.price = request.form['product_price']
             product.quantity = request.form['product_quantity']
             product.discount = product_discount
+            product.description = request.form['product_description']
             db.session.commit()
 
             if len(request.form.getlist('product_category')) == 0:

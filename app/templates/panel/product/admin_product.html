@@ -15,6 +15,7 @@
                         <thead>
                         <tr>
                             <th class="text-secondary" scope="col">نام محصول:</th>
+                            <th class="text-secondary" scope="col">توضیحات:</th>
                             <th class="text-secondary" scope="col">دسته بندی:</th>
                             <th class="text-secondary" scope="col">قیمت:</th>
                             <th class="text-secondary" scope="col">تعداد:</th>
@@ -27,6 +28,11 @@
                         {% for product in data %}
                         <tr>
                             <td class="align-middle">{{ data[product]['name'] }}</td>
+                            <td class="align-middle tinymce">
+                                {% if data[product]['description'] %}
+                                    {{ data[product]['description'] | safe }}
+                                {% endif %}
+                            </td>
                             <td class="align-middle">
                                 {% for category in data[product]['category'] %}
                                 {% if data[product]['category'][data[product]['category'].index(category)] %}

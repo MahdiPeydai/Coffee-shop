@@ -82,6 +82,8 @@ class Product(Form):
     product_price = StringField('قیمت',
                                 validators=[DataRequired(),
                                             Length(max=50)])
+    product_description = TextAreaField('توضیحات',
+                                        validators=[Length(max=255)])
     product_discount = StringField('تخفیف')
     product_short_description = TextAreaField('توضیحات',
                                               validators=[Length(max=255)])
@@ -127,8 +129,6 @@ class Permission(Form):
     permission_name = StringField('نام',
                                   validators=[DataRequired(),
                                               Length(max=50)])
-    permission_description = TextAreaField('توضیحات',
-                                           validators=[Length(max=255)])
 
 
 class AdminLogin(Form):

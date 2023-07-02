@@ -53,3 +53,7 @@ html, body{
     background: #A58152;
     color: white;
 }
+
+.tinymce p{
+    margin: 0;
+}

@@ -1,1 +1,1 @@
-import '../css/user_auth.css'
+import '../css/auth.css'

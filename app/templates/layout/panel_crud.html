@@ -3,6 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
+    <script src="https://cdn.tiny.cloud/1/{{ tinymce_key }}/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            menubar: false
+        });
+    </script>
 </head>
 <body>
 <div class="d-flex align-items-center justify-content-center">
@@ -43,6 +50,6 @@
     </form>
 </div>
 
-<script src="{{ asset.url_for('user_update.js') }}"></script>
+<script src="{{ asset.url_for('panel.js') }}"></script>
 </body>
 </html>

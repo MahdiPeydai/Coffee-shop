@@ -4,7 +4,7 @@ import '@fortawesome/fontawesome-free/js/regular'
 import '@fortawesome/fontawesome-free/js/brands'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../css/administrator.css'
+import '../css/panel.css'
 
 function importAll(r) {
   r.keys().forEach(r);

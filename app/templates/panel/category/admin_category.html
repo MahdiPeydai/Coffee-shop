@@ -28,7 +28,11 @@
                         {{ category['parent'] }}
                     {% endif %}
                 </td>
-                <td class="align-middle">{{ category['description'] }}</td>
+                <td class="align-middle tinymce">
+                    {% if category['description'] %}
+                        {{ category['description'] | safe }}
+                    {% endif %}
+                </td>
                 <td class="align-middle">
                     <a href="{{ url_for('category_delete', category_id=category['id']) }}" class="btn p-1 shadow">
                         <i class="fa-regular fa-trash-can fa-lg"></i>

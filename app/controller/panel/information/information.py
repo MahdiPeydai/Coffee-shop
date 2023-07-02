@@ -1,4 +1,4 @@
-from app import db, model
+from app import app, db, model
 from sqlalchemy import func, and_
 from flask import request, redirect, render_template, url_for, flash
 from app.forms import User, ChangePassword
@@ -149,7 +149,6 @@ def admin_user_update(user_id, id):
 
             flash('تغییرات با موفقیت انجام شد', 'message')
             return redirect(url_for('admin_user_edit', id=id))
-    print(form.errors)
 
 
 @user_login_require

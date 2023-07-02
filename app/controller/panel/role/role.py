@@ -1,4 +1,4 @@
-from app import db, model
+from app import app, db, model
 from sqlalchemy import and_
 from flask import request, redirect, render_template, url_for, flash
 from app.forms import Role
@@ -12,7 +12,7 @@ def admin_role(user_id):
     roles = db.session.query(model.Role.id, model.Role.name, model.Permission.name.label('permission')) \
         .join(model.role_permission_association, model.Role.id == model.role_permission_association.c.role_id,
               isouter=True) \
-        .join(model.Permission, model.role_permission_association.c.permission_id == model.Permission.id, isouter=True) \
+        .join(model.Permission, model.role_permission_association.c.permission_id == model.Permission.id, isouter=True)\
         .order_by(model.Role.id).all()
     data = {}
     for id, name, permission in roles:
@@ -37,7 +37,7 @@ def role_create(user_id):
         permissions_list.append((str(id), name))
     form.role_permission.choices = permissions_list
 
-    return render_template('panel/role/role_create.html', form=form)
+    return render_template('panel/role/role_create.html', form=form, tinymce_key=app.config['TINYMCE_API_KEY'])
 
 
 @user_login_require
@@ -74,7 +74,6 @@ def role_store(user_id):
             db.session.commit()
         flash('Role با موفقیت ایجاد شد', 'message')
         return redirect(url_for('admin_role'))
-    print(form.errors)
 
 
 @user_login_require
@@ -111,7 +110,8 @@ def role_edit(user_id, role_id):
         permissions_list.append((str(id), name))
     form.role_permission.choices = permissions_list
     form.role_permission.data = role_permission
-    return render_template('panel/role/role_edit.html', form=form, role_id=role_id)
+    return render_template('panel/role/role_edit.html', form=form, role_id=role_id,
+                           tinymce_key=app.config['TINYMCE_API_KEY'])
 
 
 @user_login_require
@@ -166,8 +166,6 @@ def role_update(user_id, role_id):
                         db.session.commit()
                 flash('تغییرات با موفقیت انجام شد', 'message')
                 return redirect(url_for('role_edit', role_id=role_id))
-    print(form.role_permission.choices)
-    print(form.errors)
 
 
 @user_login_require

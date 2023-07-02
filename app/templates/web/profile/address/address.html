@@ -41,7 +41,9 @@
         <div class="m-3 p-3 rounded-3 shadow-sm">
             <div class="navbar navbar-expand-lg d-flex justify-content-start mt-2">
                 <i class="fa-solid fa-location-crosshairs fa-xl"></i><span class="align-middle h5 my-0 mx-2">ادرس:</span>
-                <p class="align-middle h5 my-0 mx-2">{{ address['address_line'] }}</p>
+                <div class="tinymce align-middle h5 my-0 mx-2">
+                    {{ address['address_line'] | safe}}
+                </div>
             </div>
             <div class="navbar navbar-expand-lg d-flex justify-content-start mt-2">
                 <i class="fa-solid fa-clipboard-user fa-xl"></i><span class="align-middle h5 my-0 mx-2">تحویل گیرنده:</span>

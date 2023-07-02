@@ -54,7 +54,7 @@ def category_create(user_id):
         choices.append((id, name))
 
     form.category_parent.choices = choices
-    return render_template('panel/category/category_create.html', form=form)
+    return render_template('panel/category/category_create.html', form=form, tinymce_key=app.config['TINYMCE_API_KEY'])
 
 
 @user_login_require
@@ -133,7 +133,8 @@ def category_edit(user_id, category_id):
 
     form.category_parent.choices = choices
 
-    return render_template('panel/category/category_edit.html', form=form, category_id=category_id)
+    return render_template('panel/category/category_edit.html', form=form, category_id=category_id,
+                           tinymce_key=app.config['TINYMCE_API_KEY'])
 
 
 @user_login_require
