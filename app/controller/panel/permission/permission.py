@@ -2,27 +2,27 @@ from app import db, model
 from sqlalchemy import and_
 from flask import request, redirect, render_template, url_for, flash
 from app.forms import Permission
-from app.controller.middlewares.auth.login import admin_login_require
-from app.controller.middlewares.auth.permissions import permission_require
+from app.middlewares.auth.login import user_login_require
+from app.middlewares.auth.permissions import permission_require
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['permission'])
-def admin_permission():
+def admin_permission(user_id):
     data = db.session.query(model.Permission.id, model.Permission.name, model.Permission.description)
     return render_template('panel/permission/admin_permission.html', data=data)
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['permission', 'permission_crud'])
-def permission_create():
+def permission_create(user_id):
     form = Permission()
     return render_template('panel/permission/permission_create.html', form=form)
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['permission', 'permission_crud'])
-def permission_store():
+def permission_store(user_id):
     form = Permission()
     if form.validate:
         permission_check = db.session.query(model.Permission.name)\
@@ -42,9 +42,9 @@ def permission_store():
         return redirect(url_for('admin_permission'))
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['permission', 'permission_crud'])
-def permission_edit(permission_id):
+def permission_edit(user_id, permission_id):
     permission = db.session.query(model.Permission.name, model.Permission.description) \
         .filter_by(id=permission_id).first()
     placeholders = {
@@ -55,9 +55,9 @@ def permission_edit(permission_id):
     return render_template('panel/permission/permission_edit.html', form=form, permission_id=permission_id)
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['permission', 'permission_crud'])
-def permission_update(permission_id):
+def permission_update(user_id, permission_id):
     form = Permission()
     if form.validate:
         if request.form.get('_method') == 'PUT':
@@ -78,9 +78,9 @@ def permission_update(permission_id):
             return redirect(url_for('permission_edit', permission_id=permission_id))
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['permission', 'permission_crud'])
-def permission_delete(permission_id):
+def permission_delete(user_id, permission_id):
     db.session.query(model.Permission).filter_by(id=permission_id).delete()
     db.session.commit()
     flash('permission با موفقیت حذف شد', 'message')

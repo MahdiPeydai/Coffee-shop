@@ -30,10 +30,10 @@
                             <p class="shadow m-1 p-1 rounded-3">{{ data[user]['role'] }}</p>
                         </td>
                         <td class="align-middle">
-                            <a href="{{ url_for('admin_user_delete', user_id=user) }}" class="btn p-1 shadow">
+                            <a href="{{ url_for('admin_user_delete', id=user) }}" class="btn p-1 shadow">
                                 <i class="fa-regular fa-trash-can fa-lg"></i>
                             </a>
-                            <a href="{{ url_for('admin_user_edit', user_id=user) }}" class="btn p-1 shadow">
+                            <a href="{{ url_for('admin_user_edit', id=user) }}" class="btn p-1 shadow">
                                 <i class="fa-regular fa-pen-to-square fa-lg"></i>
                             </a>
                         </td>

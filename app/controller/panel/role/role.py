@@ -1,14 +1,14 @@
 from app import db, model
-from sqlalchemy import and_, values
+from sqlalchemy import and_
 from flask import request, redirect, render_template, url_for, flash
 from app.forms import Role
-from app.controller.middlewares.auth.login import admin_login_require
-from app.controller.middlewares.auth.permissions import permission_require
+from app.middlewares.auth.login import user_login_require
+from app.middlewares.auth.permissions import permission_require
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['role'])
-def admin_role():
+def admin_role(user_id):
     roles = db.session.query(model.Role.id, model.Role.name, model.Permission.name.label('permission')) \
         .join(model.role_permission_association, model.Role.id == model.role_permission_association.c.role_id,
               isouter=True) \
@@ -26,9 +26,9 @@ def admin_role():
     return render_template('panel/role/admin_role.html', data=data)
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['role', 'role_crud'])
-def role_create():
+def role_create(user_id):
     form = Role()
 
     permissions = db.session.query(model.Permission.id, model.Permission.name)
@@ -40,9 +40,9 @@ def role_create():
     return render_template('panel/role/role_create.html', form=form)
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['role', 'role_crud'])
-def role_store():
+def role_store(user_id):
     form = Role()
     permissions = db.session.query(model.Permission.id, model.Permission.name)
     permissions_list = []
@@ -77,9 +77,9 @@ def role_store():
     print(form.errors)
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['role', 'role_crud'])
-def role_edit(role_id):
+def role_edit(user_id, role_id):
     role_tuples = db.session.query(model.Role.name, model.Permission.id.label('permission')) \
         .join(model.role_permission_association, model.Role.id == model.role_permission_association.c.role_id,
               isouter=True) \
@@ -114,9 +114,9 @@ def role_edit(role_id):
     return render_template('panel/role/role_edit.html', form=form, role_id=role_id)
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['role', 'role_crud'])
-def role_update(role_id):
+def role_update(user_id, role_id):
     form = Role()
 
     permissions = db.session.query(model.Permission.id, model.Permission.name)
@@ -170,9 +170,9 @@ def role_update(role_id):
     print(form.errors)
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['role', 'role_crud'])
-def role_delete(role_id):
+def role_delete(user_id, role_id):
     db.session.query(model.Role).filter_by(id=role_id).delete()
     db.session.commit()
     flash('role با موفقیت حذف شد', 'message')

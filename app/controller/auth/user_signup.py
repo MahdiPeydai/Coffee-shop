@@ -21,20 +21,15 @@ def user_register():
             .join(model.user_role_association, model.User.id == model.user_role_association.c.user_id)\
             .join(model.Role, model.user_role_association.c.role_id == model.Role.id)\
             .filter(and_(model.User.email == request.form['email'],
-                         model.User.is_deleted != None,
-                         model.Role.name == 'shopper')).first()
+                         model.User.is_deleted != None)).first()
 
         if user_check:
-            flash('کاربر با ایمیل وارد شده وجود دارد', 'error')
+            flash('کاربر با ایمیل وارد شده وجود ندارد', 'error')
             return redirect(url_for('user_register'))
 
         user_password = request.form['password']
         user_password = user_password.encode()
         user_hashed_password = (hashlib.sha256(user_password)).hexdigest()
-
-        # insert_user_sql = "INSERT INTO users (firstname, lastname, email, phone, password) VALUES (%s, %s, %s, %s,
-        # %s)" insert_user_val = (request.form['firstname'], request.form['lastname'], request.form['email'],
-        # request.form['phone'], user_hashed_password) curs.execute(insert_user_sql, insert_user_val)
 
         new_user = model.User(
             firstname=request.form['firstname'],
@@ -46,11 +41,6 @@ def user_register():
         db.session.add(new_user)
         db.session.commit()
         user_id = new_user.id
-
-        # get_user_id_sql = "SELECT id FROM users WHERE email = %s"
-        # get_user_id_val = (request.form['email'],)
-        # curs.execute(get_user_id_sql, get_user_id_val)
-        # user_id = curs.fetchone()['user_id']
 
         role_id = db.session.query(model.Role.id).filter_by(name='shopper').first()
         user_role = model.user_role_association.insert().values(user_id=user_id, role_id=role_id[0])

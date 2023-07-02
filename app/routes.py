@@ -6,44 +6,48 @@ from app.controller.panel.role.role import *
 from app.controller.panel.permission.permission import *
 from app.controller.panel.category.category import *
 from app.controller.panel.product.product import *
-from app.controller.panel.auth.login import *
 
 from app.controller.auth.user_login import *
 from app.controller.auth.user_logout import *
 from app.controller.auth.user_signup import *
 
-from app.controller.home.home import *
+from app.controller.web.home.home import *
 
-from app.controller.profile.profile import *
-from app.controller.profile.information.information import *
-from app.controller.profile.address.address import *
-from app.controller.profile.order.order import *
-from app.controller.profile.password_change.password_change import *
+from app.controller.web.profile.profile import *
+from app.controller.web.profile.information.information import *
+from app.controller.web.profile.address.address import *
+from app.controller.web.profile.order.order import *
+from app.controller.web.profile.password_change.password_change import *
 
-from app.controller.category.category import *
+from app.controller.web.category.category import *
 
-from app.controller.product.product import *
+from app.controller.web.product.product import *
 
-from app.controller.order.cart.cart import *
+from app.controller.web.checkout.cart.cart import *
 
 routes = Blueprint('routes', __name__,
                    template_folder='templates',
                    static_folder='static'
                    )
 
-
-# panel
-app.add_url_rule('/panel', 'panel', panel)
-
 # auth
 
 # login
-app.add_url_rule('/panel/auth/login', 'admin_login', admin_login, methods=['POST', 'GET'])
+app.add_url_rule('/auth/login', 'user_login', user_login, methods=['POST', 'GET'])
+#
+
+# signup
+app.add_url_rule('/auth/signup', 'user_register', user_register, methods=['POST', 'GET'])
 #
 
 # logout
-app.add_url_rule('/panel/auth/logout', 'admin_logout', admin_logout)
+app.add_url_rule('/auth/logout', 'user_logout', user_logout)
 #
+
+#
+
+# panel
+app.add_url_rule('/panel', 'panel', panel)
 
 # user
 
@@ -56,16 +60,16 @@ app.add_url_rule('/panel/user/store', 'admin_user_store', admin_user_store, meth
 #
 
 # update
-app.add_url_rule('/panel/user/<int:user_id>/edit', 'admin_user_edit', admin_user_edit)
-app.add_url_rule('/panel/user/<int:user_id>/update', 'admin_user_update', admin_user_update, methods=['POST', 'PUT'])
+app.add_url_rule('/panel/user/<int:id>/edit', 'admin_user_edit', admin_user_edit)
+app.add_url_rule('/panel/user/<int:id>/update', 'admin_user_update', admin_user_update, methods=['POST', 'PUT'])
 
-app.add_url_rule('/panel/user/<int:user_id>/password/edit', 'admin_user_password_edit', admin_user_password_edit)
-app.add_url_rule('/panel/user/<int:user_id>/password/update', 'admin_user_password_update', admin_user_password_update,
+app.add_url_rule('/panel/user/<int:id>/password/edit', 'admin_user_password_edit', admin_user_password_edit)
+app.add_url_rule('/panel/user/<int:id>/password/update', 'admin_user_password_update', admin_user_password_update,
                  methods=['POST'])
 #
 
 # delete
-app.add_url_rule('/panel/user/<int:user_id>/destroy', 'admin_user_delete', admin_user_delete)
+app.add_url_rule('/panel/user/<int:id>/destroy', 'admin_user_delete', admin_user_delete)
 #
 
 #
@@ -146,22 +150,6 @@ app.add_url_rule('/panel/product/<int:product_id>/update', 'product_update', pro
 
 # delete
 app.add_url_rule('/panel/product/<int:product_id>/destroy', 'product_delete', product_delete)
-#
-
-#
-
-# auth
-
-# login
-app.add_url_rule('/auth/login', 'user_login', user_login, methods=['POST', 'GET'])
-#
-
-# signup
-app.add_url_rule('/auth/signup', 'user_register', user_register, methods=['POST', 'GET'])
-#
-
-# logout
-app.add_url_rule('/auth/logout', 'user_logout', user_logout)
 #
 
 #

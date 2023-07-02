@@ -1,7 +1,7 @@
 from flask import render_template
-from app.controller.middlewares.auth.login import admin_login_require
+from app.middlewares.auth.login import user_login_require
 
 
-@admin_login_require
-def panel():
+@user_login_require
+def panel(user_id):
     return render_template('panel/panel.html')

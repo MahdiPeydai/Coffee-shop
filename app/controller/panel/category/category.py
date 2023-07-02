@@ -1,21 +1,21 @@
 from app import app, db, model
-from sqlalchemy import and_, or_, update, delete
+from sqlalchemy import and_
 
 from flask import request, redirect, render_template, url_for, flash
 
 from app.forms import Category
 from wtforms.validators import DataRequired
 
-from app.controller.middlewares.auth.login import admin_login_require
-from app.controller.middlewares.auth.permissions import permission_require
+from app.middlewares.auth.login import user_login_require
+from app.middlewares.auth.permissions import permission_require
 
 import os
 import uuid
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['category'])
-def admin_category():
+def admin_category(user_id):
     category_alias = model.Category.__table__.alias('A')
 
     categories = db.session.query(category_alias.c.id, category_alias.c.name, category_alias.c.description,
@@ -39,9 +39,9 @@ def admin_category():
     return render_template('panel/category/admin_category.html', data=data)
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['category', 'category_crud'])
-def category_create():
+def category_create(user_id):
     form = Category()
     form.category_image.validators.append(DataRequired())
 
@@ -57,9 +57,9 @@ def category_create():
     return render_template('panel/category/category_create.html', form=form)
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['category', 'category_crud'])
-def category_store():
+def category_store(user_id):
     form = Category()
 
     categories = db.session.query(model.Category.id, model.Category.name)
@@ -103,9 +103,9 @@ def category_store():
         return redirect(url_for('admin_category'))
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['category', 'category_crud'])
-def category_edit(category_id):
+def category_edit(user_id, category_id):
     category_model_alias = model.Category.__table__.alias('A')
 
     category = db.session.query(category_model_alias.c.name, category_model_alias.c.description,
@@ -136,9 +136,9 @@ def category_edit(category_id):
     return render_template('panel/category/category_edit.html', form=form, category_id=category_id)
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['category', 'category_crud'])
-def category_update(category_id):
+def category_update(user_id, category_id):
     form = Category()
 
     categories = db.session.query(model.Category.id, model.Category.name)
@@ -186,9 +186,9 @@ def category_update(category_id):
             return redirect(url_for('category_edit', category_id=category_id))
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['category', 'category_crud'])
-def category_delete(category_id):
+def category_delete(user_id, category_id):
     parent = db.session.query(model.Category.parent_id).filter_by(id=category_id).first()
     if parent[0]:
         update_parent_query = model.product_category_association.update().filter_by(category_id=category_id) \

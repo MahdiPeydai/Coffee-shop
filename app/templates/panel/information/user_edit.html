@@ -1,7 +1,7 @@
 {% extends 'layout/panel_crud.html' %}
 
 {% block form_action %}
-    {{ url_for('admin_user_update', user_id=user_id) }}
+    {{ url_for('admin_user_update', id=user_id) }}
 {% endblock %}
 
 {% block form %}
@@ -12,7 +12,7 @@
     {{ render_field(form.phone) }}
     {{ render_field(form.role) }}
     <div class="d-flex p-3 justify-content-center">
-        <a href="{{ url_for('admin_user_password_edit', user_id=user_id) }}" class="btn bg-danger p-2 shadow text-white">
+        <a href="{{ url_for('admin_user_password_edit', id=user_id) }}" class="btn bg-danger p-2 shadow text-white">
             تغییر رمز عبور
         </a>
     </div>

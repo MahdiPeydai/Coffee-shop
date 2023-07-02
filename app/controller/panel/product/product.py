@@ -1,14 +1,14 @@
 from app import db, model
-from sqlalchemy import delete, and_, or_, func
+from sqlalchemy import and_, func
 from flask import request, redirect, render_template, url_for, flash
 from app.forms import Product
-from app.controller.middlewares.auth.login import admin_login_require
-from app.controller.middlewares.auth.permissions import permission_require
+from app.middlewares.auth.login import user_login_require
+from app.middlewares.auth.permissions import permission_require
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['product'])
-def admin_product():
+def admin_product(user_id):
     products = db.session.query(model.Product.id, model.Product.name, model.Product.quantity,
                                 model.Product.price, model.Product.discount, model.Category.name.label('category_name'))\
         .join(model.product_category_association, model.Product.id == model.product_category_association.c.product_id, isouter=True) \
@@ -30,9 +30,9 @@ def admin_product():
     return render_template('panel/product/admin_product.html', data=data)
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['product', 'product_crud'])
-def product_create():
+def product_create(user_id):
     form = Product()
 
     category_query = db.session.query(model.Category.id, model.Category.name)
@@ -44,9 +44,9 @@ def product_create():
     return render_template('panel/product/product_create.html', form=form)
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['product', 'product_crud'])
-def product_store():
+def product_store(user_id):
     form = Product()
     category_query = db.session.query(model.Category.id, model.Category.name)
     db.session.close()
@@ -90,9 +90,9 @@ def product_store():
         return redirect(url_for('admin_product'))
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['product', 'product_crud'])
-def product_edit(product_id):
+def product_edit(user_id, product_id):
     products = db.session.query(model.Product.id, model.Product.name, model.Product.quantity, model.Product.price,
                                 model.Product.discount, model.Category.id.label('category')) \
         .join(model.product_category_association, model.Product.id == model.product_category_association.c.product_id,
@@ -130,9 +130,9 @@ def product_edit(product_id):
     return render_template('panel/product/product_edit.html', form=form, product_id=product_id)
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['product', 'product_crud'])
-def product_update(product_id):
+def product_update(user_id, product_id):
     form = Product()
     category_query = db.session.query(model.Category.id, model.Category.name)
     db.session.close()
@@ -200,9 +200,9 @@ def product_update(product_id):
             return redirect(url_for('product_edit', product_id=product_id))
 
 
-@admin_login_require
+@user_login_require
 @permission_require(['product', 'product_crud'])
-def product_delete(product_id):
+def product_delete(user_id, product_id):
     product = db.session.query(model.Product).get(product_id)
     product.is_deleted = func.current_timestamp()
 
