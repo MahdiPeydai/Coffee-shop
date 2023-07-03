@@ -5,7 +5,7 @@
                     <p class="h4 my-0">
                         Permission
                     </p>
-                    <a href="{{ url_for('permission_create') }}" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
+                    <a href="{{ url_for('permission_store') }}" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
                         <i class="fa-solid fa-plus fa-xl"></i><p class="h4 mx-2 my-0">افزودن Permission</p>
                     </a>
                 </div>
@@ -14,19 +14,13 @@
                     <thead>
                     <tr>
                         <th class="text-secondary" scope="col">نام:</th>
-                        <th class="text-secondary" scope="col">توضیحات:</th>
                         <th class="text-secondary" scope="col">ویرایش:</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {% for id, name, descrption in data %}
+                    {% for id, name in data %}
                     <tr>
                         <td class="align-middle">{{ name }}</td>
-                        <td class="align-middle">
-                            {% if descrption %}
-                                {{ descrption }}
-                            {% endif %}
-                        </td>
                         <td class="align-middle">
                             <a href="{{ url_for('permission_delete', permission_id=id) }}" class="btn p-1 shadow">
                                 <i class="fa-regular fa-trash-can fa-lg"></i>

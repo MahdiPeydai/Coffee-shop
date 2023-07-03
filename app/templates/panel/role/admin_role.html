@@ -5,7 +5,7 @@
                     <p class="h4 my-0">
                         Role
                     </p>
-                    <a href="{{ url_for('role_create') }}" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
+                    <a href="{{ url_for('role_store') }}" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
                         <i class="fa-solid fa-plus fa-xl"></i><p class="h4 mx-2 my-0">افزودن Role</p>
                     </a>
                 </div>
@@ -23,13 +23,13 @@
                     <tr>
                         <td class="align-middle">{{ data[role]['name'] }}</td>
                         <td class="align-middle">
-                            <div class="d-flex h-100">
                             {% for permission in data[role]['permission'] %}
                                 {% if permission %}
-                                    <p class="shadow m-1 p-1 rounded-3">{{ permission }}</p>
+                                    <div class="d-inline-block">
+                                        <p class="shadow m-1 p-1 rounded-3">{{ permission }}</p>
+                                    </div>
                                 {% endif %}
                             {% endfor %}
-                            </div>
                         </td>
                         <td class="align-middle">
                             <a href="{{ url_for('role_delete', role_id=role) }}" class="btn p-1 shadow">

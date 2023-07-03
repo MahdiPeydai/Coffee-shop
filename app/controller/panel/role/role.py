@@ -7,7 +7,7 @@ from app.middlewares.auth.permissions import permission_require
 
 
 @user_login_require
-@permission_require(['role'])
+@permission_require(['role.index'])
 def admin_role(user_id):
     roles = db.session.query(model.Role.id, model.Role.name, model.Permission.name.label('permission')) \
         .join(model.role_permission_association, model.Role.id == model.role_permission_association.c.role_id,
@@ -27,8 +27,8 @@ def admin_role(user_id):
 
 
 @user_login_require
-@permission_require(['role', 'role_crud'])
-def role_create(user_id):
+@permission_require(['role.store'])
+def role_store(user_id):
     form = Role()
 
     permissions = db.session.query(model.Permission.id, model.Permission.name)
@@ -37,12 +37,12 @@ def role_create(user_id):
         permissions_list.append((str(id), name))
     form.role_permission.choices = permissions_list
 
-    return render_template('panel/role/role_create.html', form=form, tinymce_key=app.config['TINYMCE_API_KEY'])
+    return render_template('panel/role/role_store.html', form=form, tinymce_key=app.config['TINYMCE_API_KEY'])
 
 
 @user_login_require
-@permission_require(['role', 'role_crud'])
-def role_store(user_id):
+@permission_require(['role.store'])
+def role_create(user_id):
     form = Role()
     permissions = db.session.query(model.Permission.id, model.Permission.name)
     permissions_list = []
@@ -53,7 +53,7 @@ def role_store(user_id):
         role_check = db.session.query(model.Role).filter_by(name=request.form['role_name']).first()
         if role_check:
             flash('role با این نام قبلا ثبت شده', 'error')
-            return redirect(url_for('role_create'))
+            return redirect(url_for('role_store'))
 
         new_role = model.Role(
             name=request.form['role_name']
@@ -77,7 +77,7 @@ def role_store(user_id):
 
 
 @user_login_require
-@permission_require(['role', 'role_crud'])
+@permission_require(['role.edit'])
 def role_edit(user_id, role_id):
     role_tuples = db.session.query(model.Role.name, model.Permission.id.label('permission')) \
         .join(model.role_permission_association, model.Role.id == model.role_permission_association.c.role_id,
@@ -115,7 +115,7 @@ def role_edit(user_id, role_id):
 
 
 @user_login_require
-@permission_require(['role', 'role_crud'])
+@permission_require(['role.edit'])
 def role_update(user_id, role_id):
     form = Role()
 
@@ -169,7 +169,7 @@ def role_update(user_id, role_id):
 
 
 @user_login_require
-@permission_require(['role', 'role_crud'])
+@permission_require(['role.destroy'])
 def role_delete(user_id, role_id):
     db.session.query(model.Role).filter_by(id=role_id).delete()
     db.session.commit()

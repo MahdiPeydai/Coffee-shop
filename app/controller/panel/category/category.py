@@ -14,7 +14,7 @@ import uuid
 
 
 @user_login_require
-@permission_require(['category'])
+@permission_require(['category.index'])
 def admin_category(user_id):
     category_alias = model.Category.__table__.alias('A')
 
@@ -40,8 +40,8 @@ def admin_category(user_id):
 
 
 @user_login_require
-@permission_require(['category', 'category_crud'])
-def category_create(user_id):
+@permission_require(['category.store'])
+def category_store(user_id):
     form = Category()
     form.category_image.validators.append(DataRequired())
 
@@ -58,8 +58,8 @@ def category_create(user_id):
 
 
 @user_login_require
-@permission_require(['category', 'category_crud'])
-def category_store(user_id):
+@permission_require(['category.store'])
+def category_create(user_id):
     form = Category()
 
     categories = db.session.query(model.Category.id, model.Category.name)
@@ -77,7 +77,7 @@ def category_store(user_id):
 
         if category_check:
             flash('دسته بندی با نام وارد شده قبلا ایجاد شده است', 'error')
-            return redirect(url_for('category_create'))
+            return redirect(url_for('category_store'))
 
         category_image = request.files['category_image']
         category_image_name = category_image.filename
@@ -104,7 +104,7 @@ def category_store(user_id):
 
 
 @user_login_require
-@permission_require(['category', 'category_crud'])
+@permission_require(['category.edit'])
 def category_edit(user_id, category_id):
     category_model_alias = model.Category.__table__.alias('A')
 
@@ -138,7 +138,7 @@ def category_edit(user_id, category_id):
 
 
 @user_login_require
-@permission_require(['category', 'category_crud'])
+@permission_require(['category.edit'])
 def category_update(user_id, category_id):
     form = Category()
 
@@ -188,7 +188,7 @@ def category_update(user_id, category_id):
 
 
 @user_login_require
-@permission_require(['category', 'category_crud'])
+@permission_require(['category.destroy'])
 def category_delete(user_id, category_id):
     parent = db.session.query(model.Category.parent_id).filter_by(id=category_id).first()
     if parent[0]:

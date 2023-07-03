@@ -55,8 +55,8 @@ app.add_url_rule('/panel', 'panel', panel)
 app.add_url_rule('/panel/user', 'admin_user', admin_information)
 
 # create
-app.add_url_rule('/panel/user/create', 'admin_user_create', admin_user_create)
-app.add_url_rule('/panel/user/store', 'admin_user_store', admin_user_store, methods=['POST'])
+app.add_url_rule('/panel/user/store', 'admin_user_store', admin_user_store)
+app.add_url_rule('/panel/user/create', 'admin_user_create', admin_user_create, methods=['POST'])
 #
 
 # update
@@ -78,8 +78,8 @@ app.add_url_rule('/panel/user/<int:id>/destroy', 'admin_user_delete', admin_user
 app.add_url_rule('/panel/role', 'admin_role', admin_role)
 
 # create
-app.add_url_rule('/panel/role/create', 'role_create', role_create)
-app.add_url_rule('/panel/role/store', 'role_store', role_store, methods=['POST'])
+app.add_url_rule('/panel/role/store', 'role_store', role_store)
+app.add_url_rule('/panel/role/create', 'role_create', role_create, methods=['POST'])
 #
 
 # update
@@ -97,8 +97,8 @@ app.add_url_rule('/panel/role/<int:role_id>/destroy', 'role_delete', role_delete
 app.add_url_rule('/panel/permission', 'admin_permission', admin_permission)
 
 # create
-app.add_url_rule('/panel/permission/create', 'permission_create', permission_create)
-app.add_url_rule('/panel/permission/store', 'permission_store', permission_store, methods=['POST'])
+app.add_url_rule('/panel/permission/store', 'permission_store', permission_store)
+app.add_url_rule('/panel/permission/create', 'permission_create', permission_create, methods=['POST'])
 #
 
 # update
@@ -119,8 +119,8 @@ app.add_url_rule('/panel/permission/<int:permission_id>/destroy', 'permission_de
 app.add_url_rule('/panel/category', 'admin_category', admin_category)
 
 # create
-app.add_url_rule('/panel/category/create', 'category_create', category_create)
-app.add_url_rule('/panel/category/store', 'category_store', category_store, methods=['POST'])
+app.add_url_rule('/panel/category/store', 'category_store', category_store)
+app.add_url_rule('/panel/category/create', 'category_create', category_create, methods=['POST'])
 #
 
 # update
@@ -139,8 +139,8 @@ app.add_url_rule('/panel/category/<int:category_id>/destroy', 'category_delete',
 app.add_url_rule('/panel/product', 'admin_product', admin_product)
 
 # create
-app.add_url_rule('/panel/product/create', 'product_create', product_create)
-app.add_url_rule('/panel/product/store', 'product_store', product_store, methods=['POST'])
+app.add_url_rule('/panel/product/store', 'product_store', product_store)
+app.add_url_rule('/panel/product/create', 'product_create', product_create, methods=['POST'])
 #
 
 # update

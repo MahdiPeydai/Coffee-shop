@@ -7,23 +7,23 @@ from app.middlewares.auth.permissions import permission_require
 
 
 @user_login_require
-@permission_require(['permission'])
+@permission_require(['permission.index'])
 def admin_permission(user_id):
     data = db.session.query(model.Permission.id, model.Permission.name)
     return render_template('panel/permission/admin_permission.html', data=data)
 
 
 @user_login_require
-@permission_require(['permission', 'permission_crud'])
-def permission_create(user_id):
+@permission_require(['permission.store'])
+def permission_store(user_id):
     form = Permission()
     return render_template('panel/permission/permission_create.html', form=form,
                            tinymce_key=app.config['TINYMCE_API_KEY'])
 
 
 @user_login_require
-@permission_require(['permission', 'permission_crud'])
-def permission_store(user_id):
+@permission_require(['permission.store'])
+def permission_create(user_id):
     form = Permission()
     if form.validate:
         permission_check = db.session.query(model.Permission.name)\
@@ -31,7 +31,7 @@ def permission_store(user_id):
 
         if permission_check:
             flash('Permission با این نام وجود دارد', 'error')
-            return redirect(url_for('permission_create'))
+            return redirect(url_for('permission_store'))
 
         permission = model.Permission(
             name=request.form['permission_name']
@@ -43,7 +43,7 @@ def permission_store(user_id):
 
 
 @user_login_require
-@permission_require(['permission', 'permission_crud'])
+@permission_require(['permission.edit'])
 def permission_edit(user_id, permission_id):
     permission = db.session.query(model.Permission.name).filter_by(id=permission_id).first()
     placeholders = {
@@ -55,7 +55,7 @@ def permission_edit(user_id, permission_id):
 
 
 @user_login_require
-@permission_require(['permission', 'permission_crud'])
+@permission_require(['permission.edit'])
 def permission_update(user_id, permission_id):
     form = Permission()
     if form.validate:
@@ -77,7 +77,7 @@ def permission_update(user_id, permission_id):
 
 
 @user_login_require
-@permission_require(['permission', 'permission_crud'])
+@permission_require(['permission.destroy'])
 def permission_delete(user_id, permission_id):
     db.session.query(model.Permission).filter_by(id=permission_id).delete()
     db.session.commit()

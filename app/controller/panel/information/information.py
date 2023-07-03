@@ -8,7 +8,7 @@ import hashlib
 
 
 @user_login_require
-@permission_require(['user'])
+@permission_require(['user.index'])
 def admin_information(user_id):
     users = db.session.query(model.User.id, model.User.firstname, model.User.lastname, model.User.email,
                              model.User.phone, model.Role.name.label('role')) \
@@ -29,8 +29,8 @@ def admin_information(user_id):
 
 
 @user_login_require
-@permission_require(['user', 'user_crud'])
-def admin_user_create(user_id):
+@permission_require(['user.store'])
+def admin_user_store(user_id):
     form = User()
     roles = db.session.query(model.Role.id, model.Role.name)
 
@@ -38,12 +38,12 @@ def admin_user_create(user_id):
     for id, name in roles:
         role.append((id, name))
     form.role.choices = role
-    return render_template('panel/information/user_create.html', form=form)
+    return render_template('panel/information/user_store.html', form=form)
 
 
 @user_login_require
-@permission_require(['user', 'user_crud'])
-def admin_user_store(user_id):
+@permission_require(['user.store'])
+def admin_user_create(user_id):
     form = User()
     roles = db.session.query(model.Role.id, model.Role.name)
 
@@ -61,7 +61,7 @@ def admin_user_store(user_id):
 
         if user_id:
             flash('کاربر با این ایمیل قبلا ثبت شده', 'error')
-            return redirect(url_for('admin_user_create'))
+            return redirect(url_for('admin_user_store'))
 
         user_password = request.form['password']
         user_password = user_password.encode()
@@ -86,7 +86,7 @@ def admin_user_store(user_id):
 
 
 @user_login_require
-@permission_require(['user', 'user_crud'])
+@permission_require(['user.edit'])
 def admin_user_edit(user_id, id):
     user = db.session.query(model.User.firstname, model.User.lastname, model.User.email,
                             model.User.phone, model.Role.id.label('role')) \
@@ -111,7 +111,7 @@ def admin_user_edit(user_id, id):
 
 
 @user_login_require
-@permission_require(['user', 'user_crud'])
+@permission_require(['user.edit'])
 def admin_user_update(user_id, id):
     form = User()
     form.password.validators = []
@@ -152,14 +152,14 @@ def admin_user_update(user_id, id):
 
 
 @user_login_require
-@permission_require(['user', 'user_crud'])
+@permission_require(['user.edit'])
 def admin_user_password_edit(user_id, id):
     form = ChangePassword()
     return render_template('panel/information/user_password_edit.html', form=form, user_id=id)
 
 
 @user_login_require
-@permission_require(['user', 'user_crud'])
+@permission_require(['user.edit'])
 def admin_user_password_update(user_id, id):
     form = ChangePassword()
     if form.validate:
@@ -186,7 +186,7 @@ def admin_user_password_update(user_id, id):
 
 
 @user_login_require
-@permission_require(['user', 'user_crud'])
+@permission_require(['user.destroy'])
 def admin_user_delete(user_id, id):
     user = db.session.query(model.User).get(id)
     user.is_deleted = func.current_timestamp()

@@ -4,10 +4,11 @@ from flask import request, redirect, render_template, url_for, flash
 from app.forms import Product
 from app.middlewares.auth.login import user_login_require
 from app.middlewares.auth.permissions import permission_require
+from app.controller.utils.category_child_delete import category_child_delete
 
 
 @user_login_require
-@permission_require(['product'])
+@permission_require(['product.index'])
 def admin_product(user_id):
     products = db.session.query(model.Product.id, model.Product.name, model.Product.quantity, model.Product.price,
                                 model.Product.discount, model.Product.description,
@@ -34,8 +35,8 @@ def admin_product(user_id):
 
 
 @user_login_require
-@permission_require(['product', 'product_crud'])
-def product_create(user_id):
+@permission_require(['product.store'])
+def product_store(user_id):
     form = Product()
 
     category_query = db.session.query(model.Category.id, model.Category.name)
@@ -48,8 +49,8 @@ def product_create(user_id):
 
 
 @user_login_require
-@permission_require(['product', 'product_crud'])
-def product_store(user_id):
+@permission_require(['product.store'])
+def product_create(user_id):
     form = Product()
     category_query = db.session.query(model.Category.id, model.Category.name)
     db.session.close()
@@ -62,7 +63,7 @@ def product_store(user_id):
                                                                          model.Product.is_deleted == None)).first()
         if product_check:
             flash('محصول با نام وارد شده وجود دارد ...', 'error')
-            return redirect(url_for('product_create'))
+            return redirect(url_for('product_store'))
 
         product_category_str = request.form.getlist('product_category')
         product_category = []
@@ -90,12 +91,25 @@ def product_store(user_id):
                                                                                   category_id=category_id)
             db.session.execute(product_category)
             db.session.commit()
+            parent = db.session.query(model.Category).get(category_id)
+            parent_id = parent.parent_id
+            while parent_id:
+                record_check = db.session.query(model.product_category_association).filter(and_(
+                    model.product_category_association.c.product_id == product_id,
+                    model.product_category_association.c.category_id == parent_id)).first()
+                if not record_check:
+                    product_category = model.product_category_association.insert().values(product_id=product_id,
+                                                                                          category_id=parent_id)
+                    db.session.execute(product_category)
+                    db.session.commit()
+                parent = db.session.query(model.Category).get(parent_id)
+                parent_id = parent.parent_id
         flash('محصول با موفقیت اضافه شد', 'message')
         return redirect(url_for('admin_product'))
 
 
 @user_login_require
-@permission_require(['product', 'product_crud'])
+@permission_require(['product.edit'])
 def product_edit(user_id, product_id):
     products = db.session.query(model.Product.id, model.Product.name, model.Product.quantity, model.Product.price,
                                 model.Product.discount, model.Product.description, model.Category.id.label('category'))\
@@ -138,7 +152,7 @@ def product_edit(user_id, product_id):
 
 
 @user_login_require
-@permission_require(['product', 'product_crud'])
+@permission_require(['product.edit'])
 def product_update(user_id, product_id):
     form = Product()
     category_query = db.session.query(model.Category.id, model.Category.name)
@@ -190,26 +204,43 @@ def product_update(user_id, product_id):
 
             for overplus in old_category:
                 if overplus not in new_category:
-                    delete_product_category = model.product_category_association.delete().filter(
-                        model.product_category_association.c.category_id == overplus
-                    )
+                    delete_product_category = model.product_category_association.delete().filter(and_(
+                        model.product_category_association.c.category_id == overplus,
+                        model.product_category_association.c.product_id == product_id))
                     db.session.execute(delete_product_category)
                     db.session.commit()
+                    category = db.session.query(model.Category).get(overplus)
+                    children_list = category.children
+                    category_child_delete(product_id, children_list)
 
             for shortage in new_category:
                 if shortage not in old_category:
                     new_product_category = model.product_category_association.insert().values(
                         product_id=product_id,
-                        category_id=int(shortage)
+                        category_id=shortage
                     )
                     db.session.execute(new_product_category)
                     db.session.commit()
+                    parent = db.session.query(model.Category).get(shortage)
+                    parent_id = parent.parent_id
+                    while parent_id:
+                        record_check = db.session.query(model.product_category_association).filter(and_(
+                            model.product_category_association.c.product_id == product_id,
+                            model.product_category_association.c.category_id == parent_id)).first()
+                        if not record_check:
+                            product_category = model.product_category_association.insert().values(product_id=product_id,
+                                                                                                  category_id=parent_id)
+                            db.session.execute(product_category)
+                            db.session.commit()
+                        parent = db.session.query(model.Category).get(parent_id)
+                        parent_id = parent.parent_id
+
             flash('تغییرات با موفقیت انجام شد', 'message')
             return redirect(url_for('product_edit', product_id=product_id))
 
 
 @user_login_require
-@permission_require(['product', 'product_crud'])
+@permission_require(['product.destroy'])
 def product_delete(user_id, product_id):
     product = db.session.query(model.Product).get(product_id)
     product.is_deleted = func.current_timestamp()
