@@ -16,4 +16,4 @@ class Category(db.Model):
     children = db.relationship("Category", backref=db.backref('parent', remote_side=[id]))
 
     products = db.relationship('Product', secondary=product_category_association,
-                               backref=db.backref('category', lazy='dynamic'))
+                               backref=db.backref('categories', lazy='dynamic'))

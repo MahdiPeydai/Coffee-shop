@@ -9,7 +9,8 @@ from app.forms import Profile
 
 
 @user_login_require
-def user_information(user_id):
+def user_information():
+    user_id = getattr(request, 'user_id', None)
     user = db.session.query(model.User.firstname, model.User.lastname, model.User.email, model.User.phone) \
         .filter_by(id=user_id).first()
     user_information = {
@@ -18,11 +19,13 @@ def user_information(user_id):
         'email': user[2],
         'phone': user[3]
     }
-    return render_template('web/profile/information/information.html', user_information=user_information, user_id=user_id)
+    return render_template('web/profile/information/information.html', user_information=user_information,
+                           user_id=user_id)
 
 
 @user_login_require
-def user_information_edit(user_id):
+def user_information_edit():
+    user_id = getattr(request, 'user_id', None)
     user = db.session.query(model.User.firstname, model.User.lastname, model.User.email, model.User.phone) \
         .filter_by(id=user_id).first()
     placeholders = {
@@ -36,7 +39,8 @@ def user_information_edit(user_id):
 
 
 @user_login_require
-def user_information_update(user_id):
+def user_information_update():
+    user_id = getattr(request, 'user_id', None)
     form = Profile()
     if form.validate:
         if request.form.get('_method') == 'PUT':
@@ -63,7 +67,8 @@ def user_information_update(user_id):
 
 
 @user_login_require
-def user_delete(user_id):
+def user_delete():
+    user_id = getattr(request, 'user_id', None)
     user = db.session.query(model.User).get(user_id)
     user.is_deleted = func.current_timestamp()
     db.session.commit()

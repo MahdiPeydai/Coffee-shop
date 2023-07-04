@@ -11,6 +11,5 @@ class Role(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, server_default=db.text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
 
-    users = db.relationship('User', secondary=user_role_association, backref=db.backref('role', lazy='dynamic'))
     permissions = db.relationship('Permission', secondary=role_permission_association,
-                                  backref=db.backref('role', lazy='dynamic'))
+                                  backref=db.backref('roles', lazy='dynamic'))

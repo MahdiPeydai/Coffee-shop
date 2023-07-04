@@ -49,6 +49,6 @@ def user_register():
 
         resp = make_response(redirect(url_for('home')))
         token = jwt.encode({'user_id': user_id}, app.config['SECRET_KEY'], 'HS256')
-        resp.set_cookie('user_token', token)
+        resp.set_cookie('use_token', token)
         return resp
     return render_template('auth/user_register.html', form=form)

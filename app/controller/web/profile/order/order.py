@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import request, render_template
 
 from app import db, model
 
@@ -6,7 +6,8 @@ from app.middlewares.auth.login import user_login_require
 
 
 @user_login_require
-def user_order(user_id):
+def user_order():
+    user_id = getattr(request, 'user_id', None)
     order_tuple = db.session.query(model.Order.id, model.Order.created_at, model.Order.total, model.Product.name) \
         .join(model.OrderItem, model.Order.id == model.OrderItem.order_id) \
         .join(model.Product, model.OrderItem.product_id == model.Product.id) \

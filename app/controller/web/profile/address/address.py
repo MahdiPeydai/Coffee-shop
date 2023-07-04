@@ -10,7 +10,8 @@ from app.forms import Address
 
 
 @user_login_require
-def user_address(user_id):
+def user_address():
+    user_id = getattr(request, 'user_id', None)
     addresses = db.session.query(model.Address.id, model.Address.address_line,
                                  model.Address.postal_code, model.Address.transferee, model.Address.phone) \
         .join(model.User, model.Address.user_id == model.User.id) \
@@ -31,15 +32,16 @@ def user_address(user_id):
 
 
 @user_login_require
-def user_address_create(user_id):
+def user_address_create():
     form = Address()
     flask.session["referrer_url"] = request.referrer
-    return render_template('web/profile/address/address_create.html', form=form, user_id=user_id,
-                           tinymce_key=app.config['TINYMCE_API_KEY'])
+    return render_template('web/profile/address/address_create.html', user_id=getattr(request, 'user_id', None),
+                           form=form, tinymce_key=app.config['TINYMCE_API_KEY'])
 
 
 @user_login_require
-def user_address_store(user_id):
+def user_address_store():
+    user_id = getattr(request, 'user_id', None)
     form = Address()
     if form.validate:
         new_address = model.Address(
@@ -60,7 +62,7 @@ def user_address_store(user_id):
 
 
 @user_login_require
-def user_address_edit(user_id, address_id):
+def user_address_edit(address_id):
     address = db.session.query(model.Address.city, model.Address.address_line, model.Address.postal_code,
                                model.Address.transferee, model.Address.phone).filter_by(id=address_id).first()
     placeholders = {
@@ -76,7 +78,7 @@ def user_address_edit(user_id, address_id):
 
 
 @user_login_require
-def user_address_update(user_id, address_id):
+def user_address_update(address_id):
     form = Address()
     if form.validate:
         if request.form.get('_method') == 'PUT':
@@ -92,7 +94,7 @@ def user_address_update(user_id, address_id):
 
 
 @user_login_require
-def user_address_delete(user_id, address_id):
+def user_address_delete(address_id):
     address = db.session.query(model.Address).get(address_id)
     address.is_deleted = func.current_timestamp()
     db.session.commit()

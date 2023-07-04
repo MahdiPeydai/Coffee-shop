@@ -20,8 +20,9 @@ def cart_check(func):
             if (not cart.user_id) and (getattr(request, 'user_id', None)):
                 cart.user_id = getattr(request, 'user_id', None)
                 db.session.commit()
+            request.cart_id = cart_id
 
-            return func(*args, cart_id, **kwargs)
+            return func(*args, **kwargs)
         else:
             user_id = getattr(request, 'user_id', None)
             cart = model.Cart(
@@ -31,10 +32,9 @@ def cart_check(func):
             db.session.commit()
 
             cart_id = cart.id
-            resp = make_response(func(*args, cart_id, **kwargs))
+            request.cart_id = cart_id
+            resp = make_response(func(*args, **kwargs))
             token = jwt.encode({'cart_id': cart_id}, app.config['SECRET_KEY'], algorithm='HS256')
             resp.set_cookie('cart', token)
-
             return resp
-
     return decorator

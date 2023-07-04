@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import request, render_template
 
 from app import db, model
 
@@ -11,8 +11,8 @@ from app.controller.utils.category_dict_builder import build_categories_dict
 
 @user_login_check
 @cart_check
-def category_all(user_id, cart_id):
-    cart_items_number = cart_items_counter(cart_id)
+def category_all():
+    cart_items_number = cart_items_counter()
 
     base_categories = db.session.query(model.Category).filter_by(parent_id=None).all()
     categories_list = build_categories_dict(base_categories)
@@ -27,14 +27,15 @@ def category_all(user_id, cart_id):
 
     products = db.session.query(model.Product).filter_by(is_deleted=None).all()
 
-    return render_template('web/category/category.html', user_id=user_id, cart_items_number=cart_items_number,
-                           categories_list=categories_list, categories_data=categories_data, products=products)
+    return render_template('web/category/category.html', user_id=getattr(request, 'user_id', None),
+                           cart_items_number=cart_items_number, categories_list=categories_list,
+                           categories_data=categories_data, products=products)
 
 
 @user_login_check
 @cart_check
-def category(user_id, cart_id, category_id):
-    cart_items_number = cart_items_counter(cart_id)
+def category(category_id):
+    cart_items_number = cart_items_counter()
 
     base_categories = db.session.query(model.Category).filter_by(parent_id=None).all()
     categories_list = build_categories_dict(base_categories)
@@ -52,5 +53,6 @@ def category(user_id, cart_id, category_id):
         .join(model.Category, model.Category.id == model.product_category_association.c.category_id)\
         .filter(model.Category.id == category_id).all()
 
-    return render_template('web/category/category.html', user_id=user_id, cart_items_number=cart_items_number,
-                           categories_list=categories_list, categories_data=categories_data, products=products)
+    return render_template('web/category/category.html', user_id=getattr(request, 'user_id', None),
+                           cart_items_number=cart_items_number, categories_list=categories_list,
+                           categories_data=categories_data, products=products)

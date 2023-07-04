@@ -16,5 +16,3 @@ class Product(db.Model):
     is_deleted = db.Column(db.DateTime, default=None)
 
     images = db.relationship('ProductImage', backref=db.backref('product'))
-    categories = db.relationship('Category', secondary=product_category_association,
-                                 backref=db.backref('product', lazy='dynamic'))

@@ -17,17 +17,31 @@ def user_login():
         user_password = user_password.encode()
         user_password = (hashlib.sha256(user_password)).hexdigest()
 
-        user_id = db.session.query(model.User.id) \
+        user = db.session.query(model.User) \
             .join(model.user_role_association, model.User.id == model.user_role_association.c.user_id) \
             .join(model.Role, model.user_role_association.c.role_id == model.Role.id) \
             .filter(and_(model.User.email == request.form['email'],
                          model.User.is_deleted == None,
                          model.User.password == user_password)).first()
+        user_id = user.id
 
         if user_id:
+            user_token = jwt.encode({'user_id': user_id}, app.config['SECRET_KEY'], algorithm='HS256')
+            cart = db.session.query(model.Cart).filter_by(user_id=user_id).first()
+            cart_token = jwt.encode({'cart_id': cart.id}, app.config['SECRET_KEY'], algorithm='HS256')
+
+            token = request.cookies.get('cart')
+            if token:
+                old_cart = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+                old_cart_id = old_cart['cart_id']
+                model.CartItem.query.filter_by(cart_id=old_cart_id)\
+                    .update({model.CartItem.cart_id: cart.id})
+                db.session.commit()
+
             resp = make_response(redirect(url_for('home')))
-            token = jwt.encode({'user_id': user_id[0]}, app.config['SECRET_KEY'], algorithm='HS256')
-            resp.set_cookie('user_token', token)
+            resp.set_cookie('user', user_token)
+            resp.set_cookie('cart', cart_token)
+
             return resp
         else:
             flash('ایمیل یا رمز عبور وارد شده صحیح نمی‌باشند', 'error')

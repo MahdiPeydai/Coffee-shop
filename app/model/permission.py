@@ -9,6 +9,3 @@ class Permission(db.Model):
     name = db.Column(db.String(50), nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, server_default=db.text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
-
-    roles = db.relationship('Role', secondary=role_permission_association,
-                            backref=db.backref('permission', lazy='dynamic'))

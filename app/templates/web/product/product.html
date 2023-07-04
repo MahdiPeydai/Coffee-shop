@@ -94,7 +94,7 @@ Product
                         <div dir="rtl" class="d-inline-flex">
                             <h4 class="mx-2">قیمت:</h4>
                             <h4 class="mx-2">
-                                <span class="price">{{ product['discounted_price'] }}</span> تومان
+                                <span class="price">{{ product['final_price'] }}</span> تومان
                             </h4>
                         </div>
                         <div class="mt-3">
@@ -127,11 +127,11 @@ Product
                             {% if item_quantity %}
                                 <div class="border border-1 border-danger rounded-4 ms-4 d-inline-flex align-items-center px-3">
                                     {% if item_quantity == 1 %}
-                                    <a href="{{ url_for('cart_item_delete', product_id=product['id']) }}">
+                                    <a href="{{ url_for('cart_item_destroy', product_id=product['id']) }}">
                                         <i class="fa-regular fa-trash-can fa-lg text-black"></i>
                                     </a>
                                     {% else %}
-                                    <a href="{{ url_for('cart_item_delete', product_id=product['id']) }}">
+                                    <a href="{{ url_for('cart_item_destroy', product_id=product['id']) }}">
                                         <i class="fa-solid fa-circle-minus fa-lg text-black"></i>
                                     </a>
                                     {% endif %}

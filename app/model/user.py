@@ -16,6 +16,6 @@ class User(db.Model):
     is_deleted = db.Column(db.DateTime, default=None)
 
     addresses = db.relationship('Address', backref=db.backref('user'))
-    roles = db.relationship('Role', secondary=user_role_association, backref=db.backref('user', lazy='dynamic'))
+    roles = db.relationship('Role', secondary=user_role_association, backref=db.backref('users', lazy='dynamic'))
     carts = db.relationship('Cart', backref=db.backref('user'))
     orders = db.relationship('Order', backref=db.backref('user'))
