@@ -5,6 +5,7 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 module.exports = {
   entry: {
     layout: "./src/js/layout.js",
+    image_import: "./src/js/image_import",
     home: "./src/js/home.js",
     product: "./src/js/product.js",
     cart: "./src/js/cart.js",
@@ -35,6 +36,13 @@ module.exports = {
         {
           test: /\.(png|jpg|jpeg|svg|gif)$/i,
           type: 'asset/resource'
+        },
+        {
+          test: require.resolve("jquery"),
+          loader: "expose-loader",
+          options: {
+            exposes: ["$", "jQuery"],
+          },
         }
       ]
     },

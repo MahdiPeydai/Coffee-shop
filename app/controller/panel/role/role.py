@@ -8,7 +8,7 @@ from app.middlewares.auth.permissions import permission_require
 
 @user_login_require
 @permission_require(['role.index'])
-def admin_role(user_id):
+def admin_role():
     roles = db.session.query(model.Role.id, model.Role.name, model.Permission.name.label('permission')) \
         .join(model.role_permission_association, model.Role.id == model.role_permission_association.c.role_id,
               isouter=True) \
@@ -28,7 +28,7 @@ def admin_role(user_id):
 
 @user_login_require
 @permission_require(['role.store'])
-def role_store(user_id):
+def role_store():
     form = Role()
 
     permissions = db.session.query(model.Permission.id, model.Permission.name)
@@ -42,7 +42,7 @@ def role_store(user_id):
 
 @user_login_require
 @permission_require(['role.store'])
-def role_create(user_id):
+def role_create():
     form = Role()
     permissions = db.session.query(model.Permission.id, model.Permission.name)
     permissions_list = []
@@ -78,7 +78,7 @@ def role_create(user_id):
 
 @user_login_require
 @permission_require(['role.edit'])
-def role_edit(user_id, role_id):
+def role_edit(role_id):
     role_tuples = db.session.query(model.Role.name, model.Permission.id.label('permission')) \
         .join(model.role_permission_association, model.Role.id == model.role_permission_association.c.role_id,
               isouter=True) \
@@ -116,7 +116,7 @@ def role_edit(user_id, role_id):
 
 @user_login_require
 @permission_require(['role.edit'])
-def role_update(user_id, role_id):
+def role_update(role_id):
     form = Role()
 
     permissions = db.session.query(model.Permission.id, model.Permission.name)
@@ -170,7 +170,7 @@ def role_update(user_id, role_id):
 
 @user_login_require
 @permission_require(['role.destroy'])
-def role_delete(user_id, role_id):
+def role_delete(role_id):
     db.session.query(model.Role).filter_by(id=role_id).delete()
     db.session.commit()
     flash('role با موفقیت حذف شد', 'message')

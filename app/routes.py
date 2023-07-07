@@ -224,9 +224,9 @@ app.add_url_rule('/product/<int:product_id>', 'product', product)
 app.add_url_rule('/checkout/cart', 'cart', cart)
 
 # add item
-app.add_url_rule('/checkout/cart/product/<int:product_id>/store', 'cart_item_store', cart_item_store)
+app.add_url_rule('/checkout/cart/product/store', 'cart_item_store', cart_item_store, methods=['POST'])
 #
 
 # delete item
-app.add_url_rule('/checkout/cart/product/<int:product_id>/destroy', 'cart_item_destroy', cart_item_destroy)
+app.add_url_rule('/checkout/cart/product/destroy', 'cart_item_destroy', cart_item_destroy, methods=['POST'])
 #

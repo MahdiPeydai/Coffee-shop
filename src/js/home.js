@@ -1,11 +1,1 @@
-import "../css/home.css"
-import "../image/1.png"
-import "../image/2.png"
-import "../image/3.png"
-import "../image/12.png"
-import "../image/accessory_logo.png"
-import "../image/coffee_logo.png"
-import "../image/chocolate_logo.png"
-import "../image/espresso_maker_logo.png"
-import "../image/banner1.png"
-import "../image/banner2.png"
+import '../css/home.css'

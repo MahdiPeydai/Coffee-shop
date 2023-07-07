@@ -1,33 +1,90 @@
-<header class="container-fluid mt-3">
-    <div class="d-flex justify-content-center justify-content-md-start align-items-center sticky-top px-5 bg-white">
-        <a href="{{ url_for('home') }}" class="d-flex align-items-center text-decoration-none text-black">
-            <img src="{{ asset.url_for('logo.png') }}">
-            <p class="h5 my-0 mx-2">
-                فروشگاه قهوه بهنام کافه
-            </p>
-        </a>
-        <div id="sidebar-toggle" class="btn mx-3 d-lg-none">
-            <i class="fa-solid fa-bars"></i>
+<header class="col-12 mt-3 sticky-top">
+    <div class="d-md-flex justify-content-between align-items-center px-2 bg-white">
+        <div class="d-flex align-items-center justify-content-center px-2 my-md-2">
+            <a href="{{ url_for('home') }}" class="d-flex align-items-center text-decoration-none text-black">
+                <img src="{{ asset.url_for('logo.png') }}">
+                <p class="h5 my-0 mx-2">
+                    فروشگاه قهوه بهنام کافه
+                </p>
+            </a>
+            <a class="btn mx-3 d-lg-none" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                <i class="fa-solid fa-bars"></i>
+            </a>
         </div>
-    </div>
-    <div class="d-flex justify-content-center mt-3">
-        <div dir="ltr" class="d-md-flex col-12 col-lg-11 bottom_navbar rounded-3 p-2">
-            <a href="{{ url_for('cart') }}" class="col-md-3 col-xl-2 nav-link d-flex align-items-center justify-content-center card_button px-3 py-2 mx-2">
-                <p class="my-0 mx-1 px-1 text-white card_counter">{{ cart_items_number }}</p>
+        <div dir="ltr" class="d-flex justify-content-center rounded-3 p-2">
+            <a href="{{ url_for('cart') }}" class="cart_button btn d-flex align-items-center justify-content-center px-3 py-2 mx-2">
+                <p id="cart_item_counter" class="cart_counter my-0 mx-1 px-1 text-white">{{ cart_items_number }}</p>
                 <p class="my-0 mx-1">سبد خرید</p>
                 <i class="fa-solid fa-basket-shopping my-0 mx-1"></i>
             </a>
             {% if user_id %}
-            <a href="{{ url_for('user_profile') }}" class="col-md-3 col-xl-2 nav-link d-flex align-items-center justify-content-center px-3 py-2 mx-2 rounded-3 border border-2">
+            <a href="{{ url_for('user_profile') }}" class="btn d-flex align-items-center justify-content-center px-3 py-2 mx-2 rounded-3 border border-2">
                 <p class="my-0 mx-1">پروفایل</p>
                 <i class="fa-solid fa-id-card mx-1"></i>
             </a>
             {% else %}
-            <a href="{{ url_for('user_login') }}" class="col-md-3 col-xl-2 nav-link d-flex align-items-center justify-content-center px-3 py-2 mx-2 rounded-3 border border-1 text-secondary">
+            <a href="{{ url_for('user_login') }}" class="btn d-flex align-items-center justify-content-center px-3 py-2 mx-2 rounded-3 border border-1 text-secondary">
                 <p class="my-0 mx-1">ورود یا ثبت نام</p>
                 <i class="fa-solid fa-arrow-right-to-bracket mx-1"></i>
             </a>
             {% endif %}
         </div>
     </div>
+    <div class="offcanvas offcanvas-end col-12" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <a href="{{ url_for('home') }}" class="d-flex align-items-center text-decoration-none text-black">
+                <img src="{{ asset.url_for('logo.png') }}">
+                <p class="h5 my-0 mx-2">
+                    فروشگاه قهوه بهنام کافه
+                </p>
+            </a>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="nav flex-column mb-sm-auto mb-0 align-items-center px-3" id="menu">
+                <li class="">
+                    <a href="{{ url_for('home') }}" class="btn d-flex align-items-center justify-content-center m-1 p-1">
+                        <i class="fa-solid fa-house fa-lg text-dark"></i>
+                        <p class="my-0 mx-2 pt-1 text-dark">صفحه اصلی</p>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="{{ url_for('category_all') }}" class="btn d-flex align-items-center justify-content-center m-1 p-1">
+                        <i class="fa-solid fa-list fa-lg text-dark"></i>
+                        <p class="my-0 mx-2 pt-1 text-dark">دسته‌بندی ها</p>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="{{ url_for('user_profile') }}" class="btn d-flex align-items-center justify-content-center m-1 p-1">
+                        <i class="fa-solid fa-id-card fa-lg text-dark"></i>
+                        <p class="my-0 mx-2 pt-1 text-dark">پروفایل</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </header>
+<nav class="d-none d-lg-flex justify-content-center m-2">
+    <div class="col-12 col-lg-10 d-flex rounded-3 shadow-sm p-2">
+        <ul class="nav d-flex mb-sm-auto mb-0 align-items-center px-1" id="menu">
+            <li class="nav-item">
+                <a href="{{ url_for('home') }}" class="nav-link d-flex align-items-center justify-content-center  m-1 p-1">
+                    <i class="fa-solid fa-house fa-lg text-dark"></i>
+                    <p class="my-0 mx-2 pt-1 text-dark">صفحه اصلی</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('category_all') }}" class="nav-link d-flex align-items-center justify-content-center m-1 p-1">
+                    <i class="fa-solid fa-list fa-lg text-dark"></i>
+                    <p class="my-0 mx-2 pt-1 text-dark">دسته‌بندی ها</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('user_profile') }}" class="nav-link d-flex align-items-center justify-content-center m-1 p-1">
+                    <i class="fa-solid fa-id-card fa-lg text-dark"></i>
+                    <p class="my-0 mx-2 pt-1 text-dark">پروفایل</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>

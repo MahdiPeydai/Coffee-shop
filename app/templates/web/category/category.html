@@ -16,48 +16,48 @@
 {% include 'layout/footer.html' %}
 {% endblock %}
 
-{% block sidebar %}
-{% include 'layout/sidebar.html' %}
-{% endblock %}
-
 {% block content %}
-<div class="m-1 d-flex row">
-    <div class="col-12 col-md-2 align-self-start px-sm-1 px-0 shadow rounded-4">
-        <div class="">
-            <ul class="list-group border-0 p-3">
+<div class="m-2 row d-flex justify-content-between">
+    <div class="col-12 col-md-2 align-self-start px-0 px-sm-1 shadow rounded-4">
+        <ul class="list-group border-0 p-3">
             {% import 'macro/category_child_render.html' as macros %}
-                {% for category, children in categories_list.items() %}
-                    <li class="list-group-item border-0 p-0">
-                        <a href="{{ url_for('category', category_id=category) }}" class="btn px-1 py-0 my-1">{{ categories_data[category]['name'] }}</a>
-                        {% if children %}
-                            {{ macros.render_children(children, categories_data) }}
-                        {% endif %}
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
+            {% for category, children in categories_list.items() %}
+                <li class="list-group-item border-0 p-0">
+                    <a href="{{ url_for('category', category_id=category) }}" class="btn p-1 my-1">
+                        <p class="h5 m-0">
+                            {{ categories_data[category]['name'] }}
+                        </p>
+                    </a>
+                    {% if children %}
+                        {{ macros.render_children(children, categories_data) }}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
     </div>
-    <div class="col-12 col-md-10 d-flex row">
-        {% for product in products %}
-            <div class="col-6 col-md-4 col-xl-3 d-flex justify-content-center p-1">
-                <div class="card w-100">
-                    <a href="{{ url_for('product', product_id=product.id) }}"><img src="{{ asset.url_for('12.png') }}" class="m-4" alt="..."></a>
+    <div class="col-12 col-md-10 d-flex row rounded-1 border ">
+        {% for product in category_products %}
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3 d-flex justify-content-center p-3">
+                <a href="{{ url_for('product', product_id=product['id']) }}" class="card col-8 col-sm-6 col-md-9 col-lg-12 border-1 shadow rounded-4 pb-0 text-decoration-none">
+                    <img src="{{ asset.url_for('12.png') }}" class="m-4" alt="...">
                     <div class="card-body">
-                        <h6 class="card-title mb-5">{{ product.name }}</h6>
-                        <br>
-                        <div class="position-absolute bottom-0 start-0 p-3">
-                        {% if product.discount %}
+                        <div class="h-25 m-1">
+                            <p class="card-title fw-bold">{{ product['name'] }}</p>
+                        </div><hr>
+                        <div class="mt-3">
+                            {% if product['discount'] %}
+                                <div dir="ltr" class="d-flex align-items-center">
+                                        <p class="bg-danger rounded-5 p-2 me-2 mb-0 text-white">{{ product['discount'] }}%</p>
+                                    <p class="my-0 text-decoration-line-through price">{{ product['price'] }}</p>
+                                </div>
+                            {% endif %}
                             <div dir="ltr" class="d-flex align-items-center">
-                                <p class="price bg-danger rounded-5 p-2 me-2 mb-0 text-white">{{ product.discount }}%</p>
-                                <p class="price my-0 text-decoration-line-through">{{ product.price }}</p>
+                                <p class="price fw-bold m-1">{{ product['final_price'] }}</p>
+                                <p class="h5 fw-bold m-1">: قیمت</p>
                             </div>
-                            <p dir="ltr" class="price ms-2 mb-0">{{ product.price * ((100 - product.discount)/100) }}</p>
-                        {% else %}
-                            <p dir="ltr" class="price ms-2 mb-0">{{ product.price }}</p>
-                        {% endif %}
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
         {% endfor %}
     </div>

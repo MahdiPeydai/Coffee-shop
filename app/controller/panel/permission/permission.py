@@ -8,14 +8,14 @@ from app.middlewares.auth.permissions import permission_require
 
 @user_login_require
 @permission_require(['permission.index'])
-def admin_permission(user_id):
+def admin_permission():
     data = db.session.query(model.Permission.id, model.Permission.name)
     return render_template('panel/permission/admin_permission.html', data=data)
 
 
 @user_login_require
 @permission_require(['permission.store'])
-def permission_store(user_id):
+def permission_store():
     form = Permission()
     return render_template('panel/permission/permission_create.html', form=form,
                            tinymce_key=app.config['TINYMCE_API_KEY'])
@@ -23,7 +23,7 @@ def permission_store(user_id):
 
 @user_login_require
 @permission_require(['permission.store'])
-def permission_create(user_id):
+def permission_create():
     form = Permission()
     if form.validate:
         permission_check = db.session.query(model.Permission.name)\
@@ -44,7 +44,7 @@ def permission_create(user_id):
 
 @user_login_require
 @permission_require(['permission.edit'])
-def permission_edit(user_id, permission_id):
+def permission_edit(permission_id):
     permission = db.session.query(model.Permission.name).filter_by(id=permission_id).first()
     placeholders = {
         'permission_name': permission[0]
@@ -56,7 +56,7 @@ def permission_edit(user_id, permission_id):
 
 @user_login_require
 @permission_require(['permission.edit'])
-def permission_update(user_id, permission_id):
+def permission_update(permission_id):
     form = Permission()
     if form.validate:
         if request.form.get('_method') == 'PUT':
@@ -78,7 +78,7 @@ def permission_update(user_id, permission_id):
 
 @user_login_require
 @permission_require(['permission.destroy'])
-def permission_delete(user_id, permission_id):
+def permission_delete(permission_id):
     db.session.query(model.Permission).filter_by(id=permission_id).delete()
     db.session.commit()
     flash('permission با موفقیت حذف شد', 'message')

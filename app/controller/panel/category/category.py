@@ -15,7 +15,7 @@ import uuid
 
 @user_login_require
 @permission_require(['category.index'])
-def admin_category(user_id):
+def admin_category():
     category_alias = model.Category.__table__.alias('A')
 
     categories = db.session.query(category_alias.c.id, category_alias.c.name, category_alias.c.description,
@@ -41,7 +41,7 @@ def admin_category(user_id):
 
 @user_login_require
 @permission_require(['category.store'])
-def category_store(user_id):
+def category_store():
     form = Category()
     form.category_image.validators.append(DataRequired())
 
@@ -59,7 +59,7 @@ def category_store(user_id):
 
 @user_login_require
 @permission_require(['category.store'])
-def category_create(user_id):
+def category_create():
     form = Category()
 
     categories = db.session.query(model.Category.id, model.Category.name)
@@ -105,7 +105,7 @@ def category_create(user_id):
 
 @user_login_require
 @permission_require(['category.edit'])
-def category_edit(user_id, category_id):
+def category_edit(category_id):
     category_model_alias = model.Category.__table__.alias('A')
 
     category = db.session.query(category_model_alias.c.name, category_model_alias.c.description,
@@ -139,7 +139,7 @@ def category_edit(user_id, category_id):
 
 @user_login_require
 @permission_require(['category.edit'])
-def category_update(user_id, category_id):
+def category_update(category_id):
     form = Category()
 
     categories = db.session.query(model.Category.id, model.Category.name)
@@ -189,7 +189,7 @@ def category_update(user_id, category_id):
 
 @user_login_require
 @permission_require(['category.destroy'])
-def category_delete(user_id, category_id):
+def category_delete(category_id):
     parent = db.session.query(model.Category.parent_id).filter_by(id=category_id).first()
     if parent[0]:
         update_parent_query = model.product_category_association.update().filter_by(category_id=category_id) \

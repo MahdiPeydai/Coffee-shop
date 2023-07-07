@@ -28,19 +28,20 @@ def user_login():
         if user_id:
             user_token = jwt.encode({'user_id': user_id}, app.config['SECRET_KEY'], algorithm='HS256')
             cart = db.session.query(model.Cart).filter_by(user_id=user_id).first()
-            cart_token = jwt.encode({'cart_id': cart.id}, app.config['SECRET_KEY'], algorithm='HS256')
 
             token = request.cookies.get('cart')
-            if token:
+            resp = make_response(redirect(url_for('home')))
+            resp.set_cookie('user', user_token)
+            if token and cart:
+                cart_token = jwt.encode({'cart_id': cart.id}, app.config['SECRET_KEY'], algorithm='HS256')
                 old_cart = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
                 old_cart_id = old_cart['cart_id']
                 model.CartItem.query.filter_by(cart_id=old_cart_id)\
                     .update({model.CartItem.cart_id: cart.id})
                 db.session.commit()
-
-            resp = make_response(redirect(url_for('home')))
-            resp.set_cookie('user', user_token)
-            resp.set_cookie('cart', cart_token)
+                model.Cart.query.filter_by(id=old_cart_id).delete()
+                db.session.commit()
+                resp.set_cookie('cart', cart_token)
 
             return resp
         else:

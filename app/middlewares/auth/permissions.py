@@ -9,7 +9,7 @@ def permission_require(permissions):
     def decorator(function):
         @functools.wraps(function)
         def wrapper(*args, **kwargs):
-            token = request.cookies.get('user_token')
+            token = request.cookies.get('user')
             user_id = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
             user_id = user_id['user_id']
 

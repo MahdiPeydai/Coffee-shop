@@ -9,7 +9,7 @@ import hashlib
 
 @user_login_require
 @permission_require(['user.index'])
-def admin_information(user_id):
+def admin_information():
     users = db.session.query(model.User.id, model.User.firstname, model.User.lastname, model.User.email,
                              model.User.phone, model.Role.name.label('role')) \
         .join(model.user_role_association, model.user_role_association.c.user_id == model.User.id) \
@@ -30,7 +30,7 @@ def admin_information(user_id):
 
 @user_login_require
 @permission_require(['user.store'])
-def admin_user_store(user_id):
+def admin_user_store():
     form = User()
     roles = db.session.query(model.Role.id, model.Role.name)
 
@@ -43,7 +43,7 @@ def admin_user_store(user_id):
 
 @user_login_require
 @permission_require(['user.store'])
-def admin_user_create(user_id):
+def admin_user_create():
     form = User()
     roles = db.session.query(model.Role.id, model.Role.name)
 
@@ -87,7 +87,7 @@ def admin_user_create(user_id):
 
 @user_login_require
 @permission_require(['user.edit'])
-def admin_user_edit(user_id, id):
+def admin_user_edit(id):
     user = db.session.query(model.User.firstname, model.User.lastname, model.User.email,
                             model.User.phone, model.Role.id.label('role')) \
         .join(model.user_role_association, model.user_role_association.c.user_id == model.User.id) \
@@ -112,7 +112,7 @@ def admin_user_edit(user_id, id):
 
 @user_login_require
 @permission_require(['user.edit'])
-def admin_user_update(user_id, id):
+def admin_user_update(id):
     form = User()
     form.password.validators = []
     form.confirm_password.validators = []
@@ -153,7 +153,7 @@ def admin_user_update(user_id, id):
 
 @user_login_require
 @permission_require(['user.edit'])
-def admin_user_password_edit(user_id, id):
+def admin_user_password_edit(id):
     form = ChangePassword()
     return render_template('panel/information/user_password_edit.html', form=form, user_id=id)
 
@@ -187,7 +187,7 @@ def admin_user_password_update(user_id, id):
 
 @user_login_require
 @permission_require(['user.destroy'])
-def admin_user_delete(user_id, id):
+def admin_user_delete(id):
     user = db.session.query(model.User).get(id)
     user.is_deleted = func.current_timestamp()
     db.session.commit()

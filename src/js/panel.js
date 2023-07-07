@@ -6,8 +6,16 @@ import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/panel.css'
 
-function importAll(r) {
-  r.keys().forEach(r);
+const $ = require('jquery');
+
+function price_text() {
+    const priceElements = document.getElementsByClassName('price');
+    for (let i = 0; i < priceElements.length; i++) {
+        const priceValue = priceElements[i].innerHTML;
+        priceElements[i].innerHTML = priceValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
 }
 
-importAll(require.context('../image/category_image/', true, /\.(png|jpg|jpeg|svg|gif)$/));
+$(document).ready(function() {
+    price_text()
+})

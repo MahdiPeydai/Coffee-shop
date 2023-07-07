@@ -5,5 +5,5 @@ from app.middlewares.auth.permissions import permission_require
 
 @user_login_require
 @permission_require(['panel.index'])
-def panel(user_id):
+def panel():
     return render_template('panel/panel.html')

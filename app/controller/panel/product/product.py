@@ -9,7 +9,7 @@ from app.controller.utils.category_child_delete import category_child_delete
 
 @user_login_require
 @permission_require(['product.index'])
-def admin_product(user_id):
+def admin_product():
     products = db.session.query(model.Product.id, model.Product.name, model.Product.quantity, model.Product.price,
                                 model.Product.discount, model.Product.description,
                                 model.Category.name.label('category_name'))\
@@ -36,7 +36,7 @@ def admin_product(user_id):
 
 @user_login_require
 @permission_require(['product.store'])
-def product_store(user_id):
+def product_store():
     form = Product()
 
     category_query = db.session.query(model.Category.id, model.Category.name)
@@ -50,7 +50,7 @@ def product_store(user_id):
 
 @user_login_require
 @permission_require(['product.store'])
-def product_create(user_id):
+def product_create():
     form = Product()
     category_query = db.session.query(model.Category.id, model.Category.name)
     db.session.close()
@@ -110,7 +110,7 @@ def product_create(user_id):
 
 @user_login_require
 @permission_require(['product.edit'])
-def product_edit(user_id, product_id):
+def product_edit(product_id):
     products = db.session.query(model.Product.id, model.Product.name, model.Product.quantity, model.Product.price,
                                 model.Product.discount, model.Product.description, model.Category.id.label('category'))\
         .join(model.product_category_association, model.Product.id == model.product_category_association.c.product_id,
@@ -153,7 +153,7 @@ def product_edit(user_id, product_id):
 
 @user_login_require
 @permission_require(['product.edit'])
-def product_update(user_id, product_id):
+def product_update(product_id):
     form = Product()
     category_query = db.session.query(model.Category.id, model.Category.name)
     db.session.close()
@@ -241,7 +241,7 @@ def product_update(user_id, product_id):
 
 @user_login_require
 @permission_require(['product.destroy'])
-def product_delete(user_id, product_id):
+def product_delete(product_id):
     product = db.session.query(model.Product).get(product_id)
     product.is_deleted = func.current_timestamp()
 
