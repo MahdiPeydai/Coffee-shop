@@ -1,4 +1,9 @@
 {% extends 'layout/panel.html' %}
+
+{% block title %}
+    پنل - محصولات
+{% endblock %}
+
 {% block content %}
 <div class="p-4 rounded-4 shadow">
                 <div class="navbar navbar-expand-lg d-flex justify-content-between">
@@ -21,6 +26,7 @@
                             <th class="text-secondary" scope="col">تعداد:</th>
                             <th class="text-secondary" scope="col">تخفیف:</th>
                             <th class="text-secondary" scope="col">زمان تخفیف:</th>
+                            <th class="text-secondary" scope="col">تصاویر:</th>
                             <th class="text-secondary" scope="col">ویرایش:</th>
                         </tr>
                         </thead>
@@ -51,6 +57,11 @@
                                 {% if data[product]['discount_date'] %}
                                     {{ data[product]['discount_date'] }}
                                 {% endif %}
+                            </td>
+                            <td class="align-middle">
+                                <a href="{{ url_for('product_image', product_id=product) }}" class="btn p-1 shadow">
+                                    <i class="fa-solid fa-images fa-lg"></i>
+                                </a>
                             </td>
                             <td class="align-middle">
                                 <a href="{{ url_for('product_delete', product_id=product) }}" class="btn p-1 shadow">

@@ -1,5 +1,9 @@
 {% extends 'layout/panel_crud.html' %}
 
+{% block title %}
+    ویرایش دسته بندی
+{% endblock %}
+
 {% block form_action %}
     {{ url_for('category_update', category_id=category_id) }}
 {% endblock %}

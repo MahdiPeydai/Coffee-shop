@@ -71,7 +71,7 @@ def category_create():
         choices.append((id, name))
 
     form.category_parent.choices = choices
-    if form.validate:
+    if request.method == 'POST' and form.validate:
         category_check = db.session.query(model.Category.name) \
             .filter(model.Category.name == request.form['category_name']).first()
 

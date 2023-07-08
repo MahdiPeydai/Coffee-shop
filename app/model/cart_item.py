@@ -10,3 +10,5 @@ class CartItem(db.Model):
     quantity = db.Column(db.Integer, nullable=False, default=1)
     created_at = db.Column(db.DateTime, server_default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, server_default=db.text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
+
+    product = db.relationship('Product', backref=db.backref('cart_items'))

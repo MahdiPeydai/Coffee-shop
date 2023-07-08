@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block title %}
-    Coffee Shop
+    سبد خرید
 {% endblock %}
 
 {% block script %}
@@ -46,38 +46,38 @@
             </div>
         </div>
         <div class="d-flex justify-content-center p-3">
-        <div class="col-12 col-xl-10">
-            <div class="col-12 navbar border-bottom pb-0">
-                <p class="topic h3 pb-3 mb-0">فروش ویژه</p>
-            </div>
-            <div class="row d-lg-flex">
-                {% for product in offer_products %}
-                    <div class="col-12 col-md-6 col-lg-3 d-flex justify-content-center p-3">
-                        <a href="{{ url_for('product', product_id=product['id']) }}" class="card col-8 col-sm-6 col-md-9 col-lg-12 border-1 shadow rounded-4 pb-0 text-decoration-none">
-                            <img src="{{ asset.url_for('12.png') }}" class="m-4" alt="...">
-                            <div class="card-body">
-                                <div class="h-25 m-1">
-                                    <p class="card-title fw-bold">{{ product['name'] }}</p>
-                                </div><hr>
-                                <div class="mt-3">
-                                    {% if product['discount'] %}
-                                    <div dir="ltr" class="d-flex align-items-center">
-                                        <p class="bg-danger rounded-5 p-2 me-2 mb-0 text-white">{{ product['discount'] }}%</p>
-                                        <p class="my-0 text-decoration-line-through price">{{ product['price'] }}</p>
-                                    </div>
-                                    {% endif %}
-                                    <div dir="ltr" class="d-flex align-items-center">
-                                        <p class="price fw-bold m-1">{{ product['final_price'] }}</p>
-                                        <p class="h5 fw-bold m-1">: قیمت</p>
+            <div class="col-12 col-xl-10">
+                <div class="col-12 navbar border-bottom pb-0">
+                    <p class="topic h3 pb-3 mb-0">فروش ویژه</p>
+                </div>
+                <div class="row d-lg-flex">
+                    {% for product in offer_products %}
+                        <div class="col-12 col-md-6 col-lg-3 d-flex justify-content-center p-3">
+                            <a href="{{ url_for('product', product_id=product['id']) }}" class="card col-8 col-sm-6 col-md-9 col-lg-12 border-1 shadow rounded-4 pb-0 text-decoration-none">
+                                <img src="{{ asset.url_for(product['image']) }}" class="m-4" alt="...">
+                                <div class="card-body">
+                                    <div class="h-25 m-1">
+                                        <p class="card-title fw-bold">{{ product['name'] }}</p>
+                                    </div><hr>
+                                    <div class="mt-3">
+                                        {% if product['discount'] %}
+                                        <div dir="ltr" class="d-flex align-items-center">
+                                            <p class="bg-danger rounded-5 p-2 me-2 mb-0 text-white">{{ product['discount'] }}%</p>
+                                            <p class="my-0 text-decoration-line-through price">{{ product['price'] }}</p>
+                                        </div>
+                                        {% endif %}
+                                        <div dir="ltr" class="d-flex align-items-center">
+                                            <p class="price fw-bold m-1">{{ product['final_price'] }}</p>
+                                            <p class="h5 fw-bold m-1">: قیمت</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
-                {% endfor %}
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
-    </div>
     {% else %}
     <div class="d-md-flex align-items-start mt-2">
         <div class="col-md-7 col-lg-8 col-xl-9 d-flex flex-column align-items-center px-3 my-2 my-md-0">
@@ -161,11 +161,13 @@
                     </h5>
                 </div>
                 <p class="my-3">هزینه ارسال مرسوله‌ها برعهده مشتری است و هنگام دریافت محصول باید پرداخت شود.</p>
-                <a class="shipment_link d-flex justify-content-center text-decoration-none m-3 rounded-3 py-4">
-                    <p class="h5 m-0 text-black">
-                        پرداخت
-                    </p>
-                </a>
+                <form action="{{ url_for('order_create', cart_id=cart_id) }}" method="post" class="d-flex justify-content-center">
+                    <button type="submit" class="payment_btn col-10 btn d-flex justify-content-center text-decoration-none m-3 rounded-3 py-3">
+                        <p class="h4 m-0 text-black">
+                            پرداخت
+                        </p>
+                    </button>
+                </form>
             </div>
         </div>
     </div>

@@ -88,6 +88,13 @@ class Product(Form):
                                               validators=[Length(max=255)])
 
 
+class ProductImage(Form):
+    product_image = FileField('تصویر',
+                              validators=[DataRequired(),
+                                          FileSize(max_size=1000000),
+                                          FileAllowed(['jpg', 'jpeg', 'png'])])
+
+
 class User(Form):
     firstname = StringField('نام',
                             validators=[DataRequired(),

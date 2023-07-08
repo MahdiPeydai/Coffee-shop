@@ -24,6 +24,8 @@ from app.controller.web.category.category import *
 from app.controller.web.product.product import *
 
 from app.controller.web.checkout.cart.cart import *
+from app.controller.web.checkout.payment.payment import *
+from app.controller.web.checkout.order.order import *
 
 routes = Blueprint('routes', __name__,
                    template_folder='templates',
@@ -152,6 +154,26 @@ app.add_url_rule('/panel/product/<int:product_id>/update', 'product_update', pro
 app.add_url_rule('/panel/product/<int:product_id>/destroy', 'product_delete', product_delete)
 #
 
+# image
+app.add_url_rule('/panel/product/<int:product_id>/images', 'product_image', product_image)
+
+# create
+app.add_url_rule('/panel/product/<int:product_id>/images/create', 'product_image_create', product_image_create, methods=['POST'])
+#
+
+# edit
+app.add_url_rule('/panel/product/<int:product_id>/images/order/upgrade', 'product_image_order_upgrade',
+                 product_image_order_upgrade, methods=['POST'])
+app.add_url_rule('/panel/product/<int:product_id>/images/order/downgrade', 'product_image_order_downgrade',
+                 product_image_order_downgrade, methods=['POST'])
+#
+
+# delete
+app.add_url_rule('/panel/product/<int:product_id>/images/destroy', 'product_image_delete', product_image_delete)
+#
+
+#
+
 #
 
 # home
@@ -218,7 +240,7 @@ app.add_url_rule('/product/<int:product_id>', 'product', product)
 
 #
 
-# order
+# checkout
 
 # cart
 app.add_url_rule('/checkout/cart', 'cart', cart)
@@ -229,4 +251,24 @@ app.add_url_rule('/checkout/cart/product/store', 'cart_item_store', cart_item_st
 
 # delete item
 app.add_url_rule('/checkout/cart/product/destroy', 'cart_item_destroy', cart_item_destroy, methods=['POST'])
+#
+
+# order
+
+# create
+app.add_url_rule('/checkout/cart/<int:cart_id>/order/create', 'order_create', order_create, methods=['POST'])
+#
+
+#
+
+#
+
+# payment
+
+# send data
+app.add_url_rule('/order/<int:order_id>/payment/information/post', 'payment_data_send', payment_data_send)
+#
+
+# data callback
+app.add_url_rule('/order/<int:order_id>/payment/result', 'payment_result', payment_result)
 #

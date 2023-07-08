@@ -1,5 +1,9 @@
 {% extends 'layout/panel_crud.html' %}
 
+{% block title %}
+    ویرایش محصول
+{% endblock %}
+
 {% block form_action %}
     {{ url_for('product_update', product_id=product_id) }}
 {% endblock %}

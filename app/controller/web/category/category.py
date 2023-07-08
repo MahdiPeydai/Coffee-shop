@@ -35,13 +35,17 @@ def category_all():
                 product.price * ((100 - product.discount) / 100))
         else:
             final_price = product.price
+
+        image = model.ProductImage.query.filter_by(product_id=product.id).first()
+
         category_products.append({
             'id': product.id,
             'name': product.name,
             'quantity': product.quantity,
             'price': product.price,
             'discount': product.discount,
-            'final_price': final_price
+            'final_price': final_price,
+            'image': image.name
         })
 
     return render_template('web/category/category.html', user_id=getattr(request, 'user_id', None),
@@ -77,13 +81,17 @@ def category(category_id):
                 product.price * ((100 - product.discount) / 100))
         else:
             final_price = product.price
+
+        image = model.ProductImage.query.filter_by(product_id=product.id).first()
+
         category_products.append({
             'id': product.id,
             'name': product.name,
             'quantity': product.quantity,
             'price': product.price,
             'discount': product.discount,
-            'final_price': final_price
+            'final_price': final_price,
+            'image': image.name
         })
 
 

@@ -1,7 +1,7 @@
 {% extends "layout/layout.html" %}
 
 {% block title %}
-    Coffee Shop
+    دسته بندی ها
 {% endblock %}
 
 {% block script %}
@@ -39,7 +39,7 @@
         {% for product in category_products %}
             <div class="col-12 col-md-6 col-lg-4 col-xl-3 d-flex justify-content-center p-3">
                 <a href="{{ url_for('product', product_id=product['id']) }}" class="card col-8 col-sm-6 col-md-9 col-lg-12 border-1 shadow rounded-4 pb-0 text-decoration-none">
-                    <img src="{{ asset.url_for('12.png') }}" class="m-4" alt="...">
+                    <img src="{{ asset.url_for(product['image']) }}" class="m-4" alt="...">
                     <div class="card-body">
                         <div class="h-25 m-1">
                             <p class="card-title fw-bold">{{ product['name'] }}</p>

@@ -51,9 +51,9 @@ $(document).ready(function() {
         products.forEach(function (product) {
             cart_total_price += product.price * product.quantity
             cart_total_discount += (product.price * (product.discount/100)) * product.quantity
-            cart_total_final_price += cart_total_price - cart_total_discount
             quantity += product.quantity
         });
+        cart_total_final_price = cart_total_price - cart_total_discount
         $('#cart_total_price').text(cart_total_price);
         $('#cart_total_discount').text(cart_total_discount);
         $('#cart_total_final_price').text(cart_total_final_price);

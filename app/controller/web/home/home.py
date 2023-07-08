@@ -20,13 +20,17 @@ def home():
                 product.price * ((100 - product.discount) / 100))
         else:
             final_price = product.price
+
+        image = model.ProductImage.query.filter_by(product_id=product.id).first()
+
         offer_products.append({
             'id': product.id,
             'name': product.name,
             'quantity': product.quantity,
             'price': product.price,
             'discount': product.discount,
-            'final_price': final_price
+            'final_price': final_price,
+            'image': image.name
         })
 
     most_sail = model.Product.query.join(model.OrderItem).group_by(model.Product.id).order_by(
@@ -38,13 +42,17 @@ def home():
                 product.price * ((100 - product.discount) / 100))
         else:
             final_price = product.price
+
+        image = model.ProductImage.query.filter_by(product_id=product.id).first()
+
         most_sailed_products.append({
             'id': product.id,
             'name': product.name,
             'quantity': product.quantity,
             'price': product.price,
             'discount': product.discount,
-            'final_price': final_price
+            'final_price': final_price,
+            'image': image.name
         })
 
     return render_template('web/home/home.html', user_id=getattr(request, 'user_id', None),

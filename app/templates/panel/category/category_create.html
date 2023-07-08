@@ -1,5 +1,9 @@
 {% extends 'layout/panel_crud.html' %}
 
+{% block title %}
+    دسته بندی جدید
+{% endblock %}
+
 {% block form_action %}
     {{ url_for('category_create') }}
 {% endblock %}

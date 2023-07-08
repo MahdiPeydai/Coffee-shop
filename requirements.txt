@@ -1,7 +1,9 @@
 Flask~=2.3.2
-PyMySQL~=1.0.3
-setuptools~=67.8.0
+PyMySQL==1.1.0
+setuptools==68.0.0
 python-dotenv~=1.0.0
 WTForms~=3.0.1
 PyJWT~=2.7.0
-SQLAlchemy~=2.0.16
+SQLAlchemy==2.0.18
+requests~=2.31.0
+alembic~=1.11.1

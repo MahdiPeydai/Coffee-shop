@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl" style="height: 100%">
+<head>
+    <meta charset="UTF-8">
+    <title>تصاویر</title>
+    <script src="{{ asset.url_for('panel.js') }}"></script>
+    <script>
+        let product_id = {{ product_id }};
+        const order_upgrade_url = {{ url_for('product_image_order_upgrade', product_id=product_id) }}
+        const order_downgrade_url = {{ url_for('product_image_order_downgrade', product_id=product_id) }}
+    </script>
+    <script src="{{ asset.url_for('product_image.js') }}"></script>
+</head>
+<body style="height: 100%">
+<div class="h-100 d-flex justify-content-center align-items-center">
+    <div class="col-9">
+        <div class="p-3 m-2">
+            {% with messages = get_flashed_messages(category_filter=["message"]) %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="p-4 rounded-4 shadow mb-2">
+                            <h6 class="text-success">
+                                {{message}}
+                            </h6>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            {% with messages = get_flashed_messages(category_filter=["error"]) %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="p-4 rounded-4 shadow mb-2">
+                            <h6 class="text-danger">
+                                {{message}}
+                            </h6>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+        <div class="d-flex row rounded-4 shadow p-4 m-4">
+            {% for image in images %}
+            <div class="col-3 order-{{ image.display_order }} p-3">
+                <div class=" rounded-4 shadow">
+                    <div class="d-flex justify-content-between px-3 py-2">
+                        <div class="d-flex">
+                            <div data-order="{{ image.display_order }}" class="order_upgrade btn m-1 p-1">
+                                <i class="fa-solid fa-chevron-up"></i>
+                            </div>
+                            <div data-order="{{ image.display_order }}" class="order_downgrade btn m-1 p-1">
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('product_image_delete', product_id=product_id) }}" class="btn m-1 p-1">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </a>
+                    </div>
+                    <div class="p-3 d-flex justify-content-center">
+                        <img src="{{ asset.url_for(image.name) }}" alt="">
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="col-3 order-last align-self-center p-3">
+                <a href="#collapseExample" class=" d-flex justify-content-center btn bg-body-secondary" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    <i class="fa-solid fa-plus fa-5x"></i>
+                </a>
+            </div>
+        </div>
+        <div id="collapseExample" class="collapse rounded-4 shadow p-4 m-4">
+            <h3>
+                تصویر جدید
+            </h3>
+            <form action="{{ url_for('product_image_create', product_id=product_id) }}" enctype="multipart/form-data" method="post">
+                {% from "macro/crud_form.html" import render_field %}
+                {{ form.csrf_token }}
+                {{ render_field(form.product_image) }}
+                <button type="submit" class="btn btn-success py-2 px-4 mx-3">
+                    <span class="h5">ثبت</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

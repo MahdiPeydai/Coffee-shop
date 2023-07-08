@@ -1,0 +1,107 @@
+{% extends "layout/layout.html" %}
+
+{% block header %}
+{% include 'layout/header.html' %}
+{% endblock %}
+
+{% block footer %}
+{% include 'layout/footer.html' %}
+{% endblock %}
+
+{% block title %}
+    پرداخت
+{% endblock %}
+
+{% block script %}
+<script src="{{ asset.url_for('successful_payment.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    {% if payment_status == 'OK' %}
+    <div class="d-flex justify-content-center my-5">
+        <div class="payment_success_box w-50 text-center p-5">
+            <i class="fa-solid fa-money-check-dollar fa-10x text-success"></i>
+            <h1 class="my-4">پرداخت با موفقیت انجام شد.</h1>
+            <h5>
+                شماره تراکنش : {{ ref_id }}
+            </h5>
+            <h4>
+                شماره سفارش شما Beh-{{ order_id }} می‌باشد
+            </h4>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center p-3">
+        <div class="col-12 col-xl-10">
+            <div class="col-12 navbar border-bottom pb-0">
+                <p class="topic h3 pb-3 mb-0">فروش ویژه</p>
+            </div>
+            <div class="row d-lg-flex">
+                {% for product in offer_products %}
+                    <div class="col-12 col-md-6 col-lg-3 d-flex justify-content-center p-3">
+                        <a href="{{ url_for('product', product_id=product['id']) }}" class="card col-8 col-sm-6 col-md-9 col-lg-12 border-1 shadow rounded-4 pb-0 text-decoration-none">
+                            <img src="{{ asset.url_for(product['image']) }}" class="m-4" alt="...">
+                            <div class="card-body">
+                                <div class="h-25 m-1">
+                                    <p class="card-title fw-bold">{{ product['name'] }}</p>
+                                </div><hr>
+                                <div class="mt-3">
+                                    {% if product['discount'] %}
+                                        <div dir="ltr" class="d-flex align-items-center">
+                                            <p class="bg-danger rounded-5 p-2 me-2 mb-0 text-white">{{ product['discount'] }}%</p>
+                                            <p class="my-0 text-decoration-line-through price">{{ product['price'] }}</p>
+                                        </div>
+                                    {% endif %}
+                                        <div dir="ltr" class="d-flex align-items-center">
+                                            <p class="price fw-bold m-1">{{ product['final_price'] }}</p>
+                                            <p class="h5 fw-bold m-1">: قیمت</p>
+                                        </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="d-flex justify-content-center my-5">
+        <div class="payment_success_box w-50 text-center p-5">
+            <i class="fa-solid fa-xmark-circle fa-beat fa-10x text-danger"></i>
+            <h1 class="my-4">متاسفانه پرداخت ناموفق بود.</h1>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center p-3">
+        <div class="col-12 col-xl-10">
+            <div class="col-12 navbar border-bottom pb-0">
+                <p class="topic h3 pb-3 mb-0">فروش ویژه</p>
+            </div>
+            <div class="row d-lg-flex">
+                {% for product in offer_products %}
+                    <div class="col-12 col-md-6 col-lg-3 d-flex justify-content-center p-3">
+                        <a href="{{ url_for('product', product_id=product['id']) }}" class="card col-8 col-sm-6 col-md-9 col-lg-12 border-1 shadow rounded-4 pb-0 text-decoration-none">
+                            <img src="{{ asset.url_for('12.png') }}" class="m-4" alt="...">
+                            <div class="card-body">
+                                <div class="h-25 m-1">
+                                    <p class="card-title fw-bold">{{ product['name'] }}</p>
+                                </div><hr>
+                                <div class="mt-3">
+                                    {% if product['discount'] %}
+                                        <div dir="ltr" class="d-flex align-items-center">
+                                            <p class="bg-danger rounded-5 p-2 me-2 mb-0 text-white">{{ product['discount'] }}%</p>
+                                            <p class="my-0 text-decoration-line-through price">{{ product['price'] }}</p>
+                                        </div>
+                                    {% endif %}
+                                        <div dir="ltr" class="d-flex align-items-center">
+                                            <p class="price fw-bold m-1">{{ product['final_price'] }}</p>
+                                            <p class="h5 fw-bold m-1">: قیمت</p>
+                                        </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}

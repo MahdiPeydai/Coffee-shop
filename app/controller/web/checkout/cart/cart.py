@@ -25,13 +25,17 @@ def cart():
                     product.price * ((100 - product.discount) / 100))
             else:
                 final_price = product.price
+
+            image = model.ProductImage.query.filter_by(product_id=product.id).first()
+
             offer_products.append({
                 'id': product.id,
                 'name': product.name,
                 'quantity': product.quantity,
                 'price': product.price,
                 'discount': product.discount,
-                'final_price': final_price
+                'final_price': final_price,
+                'image': image.name
             })
 
         return render_template('web/checkout/cart/cart.html', user_id=getattr(request, 'user_id', None),
@@ -50,6 +54,8 @@ def cart():
             else:
                 final_price = price
 
+            image = model.ProductImage.query.filter_by(product_id=id).first()
+
             cart_items.append(
                 {
                     'id': id,
@@ -57,7 +63,8 @@ def cart():
                     'quantity': quantity,
                     'price': price,
                     'discount': discount,
-                    'final_price': final_price
+                    'final_price': final_price,
+                    'image': image.name
                 }
             )
 
@@ -75,7 +82,7 @@ def cart():
 
         return render_template('web/checkout/cart/cart.html', user_id=getattr(request, 'user_id', None),
                                cart_items_number=cart_items_number, cart_status=cart_status,
-                               cart_items=cart_items, cart_price=cart_price)
+                               cart_items=cart_items, cart_price=cart_price, cart_id=cart_id)
 
 
 @user_login_check

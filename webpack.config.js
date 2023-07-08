@@ -13,6 +13,7 @@ module.exports = {
     profile: "./src/js/profile.js",
     panel: "./src/js/panel.js",
     auth: "./src/js/auth.js",
+    product_image: "./src/js/product_image.js"
   },
   output: {
     filename: '[name].js',

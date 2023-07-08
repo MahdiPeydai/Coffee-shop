@@ -1,5 +1,9 @@
 {% extends 'layout/panel_crud.html' %}
 
+{% block title %}
+    ویرایش Permission
+{% endblock %}
+
 {% block form_action %}
     {{ url_for('permission_update', permission_id=permission_id) }}
 {% endblock %}

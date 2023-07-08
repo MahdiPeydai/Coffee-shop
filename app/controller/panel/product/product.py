@@ -1,10 +1,17 @@
+from flask import request, redirect, render_template, url_for, flash
+
 from app import app, db, model
 from sqlalchemy import and_, func
-from flask import request, redirect, render_template, url_for, flash
-from app.forms import Product
+
+from app.forms import Product, ProductImage
+
 from app.middlewares.auth.login import user_login_require
 from app.middlewares.auth.permissions import permission_require
+
 from app.controller.utils.category_child_delete import category_child_delete
+
+import os
+import uuid
 
 
 @user_login_require
@@ -12,7 +19,7 @@ from app.controller.utils.category_child_delete import category_child_delete
 def admin_product():
     products = db.session.query(model.Product.id, model.Product.name, model.Product.quantity, model.Product.price,
                                 model.Product.discount, model.Product.description,
-                                model.Category.name.label('category_name'))\
+                                model.Category.name.label('category_name')) \
         .join(model.product_category_association,
               model.Product.id == model.product_category_association.c.product_id, isouter=True) \
         .join(model.Category, model.Category.id == model.product_category_association.c.category_id, isouter=True) \
@@ -59,8 +66,9 @@ def product_create():
         categories.append((str(id), name))
     form.product_category.choices = categories
     if form.validate:
-        product_check = db.session.query(model.Product.name).filter(and_(model.Product.name == request.form['product_name'],
-                                                                         model.Product.is_deleted == None)).first()
+        product_check = db.session.query(model.Product.name).filter(
+            and_(model.Product.name == request.form['product_name'],
+                 model.Product.is_deleted == None)).first()
         if product_check:
             flash('محصول با نام وارد شده وجود دارد ...', 'error')
             return redirect(url_for('product_store'))
@@ -112,7 +120,7 @@ def product_create():
 @permission_require(['product.edit'])
 def product_edit(product_id):
     products = db.session.query(model.Product.id, model.Product.name, model.Product.quantity, model.Product.price,
-                                model.Product.discount, model.Product.description, model.Category.id.label('category'))\
+                                model.Product.discount, model.Product.description, model.Category.id.label('category')) \
         .join(model.product_category_association, model.Product.id == model.product_category_association.c.product_id,
               isouter=True) \
         .join(model.Category, model.Category.id == model.product_category_association.c.category_id, isouter=True) \
@@ -190,7 +198,8 @@ def product_update(product_id):
                 return redirect(url_for('product_edit', product_id=product_id))
 
             old_category_tuple = db.session.query(model.Category.id) \
-                .join(model.product_category_association, model.Category.id == model.product_category_association.c.category_id) \
+                .join(model.product_category_association,
+                      model.Category.id == model.product_category_association.c.category_id) \
                 .join(model.Product, model.Product.id == model.product_category_association.c.product_id) \
                 .filter(model.Product.id == product_id)
             old_category = []
@@ -237,6 +246,61 @@ def product_update(product_id):
 
             flash('تغییرات با موفقیت انجام شد', 'message')
             return redirect(url_for('product_edit', product_id=product_id))
+
+
+@user_login_require
+@permission_require(['product_image.index'])
+def product_image(product_id):
+    form = ProductImage()
+    images = model.ProductImage.query.filter_by(product_id=product_id).all()
+    return render_template('panel/product/product_image.html', form=form, product_id=product_id, images=images)
+
+
+@user_login_require
+@permission_require(['product_image.store'])
+def product_image_create(product_id):
+    form = ProductImage()
+    if request.method == 'POST' and form.validate:
+        image = request.files['product_image']
+        image_name = image.filename
+        file_format = image_name[image_name.index('.'):]
+        image_name = f'{str(uuid.uuid4())}{file_format}'
+        image.save(os.path.join(app.config['PRODUCT_IMAGE_FOLDER'], image_name))
+
+        max_order_image = model.ProductImage.query.filter_by(product_id=product_id).order_by(model.ProductImage.display_order.desc()).first()
+
+        if max_order_image:
+            display_order = max_order_image.display_order + 1
+        else:
+            display_order = 1
+
+        new_image = model.ProductImage(
+            product_id=product_id,
+            name=image_name,
+            display_order=display_order
+        )
+        db.session.add(new_image)
+        db.session.commit()
+    return redirect(url_for('product_image', product_id=product_id))
+
+
+@user_login_require
+@permission_require(['product_image.edit'])
+def product_image_order_upgrade(product_id):
+    return
+
+
+@user_login_require
+@permission_require(['product_image.edit'])
+def product_image_order_downgrade(product_id):
+    return
+
+
+@user_login_require
+@permission_require(['product_image.edit'])
+def product_image_delete(product_id):
+    flash('تصویر با موفقیت حذف شد .', 'message')
+    return redirect(url_for('product_image', product_id=product_id))
 
 
 @user_login_require

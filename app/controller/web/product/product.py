@@ -20,13 +20,17 @@ def product(product_id):
             product.price * ((100 - product.discount) / 100))
     else:
         final_price = product.price
+
+    image = model.ProductImage.query.filter_by(product_id=product.id).all()
+
     product_information = {
         'id': product.id,
         'name': product.name,
         'quantity': product.quantity,
         'price': product.price,
         'discount': product.discount,
-        'final_price': final_price
+        'final_price': final_price,
+        'image': image
     }
 
     cart = model.CartItem.query.filter(and_(model.CartItem.cart_id == cart_id, model.CartItem.product_id == product.id)).first()
