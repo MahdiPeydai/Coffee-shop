@@ -14,8 +14,7 @@
         <div dir="ltr" class="d-flex justify-content-center rounded-3 p-2">
             <a href="{{ url_for('cart') }}" class="cart_button btn d-flex align-items-center justify-content-center px-3 py-2 mx-2">
                 <p id="cart_item_counter" class="cart_counter my-0 mx-1 px-1 text-white">{{ cart_items_number }}</p>
-                <p class="my-0 mx-1">سبد خرید</p>
-                <i class="fa-solid fa-basket-shopping my-0 mx-1"></i>
+                <i class="fa-solid fa-basket-shopping fa-lg my-0 mx-1"></i>
             </a>
             {% if user_id %}
             <a href="{{ url_for('user_profile') }}" class="btn d-flex align-items-center justify-content-center px-3 py-2 mx-2 rounded-3 border border-2">

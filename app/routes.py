@@ -27,6 +27,8 @@ from app.controller.web.checkout.cart.cart import *
 from app.controller.web.checkout.payment.payment import *
 from app.controller.web.checkout.order.order import *
 
+from app.controller.test import *
+
 routes = Blueprint('routes', __name__,
                    template_folder='templates',
                    static_folder='static'
@@ -256,7 +258,7 @@ app.add_url_rule('/checkout/cart/product/destroy', 'cart_item_destroy', cart_ite
 # order
 
 # create
-app.add_url_rule('/checkout/cart/<int:cart_id>/order/create', 'order_create', order_create, methods=['POST'])
+app.add_url_rule('/order/create', 'order_create', order_create, methods=['POST'])
 #
 
 #
@@ -266,9 +268,12 @@ app.add_url_rule('/checkout/cart/<int:cart_id>/order/create', 'order_create', or
 # payment
 
 # send data
-app.add_url_rule('/order/<int:order_id>/payment/information/post', 'payment_data_send', payment_data_send)
+app.add_url_rule('/payment/<int:payment_id>/information/post', 'payment_data_post', payment_data_post)
 #
 
 # data callback
-app.add_url_rule('/order/<int:order_id>/payment/result', 'payment_result', payment_result)
+app.add_url_rule('/payment/transaction/<int:transaction_id>/result', 'transaction_result', transaction_result)
 #
+
+
+app.add_url_rule('/test', 'test', test)

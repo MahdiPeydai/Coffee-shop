@@ -1,17 +1,17 @@
 {% extends 'layout/panel.html' %}
 
 {% block title %}
-    پنل - Role
+    پنل - نقش ها
 {% endblock %}
 
 {% block content %}
 <div class="p-4 rounded-4 shadow">
                 <div class="navbar navbar-expand-lg d-flex justify-content-between">
                     <p class="h4 my-0">
-                        Role
+                        نقش
                     </p>
                     <a href="{{ url_for('role_store') }}" class="d-flex align-items-center text-decoration-none" style="color: #CBB270;">
-                        <i class="fa-solid fa-plus fa-xl"></i><p class="h4 mx-2 my-0">افزودن Role</p>
+                        <i class="fa-solid fa-plus fa-xl"></i><p class="h4 mx-2 my-0">افزودن نقش</p>
                     </a>
                 </div>
                 <hr>
@@ -19,7 +19,7 @@
                     <thead>
                     <tr>
                         <th class="text-secondary" scope="col">نام:</th>
-                        <th class="text-secondary" scope="col">permissions:</th>
+                        <th class="text-secondary" scope="col">دسترسی:</th>
                         <th class="text-secondary" scope="col">ویرایش:</th>
                     </tr>
                     </thead>

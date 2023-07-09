@@ -11,8 +11,14 @@ from app.controller.utils.cart_items_counter import cart_items_counter
 
 
 @user_login_require
-def payment_data_send(order_id):
-    order = model.Order.query.filter_by(id=order_id).first()
+def payment_data_post(payment_id):
+    payment = model.Payment.query.filter_by(id=payment_id).first()
+
+    transaction = model.Transaction(
+        payment_id=payment_id,
+    )
+    db.session.add(transaction)
+    db.session.commit()
 
     url = 'https://sandbox.banktest.ir/zarinpal/api.zarinpal.com/pg/v4/payment/request.json'
     headers = {
@@ -21,13 +27,12 @@ def payment_data_send(order_id):
     }
     data = {
         "merchant_id": "349F54A1-2DCF-4E2F-9A2D-98558951968A",
-        "amount": order.total * 10,
+        "amount": payment.total_amount,
         "description": "بهنام کافه",
-        "callback_url": url_for('payment_result', order_id=order_id, _external=True),
+        "callback_url": url_for('transaction_result', transaction_id=transaction.id, _external=True),
         "metadata": {
-            'mobile': order.user.phone,
-            'email': order.user.email,
-            'order_id': order_id
+            'mobile': payment.order.user.phone,
+            'email': payment.order.user.email
         }
     }
     while True:
@@ -38,14 +43,20 @@ def payment_data_send(order_id):
             authority = data['authority']
             break
 
+    transaction.authority = authority
+    db.session.commit()
+
+
     return redirect(f'https://sandbox.banktest.ir/zarinpal/www.zarinpal.com/pg/StartPay/{authority}')
 
 
 @user_login_require
 @cart_check
-def payment_result(order_id):
-    payment_status = request.args.get('Status')
+def transaction_result(transaction_id):
+    transaction_status = request.args.get('Status')
+
     offer = model.Product.query.filter_by(is_deleted=None).order_by(model.Product.discount.desc()).limit(4).all()
+
     offer_products = []
     for product in offer:
         if product.discount:
@@ -65,8 +76,9 @@ def payment_result(order_id):
             'final_price': final_price,
             'image': image.name
         })
-    if payment_status == 'OK':
-        order = model.Order.query.filter_by(id=order_id).first()
+
+    transaction = model.Transaction.query.filter_by(id=transaction_id).first()
+    if transaction_status == 'OK':
         url = 'https://sandbox.banktest.ir/zarinpal/api.zarinpal.com/pg/v4/payment/verify.json'
         headers = {
             'Accept': 'application/json',
@@ -74,37 +86,26 @@ def payment_result(order_id):
         }
         data = {
             "merchant_id": "349F54A1-2DCF-4E2F-9A2D-98558951968A",
-            "amount": order.total * 10,
-            "authority": request.args.get('Authority')
+            "amount": transaction.payment.total_amount,
+            "authority": transaction.authority
         }
-        response = requests.post(url, headers=headers, json=data)
-
-        if response.status_code == 200:
-            response_json = response.json()
-            data = response_json['data']
-            if data['code'] == 100:
-                ref_id = data['ref_id']
-
-                order = model.Order.query.get(order_id)
-                order.payment = 'successful'
-                db.session.commit()
-
-                cart_id = getattr(request, 'cart_id', None)
-                db.session.query(model.CartItem).filter_by(cart_id=cart_id).delete()
-                db.session.query(model.Cart).filter_by(id=cart_id).delete()
-                db.session.commit()
-
-                resp = make_response(render_template('web/checkout/payment/payment.html', payment_status=payment_status,
-                                                     order_id=order_id, offer_products=offer_products, ref_id=ref_id,
-                                                     user_id=getattr(request, 'user_id', None)))
-                resp.set_cookie('cart', '', expires=0)
+        while True:
+            response = requests.post(url, headers=headers, json=data)
+            if response.status_code == 200:
+                response_json = response.json()
+                data = response_json['data']
+                if data['code'] == 100 or data['code'] == 101:
+                    transaction.status = 'successful'
+                    transaction.details = 'پرداخت با موفقیت انجام شد'
+                    db.session.commit()
+                else:
+                    transaction.status = 'fail'
+                    transaction.details = 'مشکلی در عملیات پرداخت بوجود آمده، مبلغ کسر شده بعد از ۴۸ساعت به حساب شما باز میگردد'
+                    db.session.commit()
+                break
     else:
-        order = model.Order.query.get(order_id)
-        order.payment = 'failed'
+        transaction.status = 'fail'
+        transaction.details = 'عملیات پرداخت لغو شد'
         db.session.commit()
-
-        cart_items_number = cart_items_counter()
-
-        return render_template('web/checkout/payment/payment.html', user_id=getattr(request, 'user_id', None),
-                               payment_status=payment_status, order_id=order_id, offer_products=offer_products,
-                               cart_items_number=cart_items_number)
+    return render_template('web/checkout/payment/payment.html', transaction=transaction,
+                           offer_products=offer_products, user_id=getattr(request, 'user_id', None))

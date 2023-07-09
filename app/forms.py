@@ -31,7 +31,8 @@ class Address(Form):
                                    Length(max=50)])
     address_line = TextAreaField('ادرس',
                                  validators=[DataRequired(),
-                                             Length(max=255)])
+                                             Length(max=255)],
+                                 render_kw={"id": "Textarea"})
     postal_code = StringField('کد پستی',
                               validators=[DataRequired(),
                                           Length(10)])
@@ -64,7 +65,8 @@ class Category(Form):
                                 validators=[DataRequired(),
                                             Length(max=50)])
     category_description = TextAreaField('توضیحات',
-                                         validators=[Length(max=255)])
+                                         validators=[Length(max=255)],
+                                         render_kw={"id": "Textarea"})
     category_parent = SelectField('دسته بندی مادر')
     category_image = FileField('تصویر',
                                validators=[FileSize(max_size=1000000),
@@ -82,7 +84,8 @@ class Product(Form):
                                 validators=[DataRequired(),
                                             Length(max=50)])
     product_description = TextAreaField('توضیحات',
-                                        validators=[Length(max=255)])
+                                        validators=[Length(max=255)],
+                                        render_kw={"id": "Textarea"})
     product_discount = StringField('تخفیف')
     product_short_description = TextAreaField('توضیحات',
                                               validators=[Length(max=255)])
@@ -119,7 +122,7 @@ class User(Form):
     confirm_password = PasswordField('تکرار رمز عبور',
                                      validators=[DataRequired(),
                                                  EqualTo('password', message='Passwords must match!')])
-    role = SelectField('Role',
+    role = SelectField('نقش',
                        validators=[InputRequired(message='Please select a valid option.')])
 
 
@@ -127,7 +130,7 @@ class Role(Form):
     role_name = StringField('نام',
                             validators=[DataRequired(),
                                         Length(max=50)])
-    role_permission = MultiCheckboxField('permission',
+    role_permission = MultiCheckboxField('دسترسی',
                                          choices=[])
 
 

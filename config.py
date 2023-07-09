@@ -15,11 +15,3 @@ MYSQL_HOST = os.getenv('MYSQL_HOST')
 MYSQL_DB = os.getenv('MYSQL_DB')
 
 SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
-
-TINYMCE_API_KEY = os.getenv('TINYMCE_API_KEY')
-TINYMCE_DEFAULT_CONFIG = {
-    'plugins': 'advlist autolink lists link image charmap print preview anchor',
-    'toolbar': 'undo redo | styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent '
-               'indent | link image',
-    'height': 300,
-}

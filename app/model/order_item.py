@@ -12,3 +12,5 @@ class OrderItem(db.Model):
     discount = db.Column(db.SmallInteger, default=None)
     created_at = db.Column(db.DateTime, server_default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, server_default=db.text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
+
+    product = db.relationship('Product', backref=db.backref('order_items'))

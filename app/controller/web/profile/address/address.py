@@ -35,8 +35,7 @@ def user_address():
 def user_address_create():
     form = Address()
     flask.session["referrer_url"] = request.referrer
-    return render_template('web/profile/address/address_create.html', user_id=getattr(request, 'user_id', None),
-                           form=form, tinymce_key=app.config['TINYMCE_API_KEY'])
+    return render_template('web/profile/address/address_create.html', user_id=getattr(request, 'user_id', None))
 
 
 @user_login_require

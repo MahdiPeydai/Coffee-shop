@@ -68,6 +68,8 @@ def cart():
                 }
             )
 
+        print(cart_items)
+
         cart_price = {
             'cart_total_price': 0,
             'cart_total_discount': 0,
@@ -77,8 +79,6 @@ def cart():
             cart_price['cart_total_price'] += item['price']
             cart_price['cart_total_discount'] += (item['price'] - item['final_price'])
             cart_price['cart_total_final_price'] += item['final_price']
-
-
 
         return render_template('web/checkout/cart/cart.html', user_id=getattr(request, 'user_id', None),
                                cart_items_number=cart_items_number, cart_status=cart_status,
@@ -90,7 +90,7 @@ def cart():
 def cart_item_store():
     product_id = request.json.get('product_id')
     cart_id = getattr(request, 'cart_id', None)
-    cart_item_check = db.session.query(model.CartItem.id, model.CartItem.quantity)\
+    cart_item_check = db.session.query(model.CartItem.id, model.CartItem.quantity) \
         .filter(and_(model.CartItem.cart_id == cart_id, model.CartItem.product_id == product_id)).first()
     if cart_item_check:
         product_quantity = db.session.query(model.Product.quantity).filter_by(id=product_id).first()

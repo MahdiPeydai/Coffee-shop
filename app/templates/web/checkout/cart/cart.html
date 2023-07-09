@@ -84,7 +84,7 @@
             {% for item in cart_items %}
             <div id="{{ item['id'] }}" class="cart_item col-12 d-flex raw align-items-xl-center rounded-5 m-1 p-3">
                 <div class="col-2 d-flex justify-content-center align-items-start">
-                    <img src="{{ asset.url_for('product.png') }}" alt="" style="width: 100%">
+                    <img src="{{ asset.url_for(item['image']) }}" alt="" style="width: 100%">
                 </div>
                 <div class="col-10 d-flex flex-column px-3 py-xl-0">
                     <a href="{{ url_for('product', product_id=item['id']) }}" class="h5 text-decoration-none">

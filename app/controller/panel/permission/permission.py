@@ -17,8 +17,7 @@ def admin_permission():
 @permission_require(['permission.store'])
 def permission_store():
     form = Permission()
-    return render_template('panel/permission/permission_create.html', form=form,
-                           tinymce_key=app.config['TINYMCE_API_KEY'])
+    return render_template('panel/permission/permission_create.html', form=form)
 
 
 @user_login_require
@@ -50,8 +49,7 @@ def permission_edit(permission_id):
         'permission_name': permission[0]
     }
     form = Permission(data=placeholders)
-    return render_template('panel/permission/permission_edit.html', form=form, permission_id=permission_id,
-                           tinymce_key=app.config['TINYMCE_API_KEY'])
+    return render_template('panel/permission/permission_edit.html', form=form, permission_id=permission_id)
 
 
 @user_login_require

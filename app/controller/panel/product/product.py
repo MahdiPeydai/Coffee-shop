@@ -52,7 +52,7 @@ def product_store():
     for id, name in category_query:
         categories.append((id, name))
     form.product_category.choices = categories
-    return render_template('panel/product/product_create.html', form=form, tinymce_key=app.config['TINYMCE_API_KEY'])
+    return render_template('panel/product/product_create.html', form=form)
 
 
 @user_login_require
@@ -155,8 +155,7 @@ def product_edit(product_id):
         categories.append((id, name))
     form.product_category.choices = categories
     form.product_category.data = product['category']
-    return render_template('panel/product/product_edit.html', form=form, product_id=product_id,
-                           tinymce_key=app.config['TINYMCE_API_KEY'])
+    return render_template('panel/product/product_edit.html', form=form, product_id=product_id)
 
 
 @user_login_require

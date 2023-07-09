@@ -2,7 +2,7 @@
 
 {% block script %}
     <script src="{{ asset.url_for('profile.js') }}"></script>
-    <script src="https://cdn.tiny.cloud/1/{{ tinymce_key }}/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="{{ url_for('static', filename='tinymce/tinymce.min.js') }}"></script>
     <script>
         tinymce.init({selector: 'textarea'});
     </script>
@@ -14,10 +14,6 @@
 
 {% block footer %}
 {% include 'layout/footer.html' %}
-{% endblock %}
-
-{% block sidebar %}
-{% include 'layout/sidebar.html' %}
 {% endblock %}
 
 {% block content %}

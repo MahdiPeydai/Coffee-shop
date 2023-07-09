@@ -18,5 +18,5 @@ function price_text() {
 }
 
 $(document).ready(function() {
-    price_text()
+    price_text();
 })

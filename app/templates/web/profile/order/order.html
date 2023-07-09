@@ -20,31 +20,29 @@
                     <th class="text-secondary" scope="col">محصولات</th>
                     <th class="text-secondary" scope="col">تاریخ</th>
                     <th class="text-secondary" scope="col">وضعیت</th>
-                    <th class="text-secondary" scope="col">قیمت کل</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for order in user_orders %}
+                {% for order in orders %}
                 <tr>
-                    <th>{{ order }}</th>
+                    <th>{{ order.id }}</th>
                     <td>
                         <div>
-                            {% for product in user_orders[order]['product'] %}
-                            <p class="shadow m-1 p-1 rounded-3">{{ product }}</p>
+                            {% for item in order.items %}
+                            <p class="shadow m-1 p-1 rounded-3">{{ item.product.name }}</p>
                             {% endfor %}
                         </div>
                     </td>
-                    <td>{{ user_orders[order]['date'] }}</td>
+                    <td>{{ order.created_at }}</td>
                     <td>
-                        <div class="d-flex justify-content-center">
-                            {% if user_orders[order]['status'] == 'successful' %}
-                            <p class="h5 m-0 p-1 rounded-3 text-success">ثبت شده</p>
+                        <div class="d-flex justify-content-center rounded-3 border border-success-subtle">
+                            {% if order.payment[0].transactions[-1].status == 'successful' %}
+                                <p class="h5 m-0 p-1 rounded-3 text-success">موفق</p>
                             {% else %}
-                            <p class="h5 m-0 p-1 rounded-3 text-danger">ناموفق</p>
+                                <p class="h5 m-0 p-1 rounded-3 text-danger">لغو شده</p>
                             {% endif %}
                         </div>
                     </td>
-                    <td class="price">{{ user_orders[order]['total'] }} تومان</td>
                 </tr>
                 {% endfor %}
                 </tbody>

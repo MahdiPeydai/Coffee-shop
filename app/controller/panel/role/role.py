@@ -37,7 +37,7 @@ def role_store():
         permissions_list.append((str(id), name))
     form.role_permission.choices = permissions_list
 
-    return render_template('panel/role/role_store.html', form=form, tinymce_key=app.config['TINYMCE_API_KEY'])
+    return render_template('panel/role/role_store.html', form=form)
 
 
 @user_login_require
@@ -110,8 +110,7 @@ def role_edit(role_id):
         permissions_list.append((str(id), name))
     form.role_permission.choices = permissions_list
     form.role_permission.data = role_permission
-    return render_template('panel/role/role_edit.html', form=form, role_id=role_id,
-                           tinymce_key=app.config['TINYMCE_API_KEY'])
+    return render_template('panel/role/role_edit.html', form=form, role_id=role_id)
 
 
 @user_login_require

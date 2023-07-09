@@ -17,16 +17,13 @@
 {% endblock %}
 
 {% block content %}
-    {% if payment_status == 'OK' %}
+    {% if transaction.status == 'successful' %}
     <div class="d-flex justify-content-center my-5">
         <div class="payment_success_box w-50 text-center p-5">
             <i class="fa-solid fa-money-check-dollar fa-10x text-success"></i>
-            <h1 class="my-4">پرداخت با موفقیت انجام شد.</h1>
-            <h5>
-                شماره تراکنش : {{ ref_id }}
-            </h5>
+            <h1 class="my-4">{{ transaction.details }}</h1>
             <h4>
-                شماره سفارش شما Beh-{{ order_id }} می‌باشد
+                شماره سفارش شما Beh-{{ transaction.payment.order.id }} می‌باشد
             </h4>
         </div>
     </div>
@@ -67,7 +64,7 @@
     <div class="d-flex justify-content-center my-5">
         <div class="payment_success_box w-50 text-center p-5">
             <i class="fa-solid fa-xmark-circle fa-beat fa-10x text-danger"></i>
-            <h1 class="my-4">متاسفانه پرداخت ناموفق بود.</h1>
+            <h3 class="my-4">{{ transaction.details['message'] }}</h3>
         </div>
     </div>
     <div class="d-flex justify-content-center p-3">
