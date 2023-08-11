@@ -2,3 +2,4 @@
 /app/static/dist/
 node_modules
 venv
+migrations/
