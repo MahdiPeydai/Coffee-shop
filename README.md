@@ -4,7 +4,7 @@ Coffee Shop is an online coffee shop that you can sell your all related products
 In admin panel you can create,update and delete users. you can set roles for them and set permission for each roll. You can manage your products in it and you can set each product in different categories.
 <br>
 Users have cart and are able to add to or remove products from it and after that can make orders and go for payment. Users also have a dashboard that they can manage their profile and can see their orders.
-# Application
+# Development
 - Flask framework
 - Mysql database
 - SQLAlchemy for handling ORM
